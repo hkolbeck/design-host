@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@fastify/cors": "^8.1.0",
+    "@fastify/static": "^6.5.0",
     "@google-cloud/storage": "^6.4.1",
     "@stablelib/base64": "^1.0.1",
     "canvas": "^2.9.3",

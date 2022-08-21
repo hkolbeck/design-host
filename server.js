@@ -13,14 +13,9 @@ const config = {
 const storage = new Storage();
 const gcs = makeGcsClient(storage, config.bucket)
 
-const index =
-const style =
+fastify.get("/", (request, reply) => {
 
-const indexOpts = {
-    handler: (request, reply) => {
-    },
-};
-fastify.get("/", indexOpts);
+});
 
 
 fastify.listen({port: config.port}, function (err, address) {
