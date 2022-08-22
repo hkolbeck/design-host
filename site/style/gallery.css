@@ -7,8 +7,19 @@
     width: 280px;
     height: auto;
     max-height: 250px;
+    overflow-y: clip;
     border: 3px solid white;
+    z-index: 1;
 }
+.download {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    z-index: 2;
+}
+
 
 @media screen and (min-width: 1500px) {
     .gallery {
@@ -67,42 +78,42 @@
         "j";
 }
 
-.gallery-item-0 {
+#gallery-item-0 {
     grid-area: a;
 }
 
-.gallery-item-1 {
+#gallery-item-1 {
     grid-area: b;
 }
 
-.gallery-item-2 {
+#gallery-item-2 {
     grid-area: c;
 }
 
-.gallery-item-3 {
+#gallery-item-3 {
     grid-area: d;
 }
 
-.gallery-item-4 {
+#gallery-item-4 {
     grid-area: e;
 }
 
-.gallery-item-5 {
+#gallery-item-5 {
     grid-area: f;
 }
 
-.gallery-item-6 {
+#gallery-item-6 {
     grid-area: g;
 }
 
-.gallery-item-7 {
+#gallery-item-7 {
     grid-area: h;
 }
 
-.gallery-item-8 {
+#gallery-item-8 {
     grid-area: i;
 }
 
-.gallery-item-9 {
+#gallery-item-9 {
     grid-area: j;
 }

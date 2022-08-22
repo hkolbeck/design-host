@@ -35,12 +35,24 @@ function makeListDirectory(gcs, bucket) {
     }
 }
 
-function makeFetchObject(gcs, bucket) {
+function makeFetchObject() {
     return async function fetchObject(file) {
         return new Promise((resolve, reject) => {
             file.download((err, contents) => {
                 if (contents) {
-                    resolve(contents.toString("base64"))
+                    let mime
+                    if (file.name.endsWith("pdf")) {
+                        mime = "application/pdf"
+                    } else if (file.name.endsWith("png")) {
+                        mime = "image/png"
+                    } else if (file.name.endsWith("jpeg") || file.name.endsWith("jpg")) {
+                        mime = "image/jpeg"
+                    } else {
+                        reject(new Error(`Unknown mime type for file '${file.name}'`))
+                        return
+                    }
+
+                    resolve(`data:${mime},${contents.toString("base64")}`)
                 } else if (err) {
                     reject(err)
                 } else {

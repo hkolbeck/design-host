@@ -1,4 +1,5 @@
 const {Storage} = require('@google-cloud/storage');
+const path = require('path')
 const fastify = require("fastify")({
     logger: false,
 });
@@ -8,8 +9,12 @@ const {makeGcsClient} = require("./src/gcs");
 const config = {
     bucket: process.env.BUCKET,
     port: process.env.PORT,
-    pageSize: process.env.PAGE_SIZE
 }
+
+fastify.register(require('@fastify/static'), {
+    root: path.join(__dirname, 'site')
+})
+
 
 const storage = new Storage();
 const gcs = makeGcsClient(storage, config.bucket)
@@ -22,19 +27,49 @@ const galleryPaths = {
     signage: '/signage/'
 }
 
-fastify.get("/", (request, reply) => {
+const staticPaths = {
+    "/": "index.html",
+    "/gallery": "gallery.html",
 
+    "/style/common.css": "style/common.css",
+    "/style/gallery.css": "style/gallery.css",
+    "/style/index.css": "style/index.css",
+
+    "/images/acab-dot-city.png": "img/acab-dot-city.png",
+    "/images/acab-dot-city.svg": "img/acab-dot-city.svg",
+    "/images/download.svg": "img/download.svg",
+    "/images/email.svg": "img/email.svg",
+    "/images/instagram.svg": "img/instagram.svg",
+    "/images/next-page.svg": "img/next-page.svg",
+    "/images/prev-page.svg": "img/prev-page.svg",
+    "/images/twitter.svg": "img/twitter.svg",
+
+    "/src/gallery.js": "src/gallery.js"
+}
+
+fastify.get("/", (request, reply) => {
+    const path = new URL(request.url).pathname
+    if (staticPaths[path]) {
+        reply.sendFile(staticPaths[path])
+    } else {
+        reply.sendFile("does-not-exist")
+    }
 });
+
+fastify.setNotFoundHandler((request, reply) => {
+    reply.sendFile("404.html")
+})
 
 fastify.get("/api/get-page", (request, reply) => {
     const pageToken = request.query['page']
     const subGallery = request.query['gallery']
+    const pageSize = request.query['count'] || 10
     if (!galleryPaths[subGallery]) {
         reply.status(400).send({error: `Unknown gallery: '${subGallery}'`})
         return
     }
 
-    gcs.listDirectory(galleryPaths[subGallery], config.pageSize + 1, pageToken)
+    gcs.listDirectory(galleryPaths[subGallery], pageSize, pageToken)
         .then(async listResp => {
             if (!listResp) {
                 reply.status(400).send({error: "Couldn't parse provided page token"})
@@ -51,12 +86,12 @@ fastify.get("/api/get-page", (request, reply) => {
             for (const file of files) {
                 const rawFile = await gcs.fetchObject(file)
                 const metadata = await file.getMetadata()
+                const fileName = file.name.slice(file.name.lastIndexOf("/") + 1, file.name.lastIndexOf("."))
                 pageItems.push({
                     contents: rawFile,
-                    path: file.name,
+                    fileName: fileName,
                     alt: metadata.metadata["alt"] || "No alt text found",
-                    title: metadata.metadata["title"] ||
-                        file.name.slice(file.name.lastIndexOf("/") + 1, file.name.lastIndexOf("."))
+                    title: metadata.metadata["title"] || fileName
                 })
             }
 
