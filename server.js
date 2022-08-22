@@ -72,6 +72,7 @@ fastify.setErrorHandler((error, request, reply) => {
 })
 
 fastify.get("/api/get-page", (request, reply) => {
+    console.log("Hit API")
     const pageToken = request.query['page']
     const subGallery = request.query['gallery']
     const pageSize = request.query['count'] || 10
