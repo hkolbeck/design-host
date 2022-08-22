@@ -23,11 +23,11 @@ const storage = new Storage();
 const gcs = makeGcsClient(storage, config.bucket)
 
 const galleryPaths = {
-    stickers: '/stickers/',
-    jewelry: '/jewelry/',
-    stencils: '/stencils/',
-    flyers: '/flyers/',
-    signage: '/signage/'
+    stickers: 'stickers/',
+    jewelry: 'jewelry/',
+    stencils: 'stencils/',
+    flyers: 'flyers/',
+    signage: 'signage/'
 }
 
 const staticPaths = {

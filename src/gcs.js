@@ -25,7 +25,8 @@ function makeListDirectory(gcs, bucket) {
             let [files, nextPage] = await gcs.bucket(bucket).getFiles({
                 prefix: prefix,
                 autoPaginate: false,
-                maxResults: limit
+                maxResults: limit,
+                delimiter: '/'
             });
             return {
                 files: files,
