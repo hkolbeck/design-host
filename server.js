@@ -88,7 +88,8 @@ fastify.get("/api/get-page", (request, reply) => {
                 return
             }
 
-            const {files, nextPage} = listResp
+            let {files, nextPage} = listResp
+            files = files.filter(f => !f.endsWith(galleryPaths[subGallery]))
             if (!files || files.length === 0) {
                 console.log(`No files found: ${JSON.stringify(files)}`)
                 reply.status(404).send()
