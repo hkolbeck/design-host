@@ -20,6 +20,23 @@
     z-index: 2;
 }
 
+.gallery-controls {
+
+}
+
+.nav-button {
+    width: 25px;
+    height: 25px;
+    padding: 10px;
+}
+
+#previous-button {
+    float: left;
+}
+
+#next-button {
+    float: right;
+}
 
 @media screen and (min-width: 1500px) {
     .gallery {

@@ -11,10 +11,13 @@ const config = {
     port: process.env.PORT,
 }
 
+process.on('uncaughtException', function (exception) {
+    console.log(exception);
+});
+
 fastify.register(require('@fastify/static'), {
     root: path.join(__dirname, 'site')
 })
-
 
 const storage = new Storage();
 const gcs = makeGcsClient(storage, config.bucket)
@@ -47,17 +50,25 @@ const staticPaths = {
     "/src/gallery.js": "src/gallery.js"
 }
 
-fastify.get("/", (request, reply) => {
-    const path = new URL(request.url).pathname
-    if (staticPaths[path]) {
-        reply.sendFile(staticPaths[path])
-    } else {
-        reply.sendFile("does-not-exist")
-    }
+Object.entries(staticPaths).forEach(entry => {
+    const [path, file] = entry
+    fastify.get(path, (request, reply) => {
+            reply.sendFile(file)
+    });
+})
+
+fastify.get("/error", (request, reply) => {
+    reply.sendFile("error.html")
 });
 
 fastify.setNotFoundHandler((request, reply) => {
     reply.sendFile("404.html")
+})
+
+fastify.setErrorHandler((error, request, reply) => {
+    console.log(`Error serving '${request.url}'`)
+    console.log(error)
+    reply.sendFile("error.html")
 })
 
 fastify.get("/api/get-page", (request, reply) => {
@@ -112,6 +123,7 @@ fastify.get("/api/get-page", (request, reply) => {
 fastify.listen({port: config.port}, function (err, address) {
     if (err) {
         fastify.log.error(err);
+        console.log(err)
         process.exit(1);
     }
     console.log(`Your app is listening on ${address}`);

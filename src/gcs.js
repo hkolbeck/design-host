@@ -17,7 +17,7 @@ function makeListDirectory(gcs, bucket) {
 
             let [files, nextPage] = await gcs.bucket(bucket).getFiles(pageQuery)
             return {
-                files: files.map(f => f.name),
+                files: files,
                 nextPage: nextPage ? Buffer.from(JSON.stringify(nextPage)).toString("base64url") : null
             }
         } else {
@@ -52,7 +52,7 @@ function makeFetchObject() {
                         return
                     }
 
-                    resolve(`data:${mime},${contents.toString("base64")}`)
+                    resolve(`data:${mime};base64,${contents.toString("base64")}`)
                 } else if (err) {
                     reject(err)
                 } else {

@@ -4,17 +4,20 @@
     <meta charset="UTF-8">
     <title>ACAB.city</title>
     <meta name="description" content="The Laser Bloc design gallery">
-    <meta content="https://acab.city/images/acab-dot-city.png" property="og:image">
+    <meta content="/images/acab-dot-city.png" property="og:image">
 
-    <link rel="stylesheet" href="https://acab.city/style/common.css"/>
-    <link rel="stylesheet" href="https://acab.city/style/gallery.css"/>
-    
+    <link rel="stylesheet" href="/style/common.css"/>
+    <link rel="stylesheet" href="/style/gallery.css"/>
+
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.15.349/build/pdf.min.js"></script>
-    <script src="https://acab.city/src/gallery.src"></script>
+    <script src="/src/gallery.js"></script>
+    <script>
+        loadInitialPage(new URL(window.location.href))
+    </script>
 </head>
 <body>
 <div class="header">
-    <img class="logo" src="https://acab.city/images/acab-dot-city.svg"
+    <img class="logo" src="/images/acab-dot-city.svg"
          alt="'ACAB.CITY' in white on a black background"/>
 </div>
 <div class="gallery-wrapper">
@@ -22,90 +25,94 @@
         <div id="gallery-item-0" class="gallery-item">
             <div>
                 <img id="gallery-image-0" class="gallery-image" src="" alt=""/>
-                <a><img id="download-0" class="download" src="htts://acab.city/images/download.svg" alt="Download"></a>
+                <a id="download-0"><img class="download" src="/images/download.svg" alt="Download"></a>
             </div>
             <span id="gallery-title-0"></span>
         </div>
         <div id="gallery-item-1" class="gallery-item">
             <div>
                 <img id="gallery-image-1" class="gallery-image" src="" alt=""/>
-                <a><img id="download-1" class="download" src="htts://acab.city/images/download.svg" alt="Download"></a>
+                <a id="download-1"><img class="download" src="/images/download.svg" alt="Download"></a>
             </div>
             <span id="gallery-title-1"></span>
         </div>
         <div id="gallery-item-2" class="gallery-item">
             <div>
                 <img id="gallery-image-2" class="gallery-image" src="" alt=""/>
-                <a><img id="download-2" class="download" src="htts://acab.city/images/download.svg" alt="Download"></a>
+                <a id="download-2"><img class="download" src="/images/download.svg" alt="Download"></a>
             </div>
             <span id="gallery-title-2"></span>
         </div>
         <div id="gallery-item-3" class="gallery-item">
             <div>
                 <img id="gallery-image-3" class="gallery-image" src="" alt=""/>
-                <a><img id="download-3" class="download" src="htts://acab.city/images/download.svg" alt="Download"></a>
+                <a id="download-3"><img class="download" src="/images/download.svg" alt="Download"></a>
             </div>
             <span id="gallery-title-3"></span>
         </div>
         <div id="gallery-item-4" class="gallery-item">
             <div>
                 <img id="gallery-image-4" class="gallery-image" src="" alt=""/>
-                <a><img id="download-4" class="download" src="htts://acab.city/images/download.svg" alt="Download"></a>
+                <a id="download-4"><img class="download" src="/images/download.svg" alt="Download"></a>
             </div>
             <span id="gallery-title-4"></span>
         </div>
         <div id="gallery-item-5" class="gallery-item">
             <div>
                 <img id="gallery-image-5" class="gallery-image" src="" alt=""/>
-                <a><img id="download-5" class="download" src="htts://acab.city/images/download.svg" alt="Download"></a>
+                <a id="download-5"><img class="download" src="/images/download.svg" alt="Download"></a>
             </div>
             <span id="gallery-title-5"></span>
         </div>
         <div id="gallery-item-6" class="gallery-item">
             <div>
                 <img id="gallery-image-6" class="gallery-image" src="" alt=""/>
-                <a><img id="download-6" class="download" src="htts://acab.city/images/download.svg" alt="Download"></a>
+                <a id="download-6"><img class="download" src="/images/download.svg" alt="Download"></a>
             </div>
             <span id="gallery-title-6"></span>
         </div>
         <div id="gallery-item-7" class="gallery-item">
             <div>
                 <img id="gallery-image-7" class="gallery-image" src="" alt=""/>
-                <a><img id="download-7" class="download" src="htts://acab.city/images/download.svg" alt="Download"></a>
+                <a id="download-7"><img class="download" src="/images/download.svg" alt="Download"></a>
             </div>
             <span id="gallery-title-7"></span>
         </div>
         <div id="gallery-item-8" class="gallery-item">
             <div>
                 <img id="gallery-image-8" class="gallery-image" src="" alt=""/>
-                <a><img id="download-8" class="download" src="htts://acab.city/images/download.svg" alt="Download"></a>
+                <a id="download-8"><img class="download" src="/images/download.svg" alt="Download"></a>
             </div>
             <span id="gallery-title-8"></span>
         </div>
         <div id="gallery-item-9" class="gallery-item">
             <div>
                 <img id="gallery-image-9" class="gallery-image" src="" alt=""/>
-                <a><img id="download-9" class="download" src="htts://acab.city/images/download.svg" alt="Download"></a>
+                <a id="download-9"><img class="download" src="/images/download.svg" alt="Download"></a>
             </div>
             <span id="gallery-title-9"></span>
         </div>
     </div>
     <div class="gallery-controls">
-        <a id="previous-button" class="nav-button">⬅️</a>
-        <a id="next-button" class="nav-button">➡️</a>
+        <a id="previous-button" class="nav-button" onclick="previousPage()">
+            <img src="/images/prev-page.svg" alt="Previous page">
+        </a>
+        <a id="next-button" class="nav-button" onclick="nextPage()">
+            <img src="/images/next-page.svg" alt="Next page">
+        </a>
     </div>
 </div>
 <div class="footer">
     <a href="https://twitter.com/LaserBloc">
-        <img class="social-logo" src="https://acab.city/images/twitter.svg"
+        <img class="social-logo" src="/images/twitter.svg"
              alt="Twitter logo, a small blue stylized bird"/>
     </a>
     <a href="https://www.instagram.com/laser_bloc/">
-        <img class="social-logo" src="https://acab.city/images/instagram.svg"
+        <img class="social-logo" src="/images/instagram.svg"
              alt="Instagram logo, a stylized polaroid camera"/>
     </a>
     <a href="mailto:LaserBloc@protonmail.com">
-        <img class="social-logo" src="https://acab.city/images/email.svg" alt="Email symbol, a stylized letter"/>
+        <img class="social-logo" src="/images/email.svg" alt="Email symbol, a stylized letter"/>
     </a>
 </div>
 </body>
