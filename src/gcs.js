@@ -7,18 +7,40 @@ function makeClient(gcs, bucket) {
 }
 
 function makeListDirectory(gcs, bucket) {
-    return async function listDirectory(prefix) {
-        const files = await gcs.bucket(bucket).getFiles({prefix: prefix})
-        return files.map(f => f.name)
+    return async function listDirectory(prefix, limit, pageToken) {
+        if (pageToken) {
+            const pageQuery = JSON.parse(Buffer.from(pageToken, "base64url").toString("utf8"))
+            if (!pageQuery) {
+                console.log(`Couldn't parse page token as JSON: '${pageToken}'`)
+                return null
+            }
+
+            let [files, nextPage] = await gcs.bucket(bucket).getFiles(pageQuery)
+            return {
+                files: files.map(f => f.name),
+                nextPage: nextPage ? Buffer.from(JSON.stringify(nextPage)).toString("base64url") : null
+            }
+        } else {
+            let [files, nextPage] = await gcs.bucket(bucket).getFiles({
+                prefix: prefix,
+                autoPaginate: false,
+                maxResults: limit,
+                pageToken: pageToken
+            });
+            return {
+                files: files,
+                nextPage: nextPage ? Buffer.from(JSON.stringify(nextPage)).toString("base64url") : null
+            }
+        }
     }
 }
 
 function makeFetchObject(gcs, bucket) {
-    return async function fetchObject(path) {
+    return async function fetchObject(file) {
         return new Promise((resolve, reject) => {
-            gcs.bucket(bucket).file(path).download((err, contents) => {
+            file.download((err, contents) => {
                 if (contents) {
-                    resolve(contents)
+                    resolve(contents.toString("base64"))
                 } else if (err) {
                     reject(err)
                 } else {
@@ -30,9 +52,8 @@ function makeFetchObject(gcs, bucket) {
 }
 
 function makeFetchObjects(gcs, bucket) {
-    return async function fetchObjects(prefix) {
-        const files = await gcs.bucket(bucket).getFiles({prefix: prefix})
-        return await Promise.all(files.map(file => {
+    return async function fetchObjects(paths) {
+        return await Promise.all(paths.map(file => {
                 return new Promise((resolve, reject) => {
                     gcs.bucket(bucket).file(file.name).download((err, contents) => {
                         if (contents) {

@@ -1,0 +1,108 @@
+.gallery-item {
+    width: 300px;
+    height: 300px;
+}
+
+.gallery-image {
+    width: 280px;
+    height: auto;
+    max-height: 250px;
+    border: 3px solid white;
+}
+
+@media screen and (min-width: 1500px) {
+    .gallery {
+        display: grid;
+        grid-template-areas:
+            "a b c d e"
+            "f g h i j";
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .gallery {
+        display: grid;
+        grid-template-areas:
+            "a b c d"
+            "e f g h"
+            "i j";
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .gallery {
+        display: grid;
+        grid-template-areas:
+            "a b c"
+            "d e f"
+            "g h i"
+            "j . .";
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .gallery {
+        display: grid;
+        grid-template-areas:
+            "a b"
+            "c d"
+            "e f"
+            "g h"
+            "i j"
+    }
+}
+
+.gallery {
+    display: grid;
+    grid-template-areas:
+        "a"
+        "b"
+        "c"
+        "d"
+        "e"
+        "f"
+        "g"
+        "h"
+        "i"
+        "j";
+}
+
+.gallery-item-0 {
+    grid-area: a;
+}
+
+.gallery-item-1 {
+    grid-area: b;
+}
+
+.gallery-item-2 {
+    grid-area: c;
+}
+
+.gallery-item-3 {
+    grid-area: d;
+}
+
+.gallery-item-4 {
+    grid-area: e;
+}
+
+.gallery-item-5 {
+    grid-area: f;
+}
+
+.gallery-item-6 {
+    grid-area: g;
+}
+
+.gallery-item-7 {
+    grid-area: h;
+}
+
+.gallery-item-8 {
+    grid-area: i;
+}
+
+.gallery-item-9 {
+    grid-area: j;
+}
