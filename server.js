@@ -72,11 +72,11 @@ fastify.setErrorHandler((error, request, reply) => {
 })
 
 fastify.get("/api/get-page", (request, reply) => {
-    console.log("Hit API")
     const pageToken = request.query['page']
     const subGallery = request.query['gallery']
     const pageSize = request.query['count'] || 10
     if (!galleryPaths[subGallery]) {
+        console.log(`No path found for '${subGallery}'`)
         reply.status(400).send({error: `Unknown gallery: '${subGallery}'`})
         return
     }
@@ -90,6 +90,7 @@ fastify.get("/api/get-page", (request, reply) => {
 
             const {files, nextPage} = listResp
             if (!files || files.length === 0) {
+                console.log(`No files found: ${JSON.stringify(files)}`)
                 reply.status(404).send()
                 return
             }
