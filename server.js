@@ -93,7 +93,7 @@ fastify.get("/api/get-page", (request, reply) => {
         return
     }
 
-    gcs.listDirectory(galleryPaths[subGallery] + (subDir ? subDir : ""), pageToken)
+    gcs.listDirectory(galleryPaths[subGallery] + (subDir ? subDir + "/" : ""), pageToken)
         .then(async listResp => {
             if (!listResp) {
                 reply.status(400).send({error: "Couldn't parse provided page token"})
@@ -108,12 +108,12 @@ fastify.get("/api/get-page", (request, reply) => {
             }
 
             const pageItems = []
-            for (const file of files) {
-                if (file.name.endsWith("/")) {
-                    const fileName = file.name.replace(galleryPaths[subGallery], "").replace(" ", "%22")
+            for (const file of files.filter(f => !f.name.endsWith("/"))) {
+                if (file.name.endsWith("-")) {
+                    const fileName = file.name.replace(galleryPaths[subGallery], "").replace(/-$/, "")
                     pageItems.push({
                         type: "directory",
-                        nameName: fileName
+                        fileName: fileName
                     })
                 } else {
                     const rawFile = await gcs.fetchObject(file)
