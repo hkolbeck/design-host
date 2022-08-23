@@ -33,6 +33,7 @@ const galleryPaths = {
 const staticPaths = {
     "/": "index.html",
     "/gallery": "gallery.html",
+    "/404": "404.html",
 
     "/fonts/montserrat-regular-webfont.woff": "fonts/montserrat-regular-webfont.woff",
     "/fonts/montserrat-regular-webfont.woff2": "fonts/montserrat-regular-webfont.woff2",
@@ -47,7 +48,6 @@ const staticPaths = {
     "/images/email.svg": "img/email.svg",
     "/images/instagram.svg": "img/instagram.svg",
     "/images/next-page.svg": "img/next-page.svg",
-    "/images/prev-page.svg": "img/prev-page.svg",
     "/images/twitter.svg": "img/twitter.svg",
     "/images/stickers.svg": "img/stickers.svg",
     "/images/jewelry.svg": "img/jewelry.svg",
