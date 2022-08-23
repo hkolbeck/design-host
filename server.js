@@ -34,6 +34,9 @@ const staticPaths = {
     "/": "index.html",
     "/gallery": "gallery.html",
 
+    "/fonts/montserrat-regular-webfont.woff": "fonts/montserrat-regular-webfont.woff",
+    "/fonts/montserrat-regular-webfont.woff2": "fonts/montserrat-regular-webfont.woff2",
+
     "/style/common.css": "style/common.css",
     "/style/gallery.css": "style/gallery.css",
     "/style/index.css": "style/index.css",
@@ -46,6 +49,11 @@ const staticPaths = {
     "/images/next-page.svg": "img/next-page.svg",
     "/images/prev-page.svg": "img/prev-page.svg",
     "/images/twitter.svg": "img/twitter.svg",
+    "/images/stickers.svg": "img/stickers.svg",
+    "/images/jewelry.svg": "img/jewelry.svg",
+    "/images/signage.svg": "img/signage.svg",
+    "/images/flyers.svg": "img/flyers.svg",
+    "/images/stencils.svg": "img/stencils.svg",
 
     "/src/gallery.js": "src/gallery.js",
     "/src/base64-binary.js": "src/base64-binary.js"

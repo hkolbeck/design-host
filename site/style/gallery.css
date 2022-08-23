@@ -65,7 +65,7 @@
     }
 }
 
-@media screen and (min-width: 1200px) and (max-width: 1499px){
+@media screen and (min-width: 1200px) and (max-width: 1499px) {
     .gallery {
         display: grid;
         grid-template-areas:
@@ -75,7 +75,7 @@
     }
 }
 
-@media screen and (min-width: 900px) and (max-width: 1199px){
+@media screen and (min-width: 900px) and (max-width: 1199px) {
     .gallery {
         display: grid;
         grid-template-areas:

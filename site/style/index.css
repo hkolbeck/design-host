@@ -1,26 +1,28 @@
 .index-content {
-  top: 70px;
-  width: 100%;
-  position: fixed;
+    top: 70px;
+  bottom: 50px;
+    width: 100%;
+    position: fixed;
+  overflow-y: scroll;
 }
 
 .intro {
-  
+
 }
 
 .license {
-  font-family: Courier new,monospace;
-  padding: 20px;
+    font-family: Courier new, monospace;
+    padding: 20px;
 }
 
 .requests {
-  
+
 }
 
 .index-buttons {
-  text-align: center;
-  width: 100%;
-  padding-top: 5vh;
+    text-align: center;
+    width: 100%;
+    padding-top: 5vh;
 }
 
 
