@@ -7,7 +7,7 @@ function makeClient(gcs, bucket) {
 }
 
 function makeListDirectory(gcs, bucket) {
-    return async function listDirectory(prefix, subDir, pageToken) {
+    return async function listDirectory(prefix, pageToken) {
         // console.log(`Got list for prefix: '${prefix}' limit: '${limit}' page: ${pageToken}`)
         if (pageToken) {
             const pageQuery = JSON.parse(Buffer.from(pageToken, "base64url").toString("utf8"))
@@ -29,6 +29,7 @@ function makeListDirectory(gcs, bucket) {
                 maxResults: 11,
                 delimiter: '/'
             });
+          console.log(JSON.stringify(files.map(f => f.name)))
             return {
                 files: files,
                 nextPage: nextPage ? Buffer.from(JSON.stringify(nextPage)).toString("base64url") : null

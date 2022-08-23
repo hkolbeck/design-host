@@ -50,7 +50,7 @@ async function fetchPage(gallery, subDir, pageToken) {
                         resp.statusText
                     }: ${await resp.text()}`
                 );
-                return {files: []};
+                return {page: []};
             }
         })
         .catch((err) => {
@@ -160,7 +160,7 @@ async function renderPage(gallery, currentPage, nextPage, files) {
                 img.onclick = () => {
                     window.location.href = `https://acab.city/gallery?gallery=${gallery}&sub=${files[i].fileName}`
                 }
-
+                title.innerText = files[i].fileName;
                 item.style.display = "block"
             } else {
                 console.log(`Unknown file type: ${files[i].type}`)

@@ -92,7 +92,7 @@ fastify.get("/api/get-page", (request, reply) => {
         return
     }
 
-    gcs.listDirectory(galleryPaths[subGallery], subDir, pageToken)
+    gcs.listDirectory(galleryPaths[subGallery] + (subDir ? subDir : ""), pageToken)
         .then(async listResp => {
             if (!listResp) {
                 reply.status(400).send({error: "Couldn't parse provided page token"})
@@ -102,7 +102,6 @@ fastify.get("/api/get-page", (request, reply) => {
             let {files, nextPage} = listResp
             files = files.filter(f => !f.name.endsWith(galleryPaths[subGallery]) && !f.name.endsWith(subDir))
             if (!files || files.length === 0) {
-                console.log(`No files found: ${JSON.stringify(files)}`)
                 reply.status(404).send()
                 return
             }
