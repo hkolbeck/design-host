@@ -161,7 +161,6 @@ async function renderPage(gallery, currentPage, nextPage, files) {
                     window.location.href = `https://acab.city/gallery?gallery=${gallery}&sub=${files[i].fileName}`
                 }
                 title.innerText = files[i].fileName;
-
                 item.style.display = "block"
             } else {
                 console.log(`Unknown file type: ${files[i].type}`)

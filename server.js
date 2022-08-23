@@ -100,7 +100,7 @@ fastify.get("/api/get-page", (request, reply) => {
             }
 
             let {files, nextPage} = listResp
-            files = files.filter(f => !f.name.endsWith(galleryPaths[subGallery]))
+            files = files.filter(f => !f.name.endsWith(galleryPaths[subGallery]) && !f.name.endsWith(subDir))
             if (!files || files.length === 0) {
                 reply.status(404).send()
                 return
