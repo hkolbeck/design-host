@@ -7,7 +7,7 @@ function makeClient(gcs, bucket) {
 }
 
 function makeListDirectory(gcs, bucket) {
-    return async function listDirectory(prefix, limit, pageToken) {
+    return async function listDirectory(prefix, subDir, pageToken) {
         // console.log(`Got list for prefix: '${prefix}' limit: '${limit}' page: ${pageToken}`)
         if (pageToken) {
             const pageQuery = JSON.parse(Buffer.from(pageToken, "base64url").toString("utf8"))
@@ -16,6 +16,7 @@ function makeListDirectory(gcs, bucket) {
                 return null
             }
 
+            pageQuery.maxResults = 10
             let [files, nextPage] = await gcs.bucket(bucket).getFiles(pageQuery)
             return {
                 files: files,
@@ -23,9 +24,9 @@ function makeListDirectory(gcs, bucket) {
             }
         } else {
             let [files, nextPage] = await gcs.bucket(bucket).getFiles({
-                prefix: prefix,
+                prefix: prefix + (subDir ? subDir : ""),
                 autoPaginate: false,
-                maxResults: limit,
+                maxResults: 11,
                 delimiter: '/'
             });
             return {
