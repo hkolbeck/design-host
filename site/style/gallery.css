@@ -37,48 +37,6 @@
     float: right;
 }
 
-@media screen and (min-width: 1500px) {
-    .gallery {
-        display: grid;
-        grid-template-areas:
-            "a b c d e"
-            "f g h i j";
-    }
-}
-
-@media screen and (min-width: 1200px) {
-    .gallery {
-        display: grid;
-        grid-template-areas:
-            "a b c d"
-            "e f g h"
-            "i j";
-    }
-}
-
-@media screen and (min-width: 900px) {
-    .gallery {
-        display: grid;
-        grid-template-areas:
-            "a b c"
-            "d e f"
-            "g h i"
-            "j . .";
-    }
-}
-
-@media screen and (min-width: 600px) {
-    .gallery {
-        display: grid;
-        grid-template-areas:
-            "a b"
-            "c d"
-            "e f"
-            "g h"
-            "i j"
-    }
-}
-
 .gallery {
     display: grid;
     grid-template-areas:
@@ -92,6 +50,48 @@
         "h"
         "i"
         "j";
+}
+
+@media screen and (min-width: 1500px) {
+    .gallery {
+        display: grid;
+        grid-template-areas:
+            "a b c d e"
+            "f g h i j";
+    }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1499px){
+    .gallery {
+        display: grid;
+        grid-template-areas:
+            "a b c d"
+            "e f g h"
+            "i j";
+    }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1199px){
+    .gallery {
+        display: grid;
+        grid-template-areas:
+            "a b c"
+            "d e f"
+            "g h i"
+            "j . .";
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 899px) {
+    .gallery {
+        display: grid;
+        grid-template-areas:
+            "a b"
+            "c d"
+            "e f"
+            "g h"
+            "i j"
+    }
 }
 
 #gallery-item-0 {
