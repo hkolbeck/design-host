@@ -6,7 +6,6 @@
 .gallery-image {
     width: 280px;
     height: auto;
-    max-height: 250px;
     overflow-y: clip;
     border: 3px solid white;
     z-index: 1;
