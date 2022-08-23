@@ -17,8 +17,9 @@
 }
 
 .gallery-image {
-    width: 260px;
-    height: auto;
+    max-width: 260px;
+    max-height: 260px;
+  margin: auto;
     overflow-y: clip;
     border: 3px solid white;
     z-index: 1;
@@ -112,7 +113,7 @@
         grid-template-areas:
             "a b c d"
             "e f g h"
-            "i j";
+            ". i j .";
     }
 }
 
@@ -123,7 +124,7 @@
             "a b c"
             "d e f"
             "g h i"
-            "j . .";
+            ". j .";
     }
 }
 

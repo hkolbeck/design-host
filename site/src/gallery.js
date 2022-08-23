@@ -52,12 +52,8 @@ async function fetchPage(gallery, pageToken) {
 
 function clearPage() {
   for (let i = 0; i < 10; i++) {
-    const img = document.getElementById(`gallery-image-${i}`);
-    const title = document.getElementById(`gallery-title-${i}`);
-    const dl = document.getElementById(`download-${i}`);
-    img.style.display = "hidden";
-    title.style.display = "hidden";
-    dl.style.display = "hidden";
+    const item = document.getElementById(`gallery-item-${i}`)
+    item.style.display = "none";
   }
 }
 
