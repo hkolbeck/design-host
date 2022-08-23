@@ -1,0 +1,39 @@
+body {
+    background-color: black;
+    font-family: "sans-serif";
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row wrap;
+    height: auto;
+}
+
+.logo {
+
+}
+
+.footer {
+    text-align: right;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 5vh;
+    padding-top: 1px;
+}
+
+.social-logo {
+    width: 50px;
+    height: 50px;
+}
+
+.not-found-content {
+
+}
+
+.error-content {
+
+}
