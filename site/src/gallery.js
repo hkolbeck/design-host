@@ -1,5 +1,3 @@
-const pages = []
-
 async function loadPage(url) {
   const gallery = url.searchParams.get("gallery");
   if (!gallery) {
@@ -161,21 +159,12 @@ async function renderPage(gallery, currentPage, nextPage, files) {
     }
   }
 
-  const prev = document.getElementById("previous-button");
-
-  if (pages.length > 0) {
-    prev.href = `https://acab.city/gallery?gallery=${gallery}&page=${pages[pages.length - 1]}`;
-    prev.onclick = () => pages.pop()
-  } else {
-    prev.style.display = "hidden";
-  }
-
   const next = document.getElementById("next-button");
   if (nextPage) {
     next.href = `https://acab.city/gallery?gallery=${gallery}&page=${nextPage}`;
-    next.onclick = () => pages.push(currentPage)
+    next.style.display = "block";
   } else {
-    next.style.display = "hidden";
+    next.style.display = "none";
   }
   console.log(`Render completed in ${Date.now() - start}ms`)
 }
