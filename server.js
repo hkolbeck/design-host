@@ -47,7 +47,9 @@ const staticPaths = {
     "/images/prev-page.svg": "img/prev-page.svg",
     "/images/twitter.svg": "img/twitter.svg",
 
-    "/src/gallery.js": "src/gallery.js"
+    "/src/gallery.js": "src/gallery.js",
+    "/src/base64-binary.js": "src/base64-binary.js"
+  
 }
 
 Object.entries(staticPaths).forEach(entry => {
@@ -99,7 +101,7 @@ fastify.get("/api/get-page", (request, reply) => {
             const pageItems = []
             for (const file of files) {
                 const rawFile = await gcs.fetchObject(file)
-                const metadata = await file.getMetadata()
+                const [metadata] = await file.getMetadata()
                 const fileName = file.name.slice(file.name.lastIndexOf("/") + 1, file.name.lastIndexOf("."))
                 pageItems.push({
                     contents: rawFile,
