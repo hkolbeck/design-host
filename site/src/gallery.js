@@ -15,11 +15,6 @@ async function loadPage(url) {
         return;
     }
 
-    if (page.page.length === 0) {
-        window.location.href = "https://acab.city/404";
-        return;
-    }
-
     await renderPage(gallery, pageToken, page.nextPage, page.page).catch(
         (err) => {
             console.log(err);
@@ -141,6 +136,13 @@ async function getPreviewDataUrl(contentDataUrl) {
 
 async function renderPage(gallery, currentPage, nextPage, files) {
     const start = Date.now();
+
+    if (files.length === 0) {
+        const nothingHere = document.getElementById("nothing-here")
+        nothingHere.style.display = "block"
+        return
+    }
+
     for (let i = 0; i < 10; i++) {
         const item = document.getElementById(`gallery-item-${i}`);
         const img = document.getElementById(`gallery-image-${i}`);

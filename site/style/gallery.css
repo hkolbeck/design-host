@@ -93,6 +93,11 @@
     display: none;
 }
 
+#nothing-here {
+    text-align: center;
+    display: none;
+}
+
 .gallery {
     display: grid;
     grid-template-areas:
