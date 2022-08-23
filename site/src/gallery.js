@@ -99,12 +99,28 @@ async function pdfToPreviewDataUrl(pdfDataUrl) {
   return canvas.toDataURL();
 }
 
+function textToPreviewDataUrl(textDataUrl) {
+  const base64Text = textDataUrl.slice(textDataUrl.indexOf(",") + 1);
+  const text = atob(base64Text)
+
+  const canvas = document.createElement("canvas")
+  const ctx = canvas.getContext('2d');
+
+  ctx.textAlign = "left"
+  ctx.font = `12px monospace`
+  ctx.fillText(text, 10, 10)
+
+  return canvas.toDataURL()
+}
+
 async function getPreviewDataUrl(contentDataUrl) {
   const preamble = contentDataUrl.slice(0, contentDataUrl.indexOf(","));
   if (preamble.match("image/jpeg") || preamble.match("image/png")) {
     return contentDataUrl;
   } else if (preamble.match("application/pdf")) {
     return await pdfToPreviewDataUrl(contentDataUrl);
+  } else if (preamble.match("text/plain")) {
+    return textToPreviewDataUrl(contentDataUrl)
   } else {
     console.log(`Unknown mime type in preamble: '${preamble}'`);
     return contentDataUrl;
