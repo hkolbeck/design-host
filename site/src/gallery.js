@@ -114,6 +114,7 @@ async function renderPage(gallery, files, currentToken, nextToken) {
     const img = document.getElementById(`gallery-image-${i}`);
     const title = document.getElementById(`gallery-title-${i}`);
     const download = document.getElementById(`download-${i}`);
+    const downloadImg = document.getElementById(`download-img-${i}`);
 
     if (files[i]) {
       let previewDataUrl = await getPreviewDataUrl(files[i].contents);
@@ -145,6 +146,8 @@ async function renderPage(gallery, files, currentToken, nextToken) {
       download.setAttribute("href", files[i].contents);
       download.setAttribute("download", files[i].fileName);
 
+      downloadImg.setAttribute("alt", `Download ${files[i].title}`)
+      
       item.style.display = "block"
     } else {
       item.style.display = "none"
