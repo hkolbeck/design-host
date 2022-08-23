@@ -13,27 +13,24 @@ async function loadPage(url) {
         window.location.href = "https://acab.city/error";
         return;
     }
+  
+  if (page.page.length === 0) {
+        window.location.href = "https://acab.city/404";
+        return
+  }
 
     await renderPage(gallery, pageToken, page.nextPage, page.page).catch((err) => {
         console.log(err)
     });
 }
 
-async function nextPage() {
-    clearPage();
-
-
-}
-
-async function previousPage() {
-    clearPage();
-}
-
 async function fetchPage(gallery, pageToken) {
     const start = Date.now()
     let url = `https://acab.city/api/get-page?gallery=${gallery}`;
     if (pageToken) {
-        url += `&page=${pageToken}`;
+        url += `&page=${pageToken}&count=10`;
+    } else {
+      url += "&count=11"
     }
 
     return await fetch(url)
@@ -48,7 +45,7 @@ async function fetchPage(gallery, pageToken) {
                         resp.statusText
                     }: ${await resp.text()}`
                 );
-                return null;
+                return {files: []};
             }
         })
         .catch((err) => {

@@ -63,15 +63,25 @@
     right: 20px;
 }
 
+.nav-control {
+  height: 50px;
+  width: calc(98vw - 210px);
+  float: left;
+}
+
 .nav-button {
-    width: 50px;
-    height: 50px;
-    margin: 30px;
-    display: none;
+    float: right;
+    height: 40px;
+    width: auto;
+    margin: 5px 20px;
+    display: inline-block;
 }
 
 #next-button {
     float: right;
+    height: 50px;
+    width: 80px;
+    display: none;
 }
 
 .gallery {

@@ -33,6 +33,7 @@ const galleryPaths = {
 const staticPaths = {
     "/": "index.html",
     "/gallery": "gallery.html",
+    "/404": "404.html",
 
     "/fonts/montserrat-regular-webfont.woff": "fonts/montserrat-regular-webfont.woff",
     "/fonts/montserrat-regular-webfont.woff2": "fonts/montserrat-regular-webfont.woff2",

@@ -33,12 +33,15 @@ a, a:visited {
     width: 100%;
 }
 
+.header-link {
+    place-self: center;
+    grid-area: c;  
+}
+
 .logo {
     width: 300px;
     height: 50px;
     padding: 10px;
-    place-self: center;
-    grid-area: c;
 }
 
 .link-button {
@@ -65,7 +68,7 @@ a, a:visited {
 .social-logo {
     height: 40px;
     width: 40px;
-    margin: 5px 20px;
+    margin: 5px 15px;
 }
 
 .not-found-content {
@@ -77,5 +80,9 @@ a, a:visited {
 }
 
 .error-content {
-    font-size: 10rem;
+    font-size: 10vw;
+    text-align: center;
+    top: 40vh;
+    position: fixed;
+    width: 100%;
 }
