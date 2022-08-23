@@ -1,36 +1,78 @@
+.gallery-wrapper {
+      top: 70px;
+  bottom: 50px;
+    width: 100%;
+    position: fixed;
+  overflow-y: scroll;
+}
+
 .gallery-item {
     width: 280px;
     height: 280px;
     place-self: center;
     text-align: center;
     padding: 10px;
+  position: relative;
+  display: none;
 }
 
 .gallery-image {
-    width: 260px;
-    height: auto;
+    max-width: 260px;
+    max-height: 260px;
+  margin: auto;
     overflow-y: clip;
     border: 3px solid white;
     z-index: 1;
+  position: relative;
+}
+
+.big-image-wrapper {
+  top: 70px;
+  bottom: 50px;
+  position: fixed;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+
+.big-image-backer {
+  background-color: white;
+  opacity: 30%;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9998;
+}
+
+.big-image {
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 180px);
+  opacity: 100%;
+  margin: auto;
+  z-index: 9999;
 }
 
 .download {
-    width: 25px;
-    height: 25px;
+    width: 50px;
+    height: 50px;
+    z-index: 9997;
     position: absolute;
-    bottom: 5px;
-    right: 5px;
-    z-index: 2;
+    bottom: 25px;
+    right: 20px;
 }
 
 .gallery-controls {
-
+  position: fixed;
+  bottom: 60px;
+  width: 100%
 }
 
 .nav-button {
-    width: 25px;
-    height: 25px;
-    padding: 10px;
+    width: 50px;
+    height: 50px;
+    margin: 30px;
 }
 
 #previous-button {
@@ -71,7 +113,7 @@
         grid-template-areas:
             "a b c d"
             "e f g h"
-            "i j";
+            ". i j .";
     }
 }
 
@@ -82,7 +124,7 @@
             "a b c"
             "d e f"
             "g h i"
-            "j . .";
+            ". j .";
     }
 }
 

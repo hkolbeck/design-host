@@ -8,7 +8,7 @@ function makeClient(gcs, bucket) {
 
 function makeListDirectory(gcs, bucket) {
     return async function listDirectory(prefix, limit, pageToken) {
-        console.log(`Got list for prefix: '${prefix}' limit: '${limit}' page: ${pageToken}`)
+        // console.log(`Got list for prefix: '${prefix}' limit: '${limit}' page: ${pageToken}`)
         if (pageToken) {
             const pageQuery = JSON.parse(Buffer.from(pageToken, "base64url").toString("utf8"))
             if (!pageQuery) {

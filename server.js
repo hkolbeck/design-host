@@ -109,7 +109,11 @@ fastify.get("/api/get-page", (request, reply) => {
             const pageItems = []
             for (const file of files) {
                 const rawFile = await gcs.fetchObject(file)
-                const [metadata] = await file.getMetadata()
+                let [metadata] = await file.getMetadata()
+                if (!metadata.metadata) {
+                  metadata.metadata = {}
+                }
+                
                 const fileName = file.name.slice(file.name.lastIndexOf("/") + 1, file.name.lastIndexOf("."))
                 pageItems.push({
                     contents: rawFile,
