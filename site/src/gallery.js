@@ -1,4 +1,6 @@
-async function loadInitialPage(url) {
+const pages = []
+
+async function loadPage(url) {
   const gallery = url.searchParams.get("gallery");
   if (!gallery) {
     console.log(`No gallery in URL: ${url.toString()}`);
@@ -6,18 +8,21 @@ async function loadInitialPage(url) {
     return;
   }
 
-  const page = await fetchPage(gallery);
+  const pageToken = url.searchParams.get("page");
+  const page = await fetchPage(gallery, pageToken);
   if (!page) {
     console.log("Page fetch failed");
     window.location.href = "https://acab.city/error";
     return;
   }
 
-  await renderPage(gallery, page.page, null, page.nextPage).catch((err) => {console.log(err)});
+  await renderPage(gallery, pageToken, page.nextPage, page.page).catch((err) => {console.log(err)});
 }
 
 async function nextPage() {
   clearPage();
+
+
 }
 
 async function previousPage() {
@@ -25,6 +30,7 @@ async function previousPage() {
 }
 
 async function fetchPage(gallery, pageToken) {
+  const start = Date.now()
   let url = `https://acab.city/api/get-page?gallery=${gallery}`;
   if (pageToken) {
     url += `&page=${pageToken}`;
@@ -33,7 +39,9 @@ async function fetchPage(gallery, pageToken) {
   return await fetch(url)
     .then(async (resp) => {
       if (resp.ok) {
-        return await resp.json();
+        let json = await resp.json();
+        console.log(`Fetch completed in ${Date.now() - start}ms`)
+        return json;
       } else {
         console.log(
           `Failed to fetch '${url}': ${resp.status} ${
@@ -58,6 +66,7 @@ function clearPage() {
 }
 
 async function pdfToPreviewDataUrl(pdfDataUrl) {
+  const start = Date.now()
   const pdfData = pdfDataUrl.slice(pdfDataUrl.indexOf(",") + 1);
   const pdfBinaryData = Base64Binary.decode(pdfData)
   const loadingTask = pdfjsLib.getDocument(pdfBinaryData);
@@ -89,6 +98,7 @@ async function pdfToPreviewDataUrl(pdfDataUrl) {
   };
   await page.render(renderContext).promise;
 
+  console.log(`PDF=>PNG conversion completed in ${Date.now() - start}ms`)
   return canvas.toDataURL();
 }
 
@@ -104,7 +114,8 @@ async function getPreviewDataUrl(contentDataUrl) {
   }
 }
 
-async function renderPage(gallery, files, currentToken, nextToken) {
+async function renderPage(gallery, currentPage, nextPage, files) {
+  const start = Date.now();
   for (let i = 0; i < 10; i++) {
     const item = document.getElementById(`gallery-item-${i}`)
     const img = document.getElementById(`gallery-image-${i}`);
@@ -151,16 +162,20 @@ async function renderPage(gallery, files, currentToken, nextToken) {
   }
 
   const prev = document.getElementById("previous-button");
-  if (currentToken) {
-    prev.href = `https://acab.city/gallery?gallery=${gallery}&page=${currentToken}`;
+
+  if (pages.length > 0) {
+    prev.href = `https://acab.city/gallery?gallery=${gallery}&page=${pages[pages.length - 1]}`;
+    prev.onclick = () => pages.pop()
   } else {
     prev.style.display = "hidden";
   }
 
   const next = document.getElementById("next-button");
-  if (nextToken) {
-    next.href = `https://acab.city/gallery?gallery=${gallery}&page=${nextToken}`;
+  if (nextPage) {
+    next.href = `https://acab.city/gallery?gallery=${gallery}&page=${nextPage}`;
+    next.onclick = () => pages.push(currentPage)
   } else {
     next.style.display = "hidden";
   }
+  console.log(`Render completed in ${Date.now() - start}ms`)
 }
