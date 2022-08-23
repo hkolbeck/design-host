@@ -21,6 +21,7 @@ body {
 
 a, a:visited {
     text-decoration: none;
+  color: white;
 }
 
 .header {
@@ -43,7 +44,7 @@ a, a:visited {
 .link-button {
     margin: 1vh 0.5vw;
     width: 18vw;
-    min-width: 100px;
+    min-width: 300px;
     height: auto;
 }
 

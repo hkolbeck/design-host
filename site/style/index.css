@@ -1,22 +1,18 @@
+li {
+  margin: 10px 0;
+}
+
 .index-content {
-    top: 70px
+    top: 70px;
   bottom: 50px;
     width: 100%;
     position: fixed;
   overflow-y: scroll;
 }
 
-.intro {
-
-}
-
 .license {
     font-family: Courier new, monospace;
     padding: 20px;
-}
-
-.requests {
-
 }
 
 .index-buttons {

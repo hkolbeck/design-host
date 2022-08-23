@@ -110,28 +110,32 @@ async function getPreviewDataUrl(contentDataUrl) {
 
 async function renderPage(gallery, files, currentToken, nextToken) {
   for (let i = 0; i < 10; i++) {
+    const item = document.getElementById(`gallery-item-${i}`)
     const img = document.getElementById(`gallery-image-${i}`);
     const title = document.getElementById(`gallery-title-${i}`);
     const download = document.getElementById(`download-${i}`);
 
     if (files[i]) {
       let previewDataUrl = await getPreviewDataUrl(files[i].contents);
-      console.log(`Data URL: ${previewDataUrl.length} chars: ${previewDataUrl.slice(0,100)}...`)
       img.onclick = () => {
-        let div = document.createElement("div");
-        div.className = "big-image-backer";
-
+        let wrapper = document.createElement("div")
+        wrapper.className = "big-image-wrapper"
+        
+        let backer = document.createElement("div");
+        backer.className = "big-image-backer";
+        wrapper.appendChild(backer)
+        
         let bigImg = document.createElement("img");
         bigImg.src = previewDataUrl;
         bigImg.alt = files[i].alt;
-        bigImg.className = "big-image";
-        div.appendChild(bigImg);
-
-        div.onclick = () => {
-          document.removeChild(div);
+        bigImg.className = "big-image";        
+        wrapper.appendChild(bigImg);
+        
+        backer.onclick = () => {
+          document.body.removeChild(wrapper);
         };
 
-        document.appendChild(div);
+        document.body.appendChild(wrapper);
       };
 
       img.setAttribute("src", previewDataUrl);
@@ -141,13 +145,9 @@ async function renderPage(gallery, files, currentToken, nextToken) {
       download.setAttribute("href", files[i].contents);
       download.setAttribute("download", files[i].fileName);
 
-      img.style.display = "block";
-      title.style.display = "block";
-      download.style.display = "block";
+      item.style.display = "block"
     } else {
-      img.style.display = "hidden";
-      title.style.display = "hidden";
-      download.style.display = "hidden";
+      item.style.display = "none"
     }
   }
 
