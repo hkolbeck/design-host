@@ -1,21 +1,47 @@
+html {
+  width: 100%;
+  height: 100%;
+}
+
 body {
+  width: 100%;
+  height: 100%;
     background-color: black;
-    font-family: "sans-serif";
+    font-family: Arial,sans-serif;
+    color: white;
+}
+
+a, a:visited {
+    text-decoration: none;
 }
 
 .header {
     position: fixed;
     top: 0;
-    display: flex;
-    justify-content: space-between;
-    flex-flow: row wrap;
+    display: grid;
+    grid-template-areas: "c";
     height: 70px;
+  width: 100%;
 }
 
 .logo {
     width: 300px;
     height: 50px;
     padding: 10px;
+    place-self: center;
+  grid-area: c;
+}
+
+.link-button {
+        background-color: white;
+    color: black;
+  font-size: 2rem;
+    padding: 3vh 2vw;
+    border-radius: .2em;
+    width: 5vw;
+  margin: 3vh 3vw;
+  height: 3vh;
+  display: ;
 }
 
 .footer {
@@ -27,15 +53,25 @@ body {
     padding-top: 1px;
 }
 
+.social-logos {
+  position: float-right;
+  padding-right: 2vw;
+}
+
 .social-logo {
-    width: 50px;
-    height: 50px;
+    height: 4.5vh;
+    width: 4.5vh;
+    padding: 0.25vw;
 }
 
 .not-found-content {
-
+  font-size: 10vw;
+  text-align: center;
+  top: 40vh;
+  position: fixed;
+  width: 100%;
 }
 
 .error-content {
-
+  font-size: 10rem;
 }
