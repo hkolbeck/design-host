@@ -11,6 +11,10 @@ body {
     color: white;
 }
 
+a, a:visited {
+    text-decoration: none;
+}
+
 .header {
     position: fixed;
     top: 0;
@@ -26,6 +30,18 @@ body {
     padding: 10px;
     place-self: center;
   grid-area: c;
+}
+
+.link-button {
+        background-color: white;
+    color: black;
+  font-size: 2rem;
+    padding: 3vh 2vw;
+    border-radius: .2em;
+    width: 5vw;
+  margin: 3vh 3vw;
+  height: 3vh;
+  display: ;
 }
 
 .footer {
