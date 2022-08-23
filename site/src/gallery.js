@@ -107,7 +107,6 @@ function textToPreviewDataUrl(textDataUrl) {
         parts.push(text.slice(i, i + 34))
     }
 
-
     const canvas = document.createElement("canvas")
     const ctx = canvas.getContext('2d');
     canvas.width = 260
@@ -117,7 +116,6 @@ function textToPreviewDataUrl(textDataUrl) {
     ctx.fillRect(0, 0, 260, 260)
 
     ctx.fillStyle = "black"
-
     ctx.textAlign = "left"
     ctx.font = `12px monospace`
     for (let y = 10, i = 0; y < 260 && i < parts.length; y += 14, i++) {
