@@ -16,6 +16,15 @@
     display: none;
 }
 
+.gallery-folder {
+    max-width: 260px;
+    max-height: 260px;
+    margin: auto;
+    overflow-y: clip;
+    z-index: 1;
+    position: relative;
+}
+
 .gallery-image {
     max-width: 260px;
     max-height: 260px;

@@ -8,7 +8,6 @@ function makeClient(gcs, bucket) {
 
 function makeListDirectory(gcs, bucket) {
     return async function listDirectory(prefix, pageToken) {
-        // console.log(`Got list for prefix: '${prefix}' limit: '${limit}' page: ${pageToken}`)
         if (pageToken) {
             const pageQuery = JSON.parse(Buffer.from(pageToken, "base64url").toString("utf8"))
             if (!pageQuery) {
@@ -24,13 +23,13 @@ function makeListDirectory(gcs, bucket) {
             }
         } else {
             let [files, nextPage] = await gcs.bucket(bucket).getFiles({
-                prefix: prefix + (subDir ? subDir : ""),
+                prefix: prefix,
                 autoPaginate: false,
                 maxResults: 11,
                 delimiter: '/'
             });
-          console.log(JSON.stringify(files.map(f => f.name)))
-            return {
+
+          return {
                 files: files,
                 nextPage: nextPage ? Buffer.from(JSON.stringify(nextPage)).toString("base64url") : null
             }
