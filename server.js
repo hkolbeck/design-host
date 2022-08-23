@@ -55,6 +55,7 @@ const staticPaths = {
     "/images/flyers.svg": "img/flyers.svg",
     "/images/stencils.svg": "img/stencils.svg",
     "/images/folder.svg": "img/folder.svg",
+    "/images/favicon.ico": "img/favicon.png",
 
     "/src/gallery.js": "src/gallery.js",
     "/src/base64-binary.js": "src/base64-binary.js"
