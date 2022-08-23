@@ -35,7 +35,7 @@ a, a:visited {
 
 .header-link {
     place-self: center;
-    grid-area: c;  
+    grid-area: c;
 }
 
 .logo {

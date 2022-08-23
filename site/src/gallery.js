@@ -13,11 +13,11 @@ async function loadPage(url) {
         window.location.href = "https://acab.city/error";
         return;
     }
-  
-  if (page.page.length === 0) {
+
+    if (page.page.length === 0) {
         window.location.href = "https://acab.city/404";
         return
-  }
+    }
 
     await renderPage(gallery, pageToken, page.nextPage, page.page).catch((err) => {
         console.log(err)
@@ -30,7 +30,7 @@ async function fetchPage(gallery, pageToken) {
     if (pageToken) {
         url += `&page=${pageToken}&count=10`;
     } else {
-      url += "&count=11"
+        url += "&count=11"
     }
 
     return await fetch(url)

@@ -57,13 +57,13 @@ const staticPaths = {
 
     "/src/gallery.js": "src/gallery.js",
     "/src/base64-binary.js": "src/base64-binary.js"
-  
+
 }
 
 Object.entries(staticPaths).forEach(entry => {
     const [path, file] = entry
     fastify.get(path, (request, reply) => {
-            reply.sendFile(file)
+        reply.sendFile(file)
     });
 })
 
@@ -111,9 +111,9 @@ fastify.get("/api/get-page", (request, reply) => {
                 const rawFile = await gcs.fetchObject(file)
                 let [metadata] = await file.getMetadata()
                 if (!metadata.metadata) {
-                  metadata.metadata = {}
+                    metadata.metadata = {}
                 }
-                
+
                 const fileName = file.name.slice(file.name.lastIndexOf("/") + 1, file.name.lastIndexOf("."))
                 pageItems.push({
                     contents: rawFile,
