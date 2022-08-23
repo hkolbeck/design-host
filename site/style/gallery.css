@@ -1,9 +1,9 @@
 .gallery-wrapper {
-      top: 70px;
-  bottom: 50px;
+    top: 70px;
+    bottom: 50px;
     width: 100%;
     position: fixed;
-  overflow-y: scroll;
+    overflow-y: scroll;
 }
 
 .gallery-item {
@@ -12,18 +12,18 @@
     place-self: center;
     text-align: center;
     padding: 10px;
-  position: relative;
-  display: none;
+    position: relative;
+    display: none;
 }
 
 .gallery-image {
     max-width: 260px;
     max-height: 260px;
-  margin: auto;
+    margin: auto;
     overflow-y: clip;
     border: 3px solid white;
     z-index: 1;
-  position: relative;
+    position: relative;
 }
 
 .big-image-wrapper {
@@ -73,6 +73,7 @@
     width: 50px;
     height: 50px;
     margin: 30px;
+  display: none;
 }
 
 #previous-button {
