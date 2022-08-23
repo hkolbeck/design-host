@@ -6,31 +6,36 @@ async function loadPage(url) {
         return;
     }
 
+    const subDir = url.searchParams.get("sub");
     const pageToken = url.searchParams.get("page");
-    const page = await fetchPage(gallery, pageToken);
+    const page = await fetchPage(gallery, subDir, pageToken);
     if (!page) {
         console.log("Page fetch failed");
         window.location.href = "https://acab.city/error";
         return;
     }
-  
-  if (page.page.length === 0) {
+
+    if (page.page.length === 0) {
         window.location.href = "https://acab.city/404";
         return
-  }
+    }
 
     await renderPage(gallery, pageToken, page.nextPage, page.page).catch((err) => {
         console.log(err)
     });
 }
 
-async function fetchPage(gallery, pageToken) {
+async function fetchPage(gallery, subDir, pageToken) {
     const start = Date.now()
     let url = `https://acab.city/api/get-page?gallery=${gallery}`;
     if (pageToken) {
         url += `&page=${pageToken}&count=10`;
     } else {
-      url += "&count=11"
+        url += "&count=11"
+    }
+
+    if (subDir) {
+        url += `&sub=${subDir}`
     }
 
     return await fetch(url)
@@ -45,7 +50,7 @@ async function fetchPage(gallery, pageToken) {
                         resp.statusText
                     }: ${await resp.text()}`
                 );
-                return {files: []};
+                return {page: []};
             }
         })
         .catch((err) => {
@@ -53,13 +58,6 @@ async function fetchPage(gallery, pageToken) {
             console.log(err);
             return null;
         });
-}
-
-function clearPage() {
-    for (let i = 0; i < 10; i++) {
-        const item = document.getElementById(`gallery-item-${i}`)
-        item.style.display = "none";
-    }
 }
 
 async function pdfToPreviewDataUrl(pdfDataUrl) {
@@ -121,38 +119,54 @@ async function renderPage(gallery, currentPage, nextPage, files) {
         const downloadImg = document.getElementById(`download-img-${i}`);
 
         if (files[i]) {
-            let previewDataUrl = await getPreviewDataUrl(files[i].contents);
-            img.onclick = () => {
-                let wrapper = document.createElement("div")
-                wrapper.className = "big-image-wrapper"
+            if (files[i].type === "file") {
+                let previewDataUrl = await getPreviewDataUrl(files[i].contents);
+                img.onclick = () => {
+                    let wrapper = document.createElement("div")
+                    wrapper.className = "big-image-wrapper"
 
-                let backer = document.createElement("div");
-                backer.className = "big-image-backer";
-                wrapper.appendChild(backer)
+                    let backer = document.createElement("div");
+                    backer.className = "big-image-backer";
+                    wrapper.appendChild(backer)
 
-                let bigImg = document.createElement("img");
-                bigImg.src = previewDataUrl;
-                bigImg.alt = files[i].alt;
-                bigImg.className = "big-image";
-                wrapper.appendChild(bigImg);
+                    let bigImg = document.createElement("img");
+                    bigImg.src = previewDataUrl;
+                    bigImg.alt = files[i].alt;
+                    bigImg.className = "big-image";
+                    wrapper.appendChild(bigImg);
 
-                backer.onclick = () => {
-                    document.body.removeChild(wrapper);
+                    backer.onclick = () => {
+                        document.body.removeChild(wrapper);
+                    };
+
+                    document.body.appendChild(wrapper);
                 };
 
-                document.body.appendChild(wrapper);
-            };
+                img.setAttribute("src", previewDataUrl);
+                img.setAttribute("alt", files[i].alt);
+                title.innerText = files[i].title;
 
-            img.setAttribute("src", previewDataUrl);
-            img.setAttribute("alt", files[i].alt);
-            title.innerText = files[i].title;
+                download.setAttribute("href", files[i].contents);
+                download.setAttribute("download", files[i].fileName);
 
-            download.setAttribute("href", files[i].contents);
-            download.setAttribute("download", files[i].fileName);
+                downloadImg.setAttribute("alt", `Download ${files[i].title}`)
 
-            downloadImg.setAttribute("alt", `Download ${files[i].title}`)
+                item.style.display = "block"
+                download.style.display = "block"
+            } else if (files[i].type === "directory") {
+                download.style.display = "none"
+                img.setAttribute("src", "/img/folder.svg")
+                img.setAttribute("alt", `Folder - ${files[i].filename}`)
+                img.onclick = () => {
+                    window.location.href = `https://acab.city/gallery?gallery=${gallery}&sub=${files[i].fileName}`
+                }
+                title.innerText = files[i].fileName;
 
-            item.style.display = "block"
+                item.style.display = "block"
+            } else {
+                console.log(`Unknown file type: ${files[i].type}`)
+                item.style.display = "none"
+            }
         } else {
             item.style.display = "none"
         }

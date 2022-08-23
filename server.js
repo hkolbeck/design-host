@@ -54,16 +54,17 @@ const staticPaths = {
     "/images/signage.svg": "img/signage.svg",
     "/images/flyers.svg": "img/flyers.svg",
     "/images/stencils.svg": "img/stencils.svg",
+    "/images/folder.svg": "img/folder.svg",
 
     "/src/gallery.js": "src/gallery.js",
     "/src/base64-binary.js": "src/base64-binary.js"
-  
+
 }
 
 Object.entries(staticPaths).forEach(entry => {
     const [path, file] = entry
     fastify.get(path, (request, reply) => {
-            reply.sendFile(file)
+        reply.sendFile(file)
     });
 })
 
@@ -84,14 +85,14 @@ fastify.setErrorHandler((error, request, reply) => {
 fastify.get("/api/get-page", (request, reply) => {
     const pageToken = request.query['page']
     const subGallery = request.query['gallery']
-    const pageSize = request.query['count'] || 10
+    const subDir = request.query['sub']
     if (!galleryPaths[subGallery]) {
         console.log(`No path found for '${subGallery}'`)
         reply.status(400).send({error: `Unknown gallery: '${subGallery}'`})
         return
     }
 
-    gcs.listDirectory(galleryPaths[subGallery], pageSize, pageToken)
+    gcs.listDirectory(galleryPaths[subGallery] + (subDir ? subDir : ""), pageToken)
         .then(async listResp => {
             if (!listResp) {
                 reply.status(400).send({error: "Couldn't parse provided page token"})
@@ -101,28 +102,35 @@ fastify.get("/api/get-page", (request, reply) => {
             let {files, nextPage} = listResp
             files = files.filter(f => !f.name.endsWith(galleryPaths[subGallery]))
             if (!files || files.length === 0) {
-                console.log(`No files found: ${JSON.stringify(files)}`)
                 reply.status(404).send()
                 return
             }
 
             const pageItems = []
             for (const file of files) {
-                const rawFile = await gcs.fetchObject(file)
-                let [metadata] = await file.getMetadata()
-                if (!metadata.metadata) {
-                  metadata.metadata = {}
-                }
-                
-                const fileName = file.name.slice(file.name.lastIndexOf("/") + 1, file.name.lastIndexOf("."))
-                pageItems.push({
-                    contents: rawFile,
-                    fileName: fileName,
-                    alt: metadata.metadata["alt"] || "No alt text found",
-                    title: metadata.metadata["title"] || fileName
-                })
-            }
+                if (file.name.endsWith("/")) {
+                    const fileName = file.name.replace(galleryPaths[subGallery], "").replace(" ", "%22")
+                    pageItems.push({
+                        type: "directory",
+                        nameName: fileName
+                    })
+                } else {
+                    const rawFile = await gcs.fetchObject(file)
+                    let [metadata] = await file.getMetadata()
+                    if (!metadata.metadata) {
+                        metadata.metadata = {}
+                    }
 
+                    const fileName = file.name.slice(file.name.lastIndexOf("/") + 1, file.name.lastIndexOf("."))
+                    pageItems.push({
+                        type: "file",
+                        contents: rawFile,
+                        fileName: fileName,
+                        alt: metadata.metadata["alt"] || "No alt text found",
+                        title: metadata.metadata["title"] || fileName
+                    })
+                }
+            }
             const body = {
                 page: pageItems,
                 nextPage: nextPage
