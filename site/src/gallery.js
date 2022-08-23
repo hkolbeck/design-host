@@ -35,26 +35,28 @@ async function fetchPage(gallery, subDir, pageToken) {
         url += `&sub=${subDir.replace(" ", "%20")}`;
     }
 
-    return await fetch(url)
-        .then(async (resp) => {
-            if (resp.ok) {
-                let json = await resp.json();
-                console.log(`Fetch completed in ${Date.now() - start}ms`);
-                return json;
-            } else {
-                console.log(
-                    `Failed to fetch '${url}': ${resp.status} ${
-                        resp.statusText
-                    }: ${await resp.text()}`
-                );
-                return {page: []};
-            }
-        })
-        .catch((err) => {
-            console.log(`Error fetching '${url}'`);
-            console.log(err);
-            return null;
-        });
+    return await fetch(url, {
+        headers: {
+            "Accept-Encoding": "gzip"
+        }
+    }).then(async (resp) => {
+        if (resp.ok) {
+            let json = await resp.json();
+            console.log(`Fetch completed in ${Date.now() - start}ms`);
+            return json;
+        } else {
+            console.log(
+                `Failed to fetch '${url}': ${resp.status} ${
+                    resp.statusText
+                }: ${await resp.text()}`
+            );
+            return {page: []};
+        }
+    }).catch((err) => {
+        console.log(`Error fetching '${url}'`);
+        console.log(err);
+        return null;
+    });
 }
 
 async function pdfToPreviewDataUrl(pdfDataUrl) {

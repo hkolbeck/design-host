@@ -15,6 +15,8 @@ process.on('uncaughtException', function (exception) {
     console.log(exception);
 });
 
+fastify.register(require('@fastify/compress'))
+
 fastify.register(require('@fastify/static'), {
     root: path.join(__dirname, 'site')
 })
