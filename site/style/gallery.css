@@ -1,15 +1,19 @@
 .gallery-item {
-    width: 300px;
-    height: 300px;
+    width: 280px;
+    height: 280px;
+    place-self: center;
+    text-align: center;
+    padding: 10px;
 }
 
 .gallery-image {
-    width: 280px;
+    width: 260px;
     height: auto;
     overflow-y: clip;
     border: 3px solid white;
     z-index: 1;
 }
+
 .download {
     width: 25px;
     height: 25px;
@@ -37,48 +41,6 @@
     float: right;
 }
 
-@media screen and (min-width: 1500px) {
-    .gallery {
-        display: grid;
-        grid-template-areas:
-            "a b c d e"
-            "f g h i j";
-    }
-}
-
-@media screen and (min-width: 1200px) {
-    .gallery {
-        display: grid;
-        grid-template-areas:
-            "a b c d"
-            "e f g h"
-            "i j";
-    }
-}
-
-@media screen and (min-width: 900px) {
-    .gallery {
-        display: grid;
-        grid-template-areas:
-            "a b c"
-            "d e f"
-            "g h i"
-            "j . .";
-    }
-}
-
-@media screen and (min-width: 600px) {
-    .gallery {
-        display: grid;
-        grid-template-areas:
-            "a b"
-            "c d"
-            "e f"
-            "g h"
-            "i j"
-    }
-}
-
 .gallery {
     display: grid;
     grid-template-areas:
@@ -92,6 +54,48 @@
         "h"
         "i"
         "j";
+}
+
+@media screen and (min-width: 1500px) {
+    .gallery {
+        display: grid;
+        grid-template-areas:
+            "a b c d e"
+            "f g h i j";
+    }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1499px){
+    .gallery {
+        display: grid;
+        grid-template-areas:
+            "a b c d"
+            "e f g h"
+            "i j";
+    }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1199px){
+    .gallery {
+        display: grid;
+        grid-template-areas:
+            "a b c"
+            "d e f"
+            "g h i"
+            "j . .";
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 899px) {
+    .gallery {
+        display: grid;
+        grid-template-areas:
+            "a b"
+            "c d"
+            "e f"
+            "g h"
+            "i j"
+    }
 }
 
 #gallery-item-0 {
