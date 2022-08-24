@@ -153,10 +153,7 @@ fastify.get("/api/get-page", (request, reply) => {
         })
 })
 
-fastify.get("/health", (request, reply) => {
-    console.log("Healthcheck!")
-    reply.status(200).send()
-})
+fastify.get("/health", (request, reply) => reply.status(200).send())
 
 fastify.listen({port: config.port, host: config.host}, function (err, address) {
     if (err) {
