@@ -4,6 +4,8 @@
     width: 100%;
     position: fixed;
     overflow-y: scroll;
+    display: grid;
+    grid-template-areas: "c";
 }
 
 #gallery-item {
@@ -77,6 +79,15 @@
     right: 20px;
 }
 
+.item-link-img {
+    width: 50px;
+    height: 50px;
+    z-index: 9997;
+    position: absolute;
+    bottom: 25px;
+    left: 20px;
+}
+
 .nav-control {
     height: 50px;
     width: calc(98vw - 210px);
@@ -101,10 +112,14 @@
 #nothing-here {
     text-align: center;
     display: none;
+    grid-area: c;
+    place-self: center;
 }
 
 #gallery {
     display: none;
+    grid-area: c;
+    place-self: center;
     grid-template-areas:
         "a"
         "b"
@@ -198,4 +213,36 @@
 
 #gallery-item-9 {
     grid-area: j;
+}
+
+/*// <div id="single-item-wrapper">*/
+/*//     <div id="single-item">*/
+/*//         <img id="single-image" src="" alt=""/>*/
+/*//         <a id="single-image-download" href="">*/
+/*//                 id="single-image-download-img"*/
+
+#single-item-wrapper {
+    display: none;
+    grid-area: c;
+    place-self: center;
+    grid-template-areas: "img"
+                         "save";
+}
+
+#single-image {
+    width: 80vw;
+    height: auto;
+    grid-area: img;
+    place-self: center;
+}
+
+/*#single-image-download {*/
+/*}*/
+
+#single-image-download-img {
+    max-width: 300px;
+    width: 50vw;
+    height: auto;
+    grid-area: save;
+    place-self: center;
 }

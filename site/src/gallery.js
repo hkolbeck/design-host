@@ -10,7 +10,7 @@ async function loadPage(url) {
     }
 
     if (apiResult.page) {
-        await renderPage(path, pageToken, apiResult.nextPage, apiResult.page).catch(
+        renderPage(path, pageToken, apiResult.nextPage, apiResult.page).catch(
             (err) => {
                 console.log(`Error fetching ${path}`)
                 console.log(err);
@@ -18,7 +18,7 @@ async function loadPage(url) {
             }
         );
     } else if (apiResult.contents) {
-        await renderSingle(apiResult).catch(
+        renderSingle(apiResult).catch(
             (err) => {
                 console.log(`Error fetching ${path}`)
                 console.log(err);
@@ -162,6 +162,12 @@ async function getPreviewDataUrl(contentDataUrl) {
     }
 }
 
+async function dataUrlToBlob(item) {
+    return await fetch(item.contents)
+        .then((response) => response.blob())
+        .then(URL.createObjectURL);
+}
+
 async function renderPage(path, currentPage, nextPage, files) {
     const start = Date.now();
 
@@ -173,16 +179,20 @@ async function renderPage(path, currentPage, nextPage, files) {
 
     const promises = [...Array(10).keys()].map(async i => {
         const item = document.getElementById(`gallery-item-${i}`);
-        const img = document.getElementById(`gallery-image-${i}`);
-        const title = document.getElementById(`gallery-title-${i}`);
-        const download = document.getElementById(`download-${i}`);
-        const downloadImg = document.getElementById(`download-img-${i}`);
-        const folder = document.getElementById(`gallery-folder-${i}`);
-        const folderImg = document.getElementById(`gallery-folder-img-${i}`);
+        const file = files[i];
 
-        if (files[i]) {
-            if (files[i].type === "file") {
-                let previewDataUrl = await getPreviewDataUrl(files[i].contents);
+        if (file) {
+            const img = document.getElementById(`gallery-image-${i}`);
+            const title = document.getElementById(`gallery-title-${i}`);
+            const download = document.getElementById(`download-${i}`);
+            const downloadImg = document.getElementById(`download-img-${i}`);
+            const folder = document.getElementById(`gallery-folder-${i}`);
+            const folderImg = document.getElementById(`gallery-folder-img-${i}`);
+            const link = document.getElementById(`item-link-${i}`)
+            const linkImg = document.getElementById(`item-link-img-${i}`)
+
+            if (file.type === "file") {
+                let previewDataUrl = await getPreviewDataUrl(file.contents);
                 img.onclick = () => {
                     let wrapper = document.createElement("div");
                     wrapper.className = "big-image-wrapper";
@@ -193,7 +203,7 @@ async function renderPage(path, currentPage, nextPage, files) {
 
                     let bigImg = document.createElement("img");
                     bigImg.src = previewDataUrl;
-                    bigImg.alt = files[i].alt;
+                    bigImg.alt = file.alt;
                     bigImg.className = "big-image";
                     wrapper.appendChild(bigImg);
 
@@ -205,39 +215,36 @@ async function renderPage(path, currentPage, nextPage, files) {
                 };
 
                 img.setAttribute("src", previewDataUrl);
-                img.setAttribute("alt", files[i].alt);
-                title.innerText = files[i].title;
+                img.setAttribute("alt", file.alt);
+                title.innerText = file.title;
 
-                await fetch(files[i].contents)
-                    .then((response) => response.blob())
-                    .then((myBlob) => {
-                        const objectURL = URL.createObjectURL(myBlob);
-                        download.setAttribute("href", objectURL);
-                        download.setAttribute("download", files[i].fileName);
-                    });
+                const objectURL = await dataUrlToBlob(file);
+                download.setAttribute("href", objectURL);
+                download.setAttribute("download", item.fileName);
+                downloadImg.setAttribute("alt", `Download ${file.title}`);
 
-
-                downloadImg.setAttribute("alt", `Download ${files[i].title}`);
+                link.setAttribute("href", `https://acab.city/gallery/${file.fullPath}`)
+                linkImg.setAttribute("alt", `Link to ${file.title}`)
 
                 folder.style.display = "none";
                 item.style.display = "grid";
                 download.style.display = "block";
-            } else if (files[i].type === "directory") {
+            } else if (file.type === "directory") {
                 download.style.display = "none";
                 img.style.display = "none";
 
-                folderImg.setAttribute("alt", `${files[i].fileName} Folder`);
+                folderImg.setAttribute("alt", `${file.fileName} Folder`);
                 folder.setAttribute(
                     "href",
-                    `https://acab.city/gallery/${encodeURIComponent(files[i].fullPath)}`
+                    `https://acab.city/gallery/${encodeURIComponent(file.fullPath)}`
                 );
 
-                title.innerText = files[i].fileName;
+                title.innerText = file.fileName;
 
                 folderImg.style.display = "block";
                 item.style.display = "grid";
             } else {
-                console.log(`Unknown file type: ${files[i].type}`);
+                console.log(`Unknown file type: ${file.type}`);
                 item.style.display = "none";
             }
         } else {
@@ -260,6 +267,20 @@ async function renderPage(path, currentPage, nextPage, files) {
     console.log(`Render completed in ${Date.now() - start}ms`);
 }
 
-function renderSingle(item) {
+async function renderSingle(item) {
+    const wrapper = document.getElementById("single-item-wrapper")
+    const img = document.getElementById("single-image")
+    const download = document.getElementById("single-image-download")
+    const downloadImg = document.getElementById("single-image-download-img")
 
+    const previewDataURL = await getPreviewDataUrl(item.contents)
+    img.setAttribute("src", previewDataURL)
+    img.setAttribute("alt", item.alt)
+
+    const objectURL = await dataUrlToBlob(item);
+    download.setAttribute("href", objectURL);
+    download.setAttribute("download", item.fileName);
+    downloadImg.setAttribute("alt", `Save ${item.title}`)
+
+    wrapper.style.display = "grid"
 }
