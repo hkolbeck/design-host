@@ -1,6 +1,7 @@
 async function loadPage(url) {
+
     const pageToken = url.searchParams.get("page");
-    const path = decodeURI(url).replace("/gallery/", "")
+    const path = new URL(url).pathname.replace("/gallery/", "")
 
     const apiResult = await fetchForPath(path, pageToken);
     if (!apiResult) {
