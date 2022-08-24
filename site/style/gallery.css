@@ -35,7 +35,7 @@
     max-height: 260px;
     margin: auto;
     overflow-y: clip;
-    filter: drop-shadow(0 0 0.75rem crimson);
+    filter: drop-shadow(0 0 0.75rem white);
     z-index: 1;
     position: relative;
     place-self: center;
