@@ -145,7 +145,7 @@ async function renderPage(gallery, currentPage, nextPage, files) {
         return
     }
 
-    for (let i = 0; i < 10; i++) {
+    const promises = [...Array(10).keys()].map(async i => {
         const item = document.getElementById(`gallery-item-${i}`);
         const img = document.getElementById(`gallery-image-${i}`);
         const title = document.getElementById(`gallery-title-${i}`);
@@ -213,7 +213,9 @@ async function renderPage(gallery, currentPage, nextPage, files) {
         } else {
             item.style.display = "none";
         }
-    }
+    })
+
+    await Promise.all(promises)
 
     const next = document.getElementById("next-button");
     if (nextPage) {
