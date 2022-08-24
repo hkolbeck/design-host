@@ -35,7 +35,7 @@
     max-height: 260px;
     margin: auto;
     overflow-y: clip;
-    filter: drop-shadow(0 0 0.75rem crimson);
+    filter: drop-shadow(0 0 0.75rem white);
     z-index: 1;
     position: relative;
     place-self: center;
@@ -43,7 +43,6 @@
 }
 
 .gallery-title {
-    text-shadow: 2px 2px crimson;
     font-weight: bold;
 }
 
@@ -229,7 +228,7 @@
     max-height: 60vh;
     grid-area: img;
     place-self: center;
-    filter: drop-shadow(0 0 0.75rem crimson);
+    filter: drop-shadow(0 0 0.75rem white);
 }
 
 #single-image-download {
