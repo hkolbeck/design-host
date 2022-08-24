@@ -53,6 +53,10 @@ async function fetchSingle(path) {
 
 async function fetchPage(path, pageToken) {
     let url = `https://acab.city/api/get-page/${path}`;
+    if (url.endsWith('/')) {
+        url = url.slice(0, url.length - 1)
+    }
+
     if (pageToken) {
         url += `&page=${pageToken}&count=10`;
     } else {
