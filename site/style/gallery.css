@@ -41,8 +41,8 @@
 }
 
 .big-image-wrapper {
-    top: 70px;
-    bottom: 50px;
+    top: 0;
+    bottom: 0;
     position: fixed;
     width: 100vw;
     display: flex;
