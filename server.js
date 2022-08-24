@@ -27,8 +27,6 @@ const gcs = makeGcsClient(storage.bucket(config.bucket))
 
 const staticPaths = {
     "/": "index.html",
-    "/gallery": "gallery.html",
-    "/single": "single.html",
     "/404": "404.html",
 
     "/fonts/montserrat-regular-webfont.woff": "fonts/montserrat-regular-webfont.woff",
@@ -52,6 +50,10 @@ Object.entries(staticPaths).forEach(entry => {
     fastify.get(path, (request, reply) => {
         reply.sendFile(file)
     });
+})
+
+fastify.get("/gallery/*", (request, reply) => {
+    reply.sendFile("gallery.html")
 })
 
 fastify.get("/error", (request, reply) => {
