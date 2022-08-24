@@ -220,17 +220,20 @@
 }
 
 #single-image {
-    width: 80vw;
-    height: auto;
+    max-width: 80vw;
     max-height: 60vh;
     grid-area: img;
     place-self: center;
+}
+
+#single-image-download {
+    grid-area: save;
+    place-self: center;
+    height: auto;
 }
 
 #single-image-download-img {
     max-width: 300px;
     width: 50vw;
     height: auto;
-    grid-area: save;
-    place-self: center;
 }
