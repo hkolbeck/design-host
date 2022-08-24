@@ -58,9 +58,9 @@ async function fetchPage(path, pageToken) {
     }
 
     if (pageToken) {
-        url += `&page=${pageToken}&count=10`;
+        url += `?page=${pageToken}&count=10`;
     } else {
-        url += "&count=11";
+        url += "?count=11";
     }
 
     return apiFetch(url, {page: []})
