@@ -70,8 +70,8 @@ fastify.setErrorHandler((error, request, reply) => {
     reply.sendFile("error.html")
 })
 
-fastify.get("/api/get-page", (request, reply) => {
-    const path = decodeURI(request.url).replace("/api/get-page/", "")
+fastify.get("/api/get-page/*", (request, reply) => {
+    const path = new URL(request.url).pathname.replace("/api/get-page/", "")
     const pageToken = request.query['page']
 
     const listStart = Date.now()
@@ -135,7 +135,7 @@ fastify.get("/api/get-page", (request, reply) => {
 })
 
 fastify.get("/api/single-item/*", (request, reply) => {
-    const path = decodeURI(request.url).replace("/api/single-item/", "")
+    const path = new URL(request.url).pathname.replace("/api/single-item/", "")
     gcs.fetchPath(path)
         .then(response => {
             if (response) {
