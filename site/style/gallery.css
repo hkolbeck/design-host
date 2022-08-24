@@ -16,7 +16,7 @@
     padding: 10px;
     position: relative;
     display: none;
-    margin-bottom: 24px;
+    margin-bottom: 2rem;
     grid-template-areas: "c";
 }
 
