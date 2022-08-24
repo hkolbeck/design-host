@@ -71,7 +71,8 @@ fastify.setErrorHandler((error, request, reply) => {
 })
 
 fastify.get("/api/get-page/*", (request, reply) => {
-    const path = new URL(request.url).pathname.replace("/api/get-page/", "")
+    const path = decodeURIComponent(new URL(request.url).pathname.replace("/api/get-page/", ""))
+    console.log(`Got path in get-page: ${path}`)
     const pageToken = request.query['page']
 
     const listStart = Date.now()
@@ -135,7 +136,8 @@ fastify.get("/api/get-page/*", (request, reply) => {
 })
 
 fastify.get("/api/single-item/*", (request, reply) => {
-    const path = new URL(request.url).pathname.replace("/api/single-item/", "")
+    const path = decodeURIComponent(new URL(request.url).pathname.replace("/api/single-item/", ""))
+    console.log(`Got path in single-item: ${path}`)
     gcs.fetchPath(path)
         .then(response => {
             if (response) {
