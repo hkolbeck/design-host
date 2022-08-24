@@ -2,8 +2,6 @@ async function loadPage(url) {
     const pageToken = url.searchParams.get("page");
     const path = url.pathname.replace("/gallery/", "")
 
-    console.log(`path: ${path} token: ${pageToken}`)
-
     const apiResult = await fetchForPath(path, pageToken);
     if (!apiResult) {
         console.log("Page fetch failed");
@@ -247,6 +245,7 @@ async function renderPage(path, currentPage, nextPage, files) {
 
                 title.innerText = file.fileName;
 
+                link.style.display = "none"
                 folderImg.style.display = "block";
                 item.style.display = "grid";
             } else {
