@@ -211,12 +211,6 @@
     grid-area: j;
 }
 
-/*// <div id="single-item-wrapper">*/
-/*//     <div id="single-item">*/
-/*//         <img id="single-image" src="" alt=""/>*/
-/*//         <a id="single-image-download" href="">*/
-/*//                 id="single-image-download-img"*/
-
 #single-item-wrapper {
     display: none;
     grid-area: c;
@@ -228,12 +222,10 @@
 #single-image {
     width: 80vw;
     height: auto;
+    max-height: 60vh;
     grid-area: img;
     place-self: center;
 }
-
-/*#single-image-download {*/
-/*}*/
 
 #single-image-download-img {
     max-width: 300px;
