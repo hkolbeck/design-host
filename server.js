@@ -9,6 +9,7 @@ const {makeGcsClient} = require("./src/gcs");
 const config = {
     bucket: process.env.BUCKET,
     port: process.env.PORT,
+    host: process.env.HOST,
 }
 
 process.on('uncaughtException', function (exception) {
@@ -157,7 +158,7 @@ fastify.get("/health", (request, reply) => {
     reply.status(200).send()
 })
 
-fastify.listen({port: config.port, host: "0.0.0.0"}, function (err, address) {
+fastify.listen({port: config.port, host: config.host}, function (err, address) {
     if (err) {
         fastify.log.error(err);
         console.log(err)
