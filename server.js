@@ -113,14 +113,13 @@ fastify.get("/api/get-page", (request, reply) => {
             }
 
             const fetchStart = Date.now()
-            const pageItems = []
-            for (const file of files.filter(f => !f.name.endsWith("/"))) {
+            const promises = files.filter(f => !f.name.endsWith("/")).map(async file => {
                 if (file.name.endsWith("-")) {
                     const fileName = file.name.replace(galleryPaths[subGallery], "").replace(/-$/, "")
-                    pageItems.push({
+                    return {
                         type: "directory",
                         fileName: fileName
-                    })
+                    }
                 } else {
                     const rawFile = await gcs.fetchObject(file)
                     let [metadata] = await file.getMetadata()
@@ -129,16 +128,19 @@ fastify.get("/api/get-page", (request, reply) => {
                     }
 
                     const fileName = file.name.slice(file.name.lastIndexOf("/") + 1, file.name.lastIndexOf("."))
-                    pageItems.push({
+                    return {
                         type: "file",
                         contents: rawFile,
                         fileName: fileName,
                         alt: metadata.metadata["alt"] || "No alt text found",
                         title: metadata.metadata["title"] || fileName
-                    })
+                    }
                 }
-            }
+            })
+
+            const pageItems = await Promise.all(promises)
             console.log(`Fetch time: ${Date.now() - fetchStart}ms`)
+
             const body = {
                 page: pageItems,
                 nextPage: nextPage
