@@ -1,12 +1,13 @@
-function makeClient(gcs, bucket) {
+function makeClient(bucket) {
     return {
-        listDirectory: makeListDirectory(gcs, bucket),
-        fetchObject: makeFetchObject(gcs, bucket),
-        fetchObjects: makeFetchObjects(gcs, bucket),
+        listDirectory: makeListDirectory(bucket),
+        fetchObject: makeFetchObject(bucket),
+        fetchObjects: makeFetchObjects(bucket),
+        fetchPath: makeFetchPath(bucket)
     }
 }
 
-function makeListDirectory(gcs, bucket) {
+function makeListDirectory(bucket) {
     return async function listDirectory(prefix, pageToken) {
         if (pageToken) {
             const pageQuery = JSON.parse(Buffer.from(pageToken, "base64url").toString("utf8"))
@@ -16,13 +17,13 @@ function makeListDirectory(gcs, bucket) {
             }
 
             pageQuery.maxResults = 10
-            let [files, nextPage] = await gcs.bucket(bucket).getFiles(pageQuery)
+            let [files, nextPage] = await bucket.getFiles(pageQuery)
             return {
                 files: files,
                 nextPage: nextPage ? Buffer.from(JSON.stringify(nextPage)).toString("base64url") : null
             }
         } else {
-            let [files, nextPage] = await gcs.bucket(bucket).getFiles({
+            let [files, nextPage] = await bucket.getFiles({
                 prefix: prefix,
                 autoPaginate: false,
                 maxResults: 11,
@@ -33,6 +34,46 @@ function makeListDirectory(gcs, bucket) {
                 files: files,
                 nextPage: nextPage ? Buffer.from(JSON.stringify(nextPage)).toString("base64url") : null
             }
+        }
+    }
+}
+
+function makeFetchPath(bucket) {
+    const fetchObject = makeFetchObject()
+    return async function fetchPath(path) {
+        let file = bucket.file(path);
+        const contentsP = fetchObject(file);
+        const metadataP = file.getMetadata()
+        const [contents, metadataArr] = await Promise.all([contentsP, metadataP])
+            .catch(err => {
+                console.log(`Error fetching single for ${path}`)
+                console.log(err)
+                return [null, null]
+            })
+
+        let metadata
+        if (metadataArr && metadataArr.length > 0) {
+            metadata = metadataArr[0]
+            if (!metadata.metadata) {
+                metadata.metadata = {}
+            }
+        } else {
+            metadata = {
+                metadata: {}
+            }
+        }
+
+        if (contents) {
+            const fileName = file.name.slice(file.name.lastIndexOf("/") + 1, file.name.lastIndexOf("."))
+            return {
+                type: "file",
+                contents: contents,
+                fileName: fileName,
+                alt: metadata.metadata["alt"] || "No alt text found",
+                title: metadata.metadata["title"] || fileName
+            }
+        } else {
+            return null;
         }
     }
 }
@@ -67,11 +108,11 @@ function makeFetchObject() {
     }
 }
 
-function makeFetchObjects(gcs, bucket) {
+function makeFetchObjects(bucket) {
     return async function fetchObjects(paths) {
         return await Promise.all(paths.map(file => {
                 return new Promise((resolve, reject) => {
-                    gcs.bucket(bucket).file(file.name).download((err, contents) => {
+                    bucket.file(file.name).download((err, contents) => {
                         if (contents) {
                             resolve(contents)
                         } else if (err) {

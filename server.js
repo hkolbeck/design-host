@@ -23,7 +23,7 @@ fastify.register(require('@fastify/static'), {
 })
 
 const storage = new Storage();
-const gcs = makeGcsClient(storage, config.bucket)
+const gcs = makeGcsClient(storage.bucket(config.bucket))
 
 const galleryPaths = {
     stickers: 'stickers/',
@@ -158,9 +158,20 @@ fastify.get("/api/get-page", (request, reply) => {
         })
 })
 
-fastify.get("/single/*", (request, reply) => {
+fastify.get("/single-item/*", (request, reply) => {
     const path = request.url.replace("/single/", "")
-    reply.status(200).send({path})
+    gcs.fetchPath(path)
+        .then(response => {
+            if (response) {
+                reply.status(200).send(response)
+            } else {
+                reply.status(404).send()
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            reply.status(500).send({error: "Internal server error"})
+        })
 })
 
 fastify.get("/health", (request, reply) => reply.status(200).send())
