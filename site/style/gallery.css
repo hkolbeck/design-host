@@ -30,7 +30,7 @@
     grid-area: c;
 }
 
-#gallery-image {
+.gallery-image {
     max-width: 260px;
     max-height: 260px;
     margin: auto;
