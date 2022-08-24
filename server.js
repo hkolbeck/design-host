@@ -73,6 +73,8 @@ fastify.setErrorHandler((error, request, reply) => {
 fastify.get("/api/get-page/*", (request, reply) => {
     console.log(`request.url: ${request.url}`)
     const path = decodeURIComponent(request.url).replace("/api/get-page/", "")
+        .replace(/\?.*/, '/')
+
     console.log(`Got path in get-page: ${path}`)
     const pageToken = request.query['page']
 
