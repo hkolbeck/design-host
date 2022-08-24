@@ -159,12 +159,13 @@ fastify.get("/api/get-page", (request, reply) => {
 })
 
 fastify.get("/single-item/*", (request, reply) => {
-    const path = request.url.replace("/single/", "")
+    const path = decodeURI(request.url).replace("/single/", "")
     gcs.fetchPath(path)
         .then(response => {
             if (response) {
                 reply.status(200).send(response)
             } else {
+                console.log(`Nothing single found for ${path}`)
                 reply.status(404).send()
             }
         })
