@@ -8,7 +8,7 @@
     grid-template-areas: "c";
 }
 
-#gallery-item {
+.gallery-item {
     width: 280px;
     height: 280px;
     place-self: center;
@@ -20,7 +20,7 @@
     grid-template-areas: "c";
 }
 
-#gallery-folder {
+.gallery-folder {
     max-width: 260px;
     max-height: 260px;
     overflow-y: clip;
