@@ -34,31 +34,18 @@ const staticPaths = {
     "/fonts/montserrat-regular-webfont.woff": "fonts/montserrat-regular-webfont.woff",
     "/fonts/montserrat-regular-webfont.woff2": "fonts/montserrat-regular-webfont.woff2",
 
-    "/style/common.css": "style/common.css",
-    "/style/gallery.css": "style/gallery.css",
-    "/style/single.css": "style/single.css",
-    "/style/index.css": "style/index.css",
-
-    "/images/acab-dot-city.png": "img/acab-dot-city.png",
-    "/images/acab-dot-city.svg": "img/acab-dot-city.svg",
-    "/images/download.svg": "img/download.svg",
-    "/images/email.svg": "img/email.svg",
-    "/images/instagram.svg": "img/instagram.svg",
-    "/images/next-page.svg": "img/next-page.svg",
-    "/images/twitter.svg": "img/twitter.svg",
-    "/images/stickers.svg": "img/stickers.svg",
-    "/images/jewelry.svg": "img/jewelry.svg",
-    "/images/signage.svg": "img/signage.svg",
-    "/images/flyers.svg": "img/flyers.svg",
-    "/images/stencils.svg": "img/stencils.svg",
-    "/images/folder.svg": "img/folder.svg",
-    "/images/favicon.ico": "img/favicon.png",
-    "/images/link.svg": "img/link.svg",
-
     "/src/gallery.js": "src/gallery.js",
     "/src/base64-binary.js": "src/base64-binary.js"
 
 }
+
+fastify.get("/images/:img", (request, reply) => {
+    reply.sendFile(request.params["img"], path.join(__dirname, "site", "img"))
+})
+
+fastify.get("/styles/:style", (request, reply) => {
+    reply.sendFile(request.params["style"], path.join(__dirname, "site", "style"))
+})
 
 Object.entries(staticPaths).forEach(entry => {
     const [path, file] = entry
