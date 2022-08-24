@@ -25,14 +25,6 @@ fastify.register(require('@fastify/static'), {
 const storage = new Storage();
 const gcs = makeGcsClient(storage.bucket(config.bucket))
 
-const galleryPaths = {
-    stickers: 'stickers/',
-    jewelry: 'jewelry/',
-    stencils: 'stencils/',
-    flyers: 'flyers/',
-    signage: 'signage/'
-}
-
 const staticPaths = {
     "/": "index.html",
     "/gallery": "gallery.html",
@@ -61,7 +53,7 @@ const staticPaths = {
     "/images/stencils.svg": "img/stencils.svg",
     "/images/folder.svg": "img/folder.svg",
     "/images/favicon.ico": "img/favicon.png",
-    "/images/share.svg": "img/share.svg",
+    "/images/link.svg": "img/link.svg",
 
     "/src/gallery.js": "src/gallery.js",
     "/src/base64-binary.js": "src/base64-binary.js"
@@ -90,17 +82,11 @@ fastify.setErrorHandler((error, request, reply) => {
 })
 
 fastify.get("/api/get-page", (request, reply) => {
+    const path = decodeURI(request.url).replace("/api/get-page/", "")
     const pageToken = request.query['page']
-    const subGallery = request.query['gallery']
-    const subDir = request.query['sub']
-    if (!galleryPaths[subGallery]) {
-        console.log(`No path found for '${subGallery}'`)
-        reply.status(400).send({error: `Unknown gallery: '${subGallery}'`})
-        return
-    }
 
     const listStart = Date.now()
-    gcs.listDirectory(galleryPaths[subGallery] + (subDir ? subDir + "/" : ""), pageToken)
+    gcs.listDirectory(path, pageToken)
         .then(async listResp => {
             console.log(`List directory time: ${Date.now() - listStart}ms`)
             if (!listResp) {
@@ -109,7 +95,7 @@ fastify.get("/api/get-page", (request, reply) => {
             }
 
             let {files, nextPage} = listResp
-            files = files.filter(f => !f.name.endsWith(galleryPaths[subGallery]) && !f.name.endsWith(subDir))
+            files = files.filter(f => !f.name.endsWith(path))
             if (!files || files.length === 0) {
                 reply.status(404).send()
                 return
@@ -118,10 +104,10 @@ fastify.get("/api/get-page", (request, reply) => {
             const fetchStart = Date.now()
             const promises = files.filter(f => !f.name.endsWith("/")).map(async file => {
                 if (file.name.endsWith("-")) {
-                    const fileName = file.name.replace(galleryPaths[subGallery], "").replace(/-$/, "")
                     return {
                         type: "directory",
-                        fileName: fileName
+                        fullPath: file.name.replace(/-$/, ""),
+                        fileName: file.name.replace(path, "").replace(/-$/, "")
                     }
                 } else {
                     const rawFile = await gcs.fetchObject(file)
@@ -135,6 +121,7 @@ fastify.get("/api/get-page", (request, reply) => {
                         type: "file",
                         contents: rawFile,
                         fileName: fileName,
+                        fullPath: file.name,
                         alt: metadata.metadata["alt"] || "No alt text found",
                         title: metadata.metadata["title"] || fileName
                     }
@@ -152,14 +139,14 @@ fastify.get("/api/get-page", (request, reply) => {
             reply.status(200).send(body)
         })
         .catch(err => {
-            console.log(`Error getting page for '${subGallery}' page: '${pageToken}'`)
+            console.log(`Error getting page for '${path}' page: '${pageToken}'`)
             console.log(err)
             reply.status(500).send({error: "Internal server error"})
         })
 })
 
-fastify.get("/single-item/*", (request, reply) => {
-    const path = decodeURI(request.url).replace("/single-item/", "")
+fastify.get("/api/single-item/*", (request, reply) => {
+    const path = decodeURI(request.url).replace("/api/single-item/", "")
     gcs.fetchPath(path)
         .then(response => {
             if (response) {

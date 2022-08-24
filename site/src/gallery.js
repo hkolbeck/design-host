@@ -1,44 +1,68 @@
 async function loadPage(url) {
-    const gallery = url.searchParams.get("gallery");
-    if (!gallery) {
-        console.log(`No gallery in URL: ${url.toString()}`);
-        window.location.href = "https://acab.city/error";
-        return;
-    }
-
-    const subDir = url.searchParams.get("sub");
     const pageToken = url.searchParams.get("page");
-    const page = await fetchPage(gallery, subDir, pageToken);
-    if (!page) {
+    const path = decodeURI(url).replace("/gallery/", "")
+
+    const apiResult = await fetchForPath(path, pageToken);
+    if (!apiResult) {
         console.log("Page fetch failed");
         window.location.href = "https://acab.city/error";
         return;
     }
 
-    await renderPage(gallery, pageToken, page.nextPage, page.page).catch(
-        (err) => {
-            console.log(err);
-        }
-    );
+    if (apiResult.page) {
+        await renderPage(path, pageToken, apiResult.nextPage, apiResult.page).catch(
+            (err) => {
+                console.log(`Error fetching ${path}`)
+                console.log(err);
+                window.location.href = "https://acab.city/error";
+            }
+        );
+    } else if (apiResult.contents) {
+        await renderSingle(apiResult).catch(
+            (err) => {
+                console.log(`Error fetching ${path}`)
+                console.log(err);
+                window.location.href = "https://acab.city/error";
+            }
+        );
+    } else {
+        console.log(`Unexpected result type from page fetch: ${typeof apiResult}: ${JSON.stringify(apiResult)}`);
+        window.location.href = "https://acab.city/error";
+    }
 }
 
-async function loadSingle(url) {
-
+async function fetchForPath(path, pageToken) {
+    if (path.endsWith("/") || pageToken) {
+        return await fetchPage(path, pageToken)
+    } else {
+        return await fetchSingle(path).then(item => {
+            if (item) {
+                return item
+            } else {
+                return fetchPage(path + "/", null)
+            }
+        })
+    }
 }
 
-async function fetchPage(gallery, subDir, pageToken) {
-    const start = Date.now();
-    let url = `https://acab.city/api/get-page?gallery=${gallery}`;
+async function fetchSingle(path) {
+    const url = `https://acab.city/api/single-item/${path}`
+    return apiFetch(url, null)
+}
+
+async function fetchPage(path, pageToken) {
+    let url = `https://acab.city/api/get-page/${path}`;
     if (pageToken) {
         url += `&page=${pageToken}&count=10`;
     } else {
         url += "&count=11";
     }
 
-    if (subDir) {
-        url += `&sub=${subDir.replace(" ", "%20")}`;
-    }
+    return apiFetch(url, {page: []})
+}
 
+async function apiFetch(url, def) {
+    const start = Date.now()
     return await fetch(url, {
         headers: {
             "Accept-Encoding": "gzip"
@@ -54,17 +78,16 @@ async function fetchPage(gallery, subDir, pageToken) {
                     resp.statusText
                 }: ${await resp.text()}`
             );
-            return {page: []};
+            return def;
         }
     }).catch((err) => {
         console.log(`Error fetching '${url}'`);
         console.log(err);
         return null;
-    });
+    })
 }
 
 async function pdfToPreviewDataUrl(pdfDataUrl) {
-    const start = Date.now();
     const pdfData = pdfDataUrl.slice(pdfDataUrl.indexOf(",") + 1);
     const pdfBinaryData = Base64Binary.decode(pdfData);
     const loadingTask = pdfjsLib.getDocument(pdfBinaryData);
@@ -96,7 +119,6 @@ async function pdfToPreviewDataUrl(pdfDataUrl) {
     };
     await page.render(renderContext).promise;
 
-    console.log(`PDF=>PNG conversion completed in ${Date.now() - start}ms`);
     return canvas.toDataURL();
 }
 
@@ -140,7 +162,7 @@ async function getPreviewDataUrl(contentDataUrl) {
     }
 }
 
-async function renderPage(gallery, currentPage, nextPage, files) {
+async function renderPage(path, currentPage, nextPage, files) {
     const start = Date.now();
 
     if (files.length === 0) {
@@ -207,9 +229,7 @@ async function renderPage(gallery, currentPage, nextPage, files) {
                 folderImg.setAttribute("alt", `${files[i].fileName} Folder`);
                 folder.setAttribute(
                     "href",
-                    `https://acab.city/gallery?gallery=${gallery}&sub=${files[
-                        i
-                        ].fileName.replace(" ", "%20")}`
+                    `https://acab.city/gallery/${encodeURIComponent(files[i].fullPath)}`
                 );
 
                 title.innerText = files[i].fileName;
@@ -227,12 +247,19 @@ async function renderPage(gallery, currentPage, nextPage, files) {
 
     await Promise.all(promises)
 
+    const gallery = document.getElementById("gallery")
+    gallery.style.display = "grid"
+
     const next = document.getElementById("next-button");
     if (nextPage) {
-        next.href = `https://acab.city/gallery?gallery=${gallery}&page=${nextPage}`;
+        next.href = `https://acab.city/gallery/${path}&page=${nextPage}`;
         next.style.display = "block";
     } else {
         next.style.display = "none";
     }
     console.log(`Render completed in ${Date.now() - start}ms`);
+}
+
+function renderSingle(item) {
+
 }

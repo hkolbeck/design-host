@@ -69,6 +69,7 @@ function makeFetchPath(bucket) {
                 type: "file",
                 contents: contents,
                 fileName: fileName,
+                fullPath: file.name,
                 alt: metadata.metadata["alt"] || "No alt text found",
                 title: metadata.metadata["title"] || fileName
             }
