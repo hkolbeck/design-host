@@ -14,15 +14,18 @@
     padding: 10px;
     position: relative;
     display: none;
+    margin-bottom: 24px;
+    grid-template-areas: "c";
 }
 
 .gallery-folder {
     max-width: 260px;
     max-height: 260px;
-    margin: auto;
     overflow-y: clip;
     z-index: 1;
     position: relative;
+    place-self: center;
+    grid-area: c;
 }
 
 .gallery-image {
@@ -33,6 +36,8 @@
     border: 3px solid white;
     z-index: 1;
     position: relative;
+    place-self: center;
+    grid-area: c;
 }
 
 .big-image-wrapper {

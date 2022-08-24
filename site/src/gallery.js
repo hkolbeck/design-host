@@ -194,7 +194,7 @@ async function renderPage(gallery, currentPage, nextPage, files) {
                 downloadImg.setAttribute("alt", `Download ${files[i].title}`);
 
                 folder.style.display = "none";
-                item.style.display = "block";
+                item.style.display = "grid";
                 download.style.display = "block";
             } else if (files[i].type === "directory") {
                 download.style.display = "none";
@@ -211,7 +211,7 @@ async function renderPage(gallery, currentPage, nextPage, files) {
                 title.innerText = files[i].fileName;
 
                 folderImg.style.display = "block";
-                item.style.display = "block";
+                item.style.display = "grid";
             } else {
                 console.log(`Unknown file type: ${files[i].type}`);
                 item.style.display = "none";
