@@ -224,6 +224,7 @@
     max-height: 60vh;
     grid-area: img;
     place-self: center;
+    border: 3px solid white;
 }
 
 #single-image-download {
