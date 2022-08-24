@@ -182,8 +182,14 @@ async function renderPage(gallery, currentPage, nextPage, files) {
                 img.setAttribute("alt", files[i].alt);
                 title.innerText = files[i].title;
 
-                download.setAttribute("href", files[i].contents);
-                download.setAttribute("download", files[i].fileName);
+                await fetch(files[i].contents)
+                    .then((response) => response.blob())
+                    .then((myBlob) => {
+                        const objectURL = URL.createObjectURL(myBlob);
+                        download.setAttribute("href", objectURL);
+                        download.setAttribute("download", files[i].fileName);
+                    });
+
 
                 downloadImg.setAttribute("alt", `Download ${files[i].title}`);
 
