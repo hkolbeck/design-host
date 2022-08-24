@@ -35,11 +35,16 @@
     max-height: 260px;
     margin: auto;
     overflow-y: clip;
-    filter: drop-shadow(0 0 0.75rem white);
+    filter: drop-shadow(0 0 0.75rem crimson);
     z-index: 1;
     position: relative;
     place-self: center;
     grid-area: c;
+}
+
+.gallery-title {
+    filter: drop-shadow(0 0 0.75rem crimson);
+    font-weight: bold;
 }
 
 .big-image-wrapper {
