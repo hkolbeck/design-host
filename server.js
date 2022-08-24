@@ -159,7 +159,7 @@ fastify.get("/api/get-page", (request, reply) => {
 })
 
 fastify.get("/single-item/*", (request, reply) => {
-    const path = decodeURI(request.url).replace("/single/", "")
+    const path = decodeURI(request.url).replace("/single-item/", "")
     gcs.fetchPath(path)
         .then(response => {
             if (response) {
