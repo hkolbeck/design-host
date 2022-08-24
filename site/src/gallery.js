@@ -104,7 +104,7 @@ async function pdfToPreviewDataUrl(pdfDataUrl) {
     const page = await pdf.getPage(1);
     const viewport = page.getViewport({scale: 1.5});
     // Support HiDPI-screens.
-    const outputScale = window.devicePixelRatio || 3;
+    const outputScale = window.devicePixelRatio || 10;
 
     // Prepare canvas using PDF page dimensions.
     const canvas = document.createElement("canvas");
