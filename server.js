@@ -152,6 +152,8 @@ fastify.get("/api/get-page", (request, reply) => {
         })
 })
 
+fastify.get("/health", (request, reply) => reply.status(200).send())
+
 fastify.listen({port: config.port}, function (err, address) {
     if (err) {
         fastify.log.error(err);
