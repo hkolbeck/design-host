@@ -264,7 +264,7 @@ async function renderPage(path, currentPage, nextPage, files) {
 
     const next = document.getElementById("next-button");
     if (nextPage) {
-        next.href = `https://acab.city/gallery/${path}&page=${nextPage}`;
+        next.href = `https://acab.city/gallery/${path}?page=${nextPage}`;
         next.style.display = "block";
     } else {
         next.style.display = "none";
