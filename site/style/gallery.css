@@ -43,6 +43,7 @@
 }
 
 .gallery-title {
+    font-size: 1rem;
     font-weight: bold;
     text-shadow: 2px 2px black;
 }
