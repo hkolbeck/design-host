@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>ACAB.city</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico"/>
+    <meta name="description" content="The Laser Bloc design gallery"/>
+    <meta content="/images/acab-dot-city.png" property="og:image"/>
+
+    <link rel="stylesheet" href="/style/gallery.css"/>
+    <link rel="stylesheet" href="/style/common.css"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.15.349/build/pdf.min.js"></script>
+    <script src="/src/base64-binary.js"></script>
+    <script src="/src/gallery.js"></script>
+    <script>
+        loadSingle(new URL(window.location.href));
+    </script>
+</head>
+<body>
+<div class="header">
+    <a class="header-link" href="/">
+        <img class="logo" src="/images/acab-dot-city.svg"
+             alt="'ACAB.CITY' in white on a black background"/>
+    </a>
+</div>
+<div class="single-content">
+    <div id="single-wrapper">
+        <div>
+            <img id="single-img" src="" alt="">
+            <a id="single-download">
+                <img
+                        id="single-download-img"
+                        class="download"
+                        src="/images/download.svg"
+                        alt="Download"
+                />
+            </a>
+        </div>
+        <span id="single-title"></span>
+    </div>
+</div>
+<div class="footer">
+    <div class="social-logos">
+        <a href="https://twitter.com/LaserBloc">
+            <img class="social-logo" src="/images/twitter.svg"
+                 alt="Twitter logo, a small blue stylized bird"/>
+        </a>
+        <a href="https://www.instagram.com/laser_bloc/">
+            <img class="social-logo" src="/images/instagram.svg"
+                 alt="Instagram logo, a stylized polaroid camera"/>
+        </a>
+        <a href="mailto:LaserBloc@protonmail.com">
+            <img class="social-logo" src="/images/email.svg" alt="Email symbol, a stylized letter"/>
+        </a>
+    </div>
+</div>
+</body>
+</html>

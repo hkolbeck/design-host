@@ -36,6 +36,7 @@ const galleryPaths = {
 const staticPaths = {
     "/": "index.html",
     "/gallery": "gallery.html",
+    "/single": "single.html",
     "/404": "404.html",
 
     "/fonts/montserrat-regular-webfont.woff": "fonts/montserrat-regular-webfont.woff",
@@ -43,6 +44,7 @@ const staticPaths = {
 
     "/style/common.css": "style/common.css",
     "/style/gallery.css": "style/gallery.css",
+    "/style/single.css": "style/single.css",
     "/style/index.css": "style/index.css",
 
     "/images/acab-dot-city.png": "img/acab-dot-city.png",
@@ -59,6 +61,7 @@ const staticPaths = {
     "/images/stencils.svg": "img/stencils.svg",
     "/images/folder.svg": "img/folder.svg",
     "/images/favicon.ico": "img/favicon.png",
+    "/images/share.svg": "img/share.svg",
 
     "/src/gallery.js": "src/gallery.js",
     "/src/base64-binary.js": "src/base64-binary.js"

@@ -22,6 +22,10 @@ async function loadPage(url) {
     );
 }
 
+async function loadSingle(url) {
+
+}
+
 async function fetchPage(gallery, subDir, pageToken) {
     const start = Date.now();
     let url = `https://acab.city/api/get-page?gallery=${gallery}`;
