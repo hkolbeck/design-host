@@ -91,7 +91,7 @@ async function apiFetch(url, def) {
     })
 }
 
-async function pdfToPreviewDataUrl(pdfDataUrl) {
+async function pdfToPreviewDataUrl(pdfDataUrl, scale) {
     const pdfData = pdfDataUrl.slice(pdfDataUrl.indexOf(",") + 1);
     const pdfBinaryData = Base64Binary.decode(pdfData);
     const loadingTask = pdfjsLib.getDocument(pdfBinaryData);
@@ -103,7 +103,7 @@ async function pdfToPreviewDataUrl(pdfDataUrl) {
     const page = await pdf.getPage(1);
     const viewport = page.getViewport({scale: 1.5});
     // Support HiDPI-screens.
-    const outputScale = window.devicePixelRatio || 10;
+    const outputScale = window.devicePixelRatio || scale;
 
     // Prepare canvas using PDF page dimensions.
     const canvas = document.createElement("canvas");
@@ -152,12 +152,12 @@ function textToPreviewDataUrl(textDataUrl) {
     return canvas.toDataURL()
 }
 
-async function getPreviewDataUrl(contentDataUrl) {
+async function getPreviewDataUrl(contentDataUrl, pdfScale) {
     const preamble = contentDataUrl.slice(0, contentDataUrl.indexOf(","));
     if (preamble.match("image/jpeg") || preamble.match("image/png")) {
         return contentDataUrl;
     } else if (preamble.match("application/pdf")) {
-        return await pdfToPreviewDataUrl(contentDataUrl);
+        return await pdfToPreviewDataUrl(contentDataUrl, pdfScale);
     } else if (preamble.match("text/plain")) {
         return textToPreviewDataUrl(contentDataUrl)
     } else {
@@ -196,7 +196,7 @@ async function renderPage(path, currentPage, nextPage, files) {
             const linkImg = document.getElementById(`item-link-img-${i}`)
 
             if (file.type === "file") {
-                let previewDataUrl = await getPreviewDataUrl(file.contents);
+                const previewDataUrl = await getPreviewDataUrl(file.contents, 1);
                 img.onclick = () => {
                     let wrapper = document.createElement("div");
                     wrapper.className = "big-image-wrapper";
@@ -278,7 +278,7 @@ async function renderSingle(item) {
     const download = document.getElementById("single-image-download")
     const downloadImg = document.getElementById("single-image-download-img")
 
-    const previewDataURL = await getPreviewDataUrl(item.contents)
+    const previewDataURL = await getPreviewDataUrl(item.contents, 10)
     img.setAttribute("src", previewDataURL)
     img.setAttribute("alt", item.alt)
 
