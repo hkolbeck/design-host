@@ -165,7 +165,8 @@ async function svgToPreviewDataUrl(svgDataUrl) {
             ctx.rect(0, 0, canvas.width, canvas.height)
             ctx.drawImage(img, 20, 20)
 
-            resolve(canvas.toDataURL())
+            console.log("Contextin!")
+            resolve(canvas.toDataURL("image/ing"))
         }
         img.src = svgDataUrl
     })
