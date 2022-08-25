@@ -88,19 +88,6 @@ async function generateSvgPreview(svgBuffer) {
             workingCanvas.add(grouped).renderAll()
             resolve(workingCanvas)
         })
-
-            // curves.forEach(curve => {
-            //     // console.log(`Setting ${origHeight} ${origWidth}`)
-            //     curve.set({
-            //         top: 90,
-            //         left: 90,
-            //         originX: 'center',
-            //         originY: 'center'
-            //     });
-            //     curve.scaleToWidth(100);
-            //     curve.scaleToHeight(100);
-            //     workingCanvas.add(curve)
-            // })
     })
 
     return fabric.util.getNodeCanvas(canvas.lowerCanvasEl).toBuffer()
