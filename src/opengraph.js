@@ -16,12 +16,12 @@ async function generateOpengraph(gcs, gcsPath) {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@LaserBloc" />
     <meta name="twitter:creator" content="@LaserBloc" />
-    <meta name="twitter:image" content="https://acab.city/api/preview/${encodeURIComponent(gcsPath)}">
+    <meta name="twitter:image" content="https://acab.city/api/preview/${gcsPath}">
     <meta name="twitter:image:alt" content="${metadata.alt}">
     <meta property="og:url" content="https://acab.city/gallery/${encodeURIComponent(gcsPath)}" />
     <meta property="og:title" content="${metadata.title}" />
     <meta property="og:description" content="${metadata.alt}" />
-    <meta property="og:image" content="https://acab.city/api/preview/${encodeURIComponent(gcsPath)}" />
+    <meta property="og:image" content="https://acab.city/api/preview/${gcsPath}}" />
     <meta property="og:image:alt" content="${metadata.alt}" />
 </head>
 <body>
