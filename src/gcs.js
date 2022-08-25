@@ -36,7 +36,7 @@ function makeGetMetadata(bucket) {
 async function listDirBatch(bucket, pageQuery, maxResults) {
     pageQuery.maxResults = maxResults
     let [files, nextPage] = await bucket.getFiles(pageQuery)
-    if (files.length < maxResults && nextPage)) {
+    if (files.length < maxResults && nextPage) {
         while (files.length < maxResults && nextPage) {
             nextPage.maxResults = 1 //lolsob
             const [batchFiles, batchNextPage] = await bucket.getFiles(pageQuery)
