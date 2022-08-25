@@ -73,15 +73,18 @@ fastify.get("/gallery/*", (request, reply) => {
         const ext = request.url.slice(lastDot)
         if (canPreview[ext]) {
             const userAgent = request.headers["user-agent"].match(/^([\w-]+)/)
-            if (previewBots[userAgent]) {
-                const path = decodeURIComponent(request.url).replace("/gallery/", "")
-                sendingPreview = true
-                generateOpengraph(gcs, path)
-                    .then(head => reply.status(200).send(head))
-                    .catch(err => {
-                        console.log(`Error generating preview for ${path}: ${err.message}`)
-                        reply.status(404).send()
-                    })
+            console.log(`User-Agent: ${JSON.stringify(userAgent)}`)
+            if (userAgent) {
+                if (previewBots[userAgent[0]]) {
+                    const path = decodeURIComponent(request.url).replace("/gallery/", "")
+                    sendingPreview = true
+                    generateOpengraph(gcs, path)
+                        .then(head => reply.status(200).send(head))
+                        .catch(err => {
+                            console.log(`Error generating preview for ${path}: ${err.message}`)
+                            reply.status(404).send()
+                        })
+                }
             }
         }
     }
