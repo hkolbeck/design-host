@@ -49,10 +49,10 @@ async function getPreviewBuffer(mime, contents) {
         return {mime, contents}
     } else if (mime === "application/pdf") {
         const imgContents = await generatePdfPreview(contents).catch(err => console.log(err))
-        return {mime, contents: imgContents}
+        return {"image/png", contents: imgContents}
     } else if (mime === "image/svg+xml") {
         const imgContents = await generateSvgPreview(contents)
-        return {mime, contents: imgContents}
+        return {"image/png", contents: imgContents}
     }
 
     throw new Error(`Unsupported mime type: ${mime}`)
