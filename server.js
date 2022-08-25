@@ -43,6 +43,8 @@ const previewBots = {
     "facebookexternalhit": true,
     "Twitterbot": true,
     "Slackbot-LinkExpanding": true,
+    "Googlebot-Image": true,
+    "Iframely": true,
     "node-fetch": true //For testing
 }
 
@@ -73,7 +75,7 @@ fastify.get("/gallery/*", (request, reply) => {
     let sendingPreview = false
     if (lastDot >= 0) {
         const ext = request.url.slice(lastDot)
-        if (canPreview[ext]) {
+        if (canPreview[ext] && request.headers["user-agent"]) {
             const userAgent = request.headers["user-agent"].match(/^([\w-]+)/)
             console.log(`User-Agent: ${JSON.stringify(userAgent)}`)
             if (userAgent) {
