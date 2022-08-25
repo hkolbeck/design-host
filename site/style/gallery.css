@@ -47,6 +47,8 @@
 
 .title-wrapper {
     width: 280px;
+    display: grid;
+    grid-template-areas: "c";
 }
 
 .gallery-title {
@@ -54,6 +56,8 @@
     font-size: 1.5rem;
     font-weight: bold;
     text-shadow: 2px 2px black;
+    place-self: center;
+    grid-area: c;
 }
 
 .big-image-wrapper {
