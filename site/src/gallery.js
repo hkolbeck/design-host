@@ -279,12 +279,15 @@ async function renderPage(path, currentPage, nextPage, files) {
 async function renderSingle(item) {
     const wrapper = document.getElementById("single-item-wrapper")
     const img = document.getElementById("single-image")
+    const title = document.getElementById("single-image-title")
     const download = document.getElementById("single-image-download")
     const downloadImg = document.getElementById("single-image-download-img")
 
     const previewDataURL = await getPreviewDataUrl(item.contents, 10)
     img.setAttribute("src", previewDataURL)
     img.setAttribute("alt", item.alt)
+
+    title.innerText = item.title
 
     const objectURL = await dataUrlToBlob(item);
     download.setAttribute("href", objectURL);

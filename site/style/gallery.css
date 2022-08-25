@@ -8,6 +8,10 @@
     grid-template-areas: "c";
 }
 
+.gallery-item-wrapper {
+
+}
+
 .gallery-item {
     width: 280px;
     height: 280px;
