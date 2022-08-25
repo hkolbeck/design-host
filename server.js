@@ -48,7 +48,10 @@ const previewBots = {
     "node-fetch": true //For testing
 }
 
-const longBots = ["Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)"]
+const longBots = [
+    "Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)",
+    "Mozilla/5.0 (compatible; redditbot/1.0; +http://www.reddit.com/feedback)"
+]
 fastify.get("/images/:img", (request, reply) => {
     reply.sendFile(request.params["img"], path.join(__dirname, "site", "img"))
 })
@@ -78,9 +81,10 @@ fastify.get("/gallery/*", (request, reply) => {
         const ext = request.url.slice(lastDot)
         if (canPreview[ext] && request.headers["user-agent"]) {
             const userAgent = request.headers["user-agent"].match(/^([\w-]+)/)
-            console.log(`URL: ${request.url} User-Agent: ${request.headers["user-agent"]} => ${JSON.stringify(userAgent)}`)
+            let isLongAgent = longBots.indexOf(request.headers["user-agent"]) >= 0;
+            console.log(`URL: ${request.url} User-Agent: ${request.headers["user-agent"]} => ${JSON.stringify(userAgent)} IsLong: ${isLongAgent}`)
             if (userAgent) {
-                if (previewBots[userAgent[0]] || longBots.indexOf(request.headers["user-agent"]) >= 0) {
+                if (previewBots[userAgent[0]] || isLongAgent) {
                     const path = decodeURIComponent(request.url).replace("/gallery/", "")
                     sendingPreview = true
                     generateOpengraph(gcs, path)
