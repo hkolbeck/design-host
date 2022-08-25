@@ -112,7 +112,7 @@ async function testPreview(file, mime) {
     fs.writeFileSync(file + ".png", outBuffer)
 }
 
-testPreview("../site/img/asl-i-love-you.svg", "image/svg+xml")
+// testPreview("../site/img/asl-i-love-you.svg", "image/svg+xml")
 
 exports.generateOpengraph = generateOpengraph;
 exports.generatePreviewImage = generatePreviewImage;
