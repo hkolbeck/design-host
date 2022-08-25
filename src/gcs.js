@@ -33,6 +33,24 @@ function makeGetMetadata(bucket) {
     }
 }
 
+async function listDirBatch(bucket, pageQuery, maxResults) {
+    pageQuery.maxResults = maxResults
+    let [files, nextPage] = await bucket.getFiles(pageQuery)
+    if (files.length < maxResults && nextPage)) {
+        while (files.length < maxResults && nextPage) {
+            nextPage.maxResults = 1 //lolsob
+            const [batchFiles, batchNextPage] = await bucket.getFiles(pageQuery)
+            files.push(...batchFiles)
+            nextPage = batchNextPage
+        }
+    }
+
+    return {
+        files: files,
+        nextPage: nextPage ? Buffer.from(JSON.stringify(nextPage)).toString("base64url") : null
+    }
+}
+
 function makeListDirectory(bucket) {
     return async function listDirectory(prefix, pageToken) {
         if (pageToken) {
@@ -42,24 +60,13 @@ function makeListDirectory(bucket) {
                 return null
             }
 
-            pageQuery.maxResults = 10
-            let [files, nextPage] = await bucket.getFiles(pageQuery)
-            return {
-                files: files,
-                nextPage: nextPage ? Buffer.from(JSON.stringify(nextPage)).toString("base64url") : null
-            }
+            return await listDirBatch(bucket, pageQuery, 10)
         } else {
-            let [files, nextPage] = await bucket.getFiles({
+            return await listDirBatch(bucket, {
                 prefix: prefix,
                 autoPaginate: false,
-                maxResults: 11,
                 delimiter: '/'
-            });
-
-            return {
-                files: files,
-                nextPage: nextPage ? Buffer.from(JSON.stringify(nextPage)).toString("base64url") : null
-            }
+            }, 11)
         }
     }
 }
