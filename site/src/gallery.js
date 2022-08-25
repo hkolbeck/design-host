@@ -163,7 +163,7 @@ async function svgToPreviewDataUrl(svgDataUrl, edgeLen) {
             const ctx = canvas.getContext('2d')
             ctx.fillStyle = "#FFFFFF"
             ctx.fillRect(0, 0, canvas.width, canvas.height)
-            ctx.drawImage(img, 0, 0, img.width, img.height, 20, 20, edgeLen - 40, edgeLen - 40)
+            ctx.drawImage(img, 0, 0)
 
             resolve(canvas.toDataURL("image/ing"))
         }
