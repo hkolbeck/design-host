@@ -152,18 +152,18 @@ function textToPreviewDataUrl(textDataUrl) {
     return canvas.toDataURL()
 }
 
-async function svgToPreviewDataUrl(svgDataUrl) {
+async function svgToPreviewDataUrl(svgDataUrl, edgeLen) {
     return new Promise((resolve) => {
         const img = document.createElement("img")
         img.onload = () => {
             const canvas = document.createElement("canvas")
-            canvas.width = img.width + 40
-            canvas.height = img.height + 40
+            canvas.width = edgeLen
+            canvas.height = edgeLen
 
             const ctx = canvas.getContext('2d')
             ctx.fillStyle = "#FFFFFF"
             ctx.fillRect(0, 0, canvas.width, canvas.height)
-            ctx.drawImage(img, 20, 20)
+            ctx.drawImage(img, 0, 0, img.width, img.height, 20, 20, edgeLen - 40, edgeLen - 40)
 
             resolve(canvas.toDataURL("image/ing"))
         }
