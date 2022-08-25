@@ -171,14 +171,14 @@ async function svgToPreviewDataUrl(svgDataUrl, edgeLen) {
     })
 }
 
-async function getPreviewDataUrl(contentDataUrl, pdfScale) {
+async function getPreviewDataUrl(contentDataUrl, pdfScale, svgEdgeLen) {
     const preamble = contentDataUrl.slice(0, contentDataUrl.indexOf(","));
     if (preamble.match("image/jpeg") || preamble.match("image/png")) {
         return contentDataUrl;
     } else if (preamble.match("application/pdf")) {
         return await pdfToPreviewDataUrl(contentDataUrl, pdfScale);
     } else if (preamble.indexOf("image/svg+xml") >= 0) {
-        return await svgToPreviewDataUrl(contentDataUrl)
+        return await svgToPreviewDataUrl(contentDataUrl, svgEdgeLen)
     } else if (preamble.match("text/plain")) {
         return textToPreviewDataUrl(contentDataUrl)
     } else {
@@ -218,7 +218,7 @@ async function renderPage(path, currentPage, nextPage, files) {
             const linkImg = document.getElementById(`item-link-img-${i}`)
 
             if (file.type === "file") {
-                const previewDataUrl = await getPreviewDataUrl(file.contents, 1);
+                const previewDataUrl = await getPreviewDataUrl(file.contents, 1, 280);
                 img.onclick = () => {
                     let wrapper = document.createElement("div");
                     wrapper.className = "big-image-wrapper";
@@ -305,7 +305,7 @@ async function renderSingle(item) {
     const download = document.getElementById("single-image-download")
     const downloadImg = document.getElementById("single-image-download-img")
 
-    const previewDataURL = await getPreviewDataUrl(item.contents, 10)
+    const previewDataURL = await getPreviewDataUrl(item.contents, 10, 2048)
     img.setAttribute("src", previewDataURL)
     img.setAttribute("alt", item.alt)
 
