@@ -1,9 +1,35 @@
 function makeClient(bucket) {
     return {
         listDirectory: makeListDirectory(bucket),
-        fetchObject: makeFetchObject(bucket),
-        fetchObjects: makeFetchObjects(bucket),
-        fetchPath: makeFetchPath(bucket)
+        fetchObject: makeFetchObject(),
+        fetchObjectRaw: makeFetchObjectRaw(bucket),
+        fetchPath: makeFetchPath(bucket),
+        getMetadata: makeGetMetadata(bucket)
+    }
+}
+
+function makeGetMetadata(bucket) {
+    return async function getMetaData(path) {
+        const file = bucket.file(path);
+        const [metadata] = await file.getMetadata()
+            .catch(err => {
+                console.log(`Metadata fetch failed for '${path}': ${err.message}`)
+                return null
+            })
+
+        if (!metadata) {
+            return null
+        }
+
+        if (!metadata.metadata) {
+            metadata.metadata = {}
+        }
+
+        const fileName = file.name.slice(file.name.lastIndexOf("/") + 1, file.name.lastIndexOf("."))
+        return {
+            alt: metadata.metadata["alt"] || "No alt text found",
+            title: metadata.metadata["title"] || fileName,
+        }
     }
 }
 
@@ -30,7 +56,7 @@ function makeListDirectory(bucket) {
                 delimiter: '/'
             });
 
-          return {
+            return {
                 files: files,
                 nextPage: nextPage ? Buffer.from(JSON.stringify(nextPage)).toString("base64url") : null
             }
@@ -41,7 +67,7 @@ function makeListDirectory(bucket) {
 function makeFetchPath(bucket) {
     const fetchObject = makeFetchObject()
     return async function fetchPath(path) {
-        let file = bucket.file(path);
+        const file = bucket.file(path);
         const contentsP = fetchObject(file);
         const metadataP = file.getMetadata()
         const [contents, metadataArr] = await Promise.all([contentsP, metadataP])
@@ -79,27 +105,32 @@ function makeFetchPath(bucket) {
     }
 }
 
+function filenameToMimeType(filename) {
+    if (filename.endsWith("pdf")) {
+        return "application/pdf"
+    } else if (filename.endsWith("png")) {
+        return "image/png"
+    } else if (filename.endsWith("jpeg") || filename.endsWith("jpg")) {
+        return "image/jpeg"
+    } else if (filename.endsWith("txt")) {
+        return "text/plain"
+    } else if (filename.endsWith("svg")) {
+        return "image/svg+xml"
+    } else {
+        return null
+    }
+}
+
 function makeFetchObject() {
     return async function fetchObject(file) {
         return new Promise((resolve, reject) => {
             file.download((err, contents) => {
                 if (contents) {
-                    let mime
-                    if (file.name.endsWith("pdf")) {
-                        mime = "application/pdf"
-                    } else if (file.name.endsWith("png")) {
-                        mime = "image/png"
-                    } else if (file.name.endsWith("jpeg") || file.name.endsWith("jpg")) {
-                        mime = "image/jpeg"
-                    } else if (file.name.endsWith("txt")) {
-                        mime = "text/plain"
-                    } else if (file.name.endsWith("svg")) {
-                        mime = "image/svg+xml"
-                    } else {
+                    const mime = filenameToMimeType(file.name)
+                    if (!mime) {
                         reject(new Error(`Unknown mime type for file '${file.name}'`))
                         return
                     }
-
                     resolve(`data:${mime};base64,${contents.toString("base64")}`)
                 } else if (err) {
                     reject(err)
@@ -111,22 +142,25 @@ function makeFetchObject() {
     }
 }
 
-function makeFetchObjects(bucket) {
-    return async function fetchObjects(paths) {
-        return await Promise.all(paths.map(file => {
-                return new Promise((resolve, reject) => {
-                    bucket.file(file.name).download((err, contents) => {
-                        if (contents) {
-                            resolve(contents)
-                        } else if (err) {
-                            reject(err)
-                        } else {
-                            reject(new Error("Both contents and err were null"))
-                        }
-                    })
-                })
+function makeFetchObjectRaw(bucket) {
+    return async function fetchObjectRaw(path) {
+        return new Promise((resolve, reject) => {
+            const file = bucket.file(path)
+            file.download((err, contents) => {
+                if (contents) {
+                    const mime = filenameToMimeType(file.name)
+                    if (!mime) {
+                        reject(new Error(`Unknown mime type for file '${file.name}'`))
+                        return
+                    }
+                    resolve({mime, contents})
+                } else if (err) {
+                    reject(err)
+                } else {
+                    reject(new Error("Both contents and err were null"))
+                }
             })
-        )
+        })
     }
 }
 

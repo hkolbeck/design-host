@@ -5,6 +5,7 @@ const fastify = require("fastify")({
 });
 
 const {makeGcsClient} = require("./src/gcs");
+const {generatePreviewImage, generateOpengraph} = require("./src/opengraph");
 
 const config = {
     bucket: process.env.BUCKET,
@@ -37,6 +38,12 @@ const staticPaths = {
 
 }
 
+const previewBots = {
+    "facebot": true,
+    "Twitterbot": true,
+    "Slackbot-LinkExpanding": true
+}
+
 fastify.get("/images/:img", (request, reply) => {
     reply.sendFile(request.params["img"], path.join(__dirname, "site", "img"))
 })
@@ -52,8 +59,36 @@ Object.entries(staticPaths).forEach(entry => {
     });
 })
 
+const canPreview = {
+    ".pdf": true,
+    ".jpeg": true,
+    ".jpg": true,
+    ".png": true,
+    ".svg": true
+}
 fastify.get("/gallery/*", (request, reply) => {
-    reply.sendFile("gallery.html")
+    const lastDot = request.url.lastIndexOf(".")
+    let sendingPreview = false
+    if (lastDot >= 0) {
+        const ext = request.url.slice(lastDot)
+        if (canPreview[ext]) {
+            const userAgent = request.headers["user-agent"].match(/^([\w-]+)/)
+            if (previewBots[userAgent]) {
+                const path = decodeURIComponent(request.url).replace("/gallery/", "")
+                sendingPreview = true
+                generateOpengraph(gcs, path)
+                    .then(head => reply.status(200).send(head))
+                    .catch(err => {
+                        console.log(`Error generating preview for ${path}: ${err.message}`)
+                        reply.status(404).send()
+                    })
+            }
+        }
+    }
+
+    if (!sendingPreview) {
+        reply.sendFile("gallery.html")
+    }
 })
 
 fastify.get("/error", (request, reply) => {
@@ -150,6 +185,25 @@ fastify.get("/api/single-item/*", (request, reply) => {
         .catch(err => {
             console.log(err)
             reply.status(500).send({error: "Internal server error"})
+        })
+})
+
+fastify.get("/api/preview/*", (request, reply) => {
+    const path = decodeURIComponent(request.url).replace("/api/preview/", "")
+        .replace(/\?.*/, '/')
+    generatePreviewImage(gcs, path)
+        .then(({mime, contents}) => {
+            if (!contents) {
+                reply.status(404).send()
+                return
+            }
+
+            reply.header("Content-Type", mime)
+            reply.status(200).send(contents)
+        })
+        .catch(err => {
+            console.log(err)
+            reply.status(404).send()
         })
 })
 
