@@ -9,18 +9,18 @@
 }
 
 .gallery-item-wrapper {
-
+    width: 300px;
+    display: none;
 }
 
 .gallery-item {
     width: 280px;
     height: 280px;
     place-self: center;
-    text-align: center;
     padding: 10px;
     position: relative;
-    display: none;
     margin-bottom: 2rem;
+    display: grid;
     grid-template-areas: "c";
 }
 
@@ -47,19 +47,14 @@
 }
 
 .title-wrapper {
-    height: 100%;
-    width: 100%;
-    display: grid;
-    grid-template-areas: "b";
+    width: 280px;
 }
 
 .gallery-title {
+    text-align: center;
     font-size: 1.5rem;
     font-weight: bold;
     text-shadow: 2px 2px black;
-    justify-self: center;
-    align-self: end;
-    grid-area: b;
 }
 
 .big-image-wrapper {

@@ -182,6 +182,7 @@ async function renderPage(path, currentPage, nextPage, files) {
     }
 
     const promises = [...Array(10).keys()].map(async i => {
+        const wrapper = document.getElementById(`gallery-item-wrapper-${i}`)
         const item = document.getElementById(`gallery-item-${i}`);
         const file = files[i];
 
@@ -235,8 +236,8 @@ async function renderPage(path, currentPage, nextPage, files) {
                 linkImg.setAttribute("alt", `Link to ${file.title}`)
 
                 folder.style.display = "none";
-                item.style.display = "grid";
                 download.style.display = "block";
+                wrapper.style.display = "block";
             } else if (file.type === "directory") {
                 download.style.display = "none";
                 img.style.display = "none";
@@ -251,7 +252,7 @@ async function renderPage(path, currentPage, nextPage, files) {
 
                 link.style.display = "none"
                 folderImg.style.display = "block";
-                item.style.display = "grid";
+                wrapper.style.display = "block";
             } else {
                 console.log(`Unknown file type: ${file.type}`);
                 item.style.display = "none";
