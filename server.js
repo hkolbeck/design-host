@@ -100,8 +100,7 @@ fastify.get("/api/get-page/*", (request, reply) => {
                         fileName: file.name.replace(path, "").replace(/-$/, "")
                     }
                 } else {
-                    const rawFile = await gcs.fetchObject(file)
-                    let [metadata] = await file.getMetadata()
+                    const [rawFile, [metadata]] = await Promise.all([gcs.fetchObject(file), file.getMetadata()])
                     if (!metadata.metadata) {
                         metadata.metadata = {}
                     }
