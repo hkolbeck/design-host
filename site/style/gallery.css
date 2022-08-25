@@ -91,7 +91,7 @@
     height: 50px;
     z-index: 9997;
     position: absolute;
-    top: 25px;
+    bottom: 25px;
     right: 20px;
 }
 
@@ -100,7 +100,7 @@
     height: 50px;
     z-index: 9997;
     position: absolute;
-    top: 25px;
+    bottom: 25px;
     left: 20px;
 }
 
