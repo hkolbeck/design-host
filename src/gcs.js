@@ -46,8 +46,7 @@ function makeFetchPath(bucket) {
         const metadataP = file.getMetadata()
         const [contents, metadataArr] = await Promise.all([contentsP, metadataP])
             .catch(err => {
-                console.log(`Error fetching single for ${path}`)
-                console.log(err)
+                console.log(`Error fetching single for ${path}: ${err.message()}`)
                 return [null, null]
             })
 
