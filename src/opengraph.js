@@ -54,7 +54,6 @@ async function getPreviewBuffer(mime, contents) {
     }
 
     throw new Error(`Unsupported mime type: ${mime}`)
-
 }
 
 async function generatePdfPreview(pdfBuffer) {
@@ -107,14 +106,6 @@ async function generateSvgPreview(svgBuffer) {
 
     return fabric.util.getNodeCanvas(canvas.lowerCanvasEl).toBuffer()
 }
-
-async function testPreview(file, mime) {
-    let buffer = fs.readFileSync(file);
-    const outBuffer = (await getPreviewBuffer(mime, buffer)).contents
-    fs.writeFileSync(file + ".png", outBuffer)
-}
-
-testPreview("acab-cat.pdf", "application/pdf")
 
 exports.generateOpengraph = generateOpengraph;
 exports.generatePreviewImage = generatePreviewImage;
