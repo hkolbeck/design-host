@@ -165,7 +165,6 @@ async function svgToPreviewDataUrl(svgDataUrl) {
             ctx.rect(0, 0, canvas.width, canvas.height)
             ctx.drawImage(img, 20, 20)
 
-            console.log("Contextin!")
             resolve(canvas.toDataURL("image/ing"))
         }
         img.src = svgDataUrl
@@ -178,7 +177,7 @@ async function getPreviewDataUrl(contentDataUrl, pdfScale) {
         return contentDataUrl;
     } else if (preamble.match("application/pdf")) {
         return await pdfToPreviewDataUrl(contentDataUrl, pdfScale);
-    } else if (preamble.match("image/svg+xml")) {
+    } else if (preamble.match("image/svg\+xml")) {
         return await svgToPreviewDataUrl(contentDataUrl)
     } else if (preamble.match("text/plain")) {
         return textToPreviewDataUrl(contentDataUrl)
