@@ -39,7 +39,7 @@ async function listDirBatch(bucket, pageQuery, maxResults) {
     if (files.length < maxResults && nextPage) {
         while (files.length < maxResults && nextPage) {
             nextPage.maxResults = 1 //lolsob
-            const [batchFiles, batchNextPage] = await bucket.getFiles(pageQuery)
+            const [batchFiles, batchNextPage] = await bucket.getFiles(nextPage)
             files.push(...batchFiles)
             nextPage = batchNextPage
         }
