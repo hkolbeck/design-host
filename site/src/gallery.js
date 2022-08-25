@@ -221,7 +221,7 @@ async function renderPage(path, currentPage, nextPage, files) {
                 img.setAttribute("src", previewDataUrl);
                 img.setAttribute("alt", file.alt);
                 if (file.blur) {
-                    img.style.filter = "blur(50px)"
+                    img.style.filter = "blur(10px)"
                 }
 
                 title.innerText = file.title;
