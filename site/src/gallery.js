@@ -154,7 +154,7 @@ function textToPreviewDataUrl(textDataUrl) {
 
 async function getPreviewDataUrl(contentDataUrl, pdfScale) {
     const preamble = contentDataUrl.slice(0, contentDataUrl.indexOf(","));
-    if (preamble.match("image/jpeg") || preamble.match("image/png")) {
+    if (preamble.match("image/jpeg") || preamble.match("image/png") || preamble.match("image/svg+xml")) {
         return contentDataUrl;
     } else if (preamble.match("application/pdf")) {
         return await pdfToPreviewDataUrl(contentDataUrl, pdfScale);

@@ -93,6 +93,8 @@ function makeFetchObject() {
                         mime = "image/jpeg"
                     } else if (file.name.endsWith("txt")) {
                         mime = "text/plain"
+                    } else if (file.name.endsWith("svg")) {
+                        mime = "image/svg+xml"
                     } else {
                         reject(new Error(`Unknown mime type for file '${file.name}'`))
                         return
