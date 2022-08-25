@@ -152,12 +152,33 @@ function textToPreviewDataUrl(textDataUrl) {
     return canvas.toDataURL()
 }
 
+async function svgToPreviewDataUrl(svgDataUrl) {
+    return new Promise((resolve, reject) => {
+        const img = document.createElement("img")
+        img.onload = () => {
+            const canvas = document.createElement("canvas")
+            canvas.width = img.width + 40
+            canvas.height = img.height + 40
+
+            const ctx = canvas.getContext('2d')
+            ctx.fillStyle = "#FFFFFF"
+            ctx.rect(0, 0, canvas.width, canvas.height)
+            ctx.drawImage(img, 20, 20)
+
+            resolve(canvas.toDataURL())
+        }
+        img.src = svgDataUrl
+    })
+}
+
 async function getPreviewDataUrl(contentDataUrl, pdfScale) {
     const preamble = contentDataUrl.slice(0, contentDataUrl.indexOf(","));
-    if (preamble.match("image/jpeg") || preamble.match("image/png") || preamble.match("image/svg+xml")) {
+    if (preamble.match("image/jpeg") || preamble.match("image/png")) {
         return contentDataUrl;
     } else if (preamble.match("application/pdf")) {
         return await pdfToPreviewDataUrl(contentDataUrl, pdfScale);
+    } else if (preamble.match("image/svg+xml")) {
+        return await svgToPreviewDataUrl(contentDataUrl)
     } else if (preamble.match("text/plain")) {
         return textToPreviewDataUrl(contentDataUrl)
     } else {
