@@ -12,6 +12,7 @@ async function generateOpengraph(gcs, gcsPath) {
     <title>ACAB.city</title>
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico"/>
     <meta name="description" content="The LaserBloc Design Gallery"/>
+    
     <meta name="twitter:title" content="${encodeQuotes(metadata.title)}">
     <meta name="twitter:text:title" content="${encodeQuotes(metadata.title)}">
     <meta name="twitter:card" content="summary_large_image" />
@@ -24,6 +25,7 @@ async function generateOpengraph(gcs, gcsPath) {
     <meta property="og:description" content="${encodeQuotes(metadata.alt)}" />
     <meta property="og:image" content="https://acab.city/api/preview/${encodeURI(gcsPath)}.png" />
     <meta property="og:image:alt" content="${encodeQuotes(metadata.alt)}" />
+    <meta property="og:site_name" content="ACAB.city">
 </head>
 <body>
 </body>
