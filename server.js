@@ -78,7 +78,7 @@ fastify.get("/gallery/*", (request, reply) => {
         const ext = request.url.slice(lastDot)
         if (canPreview[ext] && request.headers["user-agent"]) {
             const userAgent = request.headers["user-agent"].match(/^([\w-]+)/)
-            console.log(`User-Agent: ${request.headers["user-agent"]} => ${JSON.stringify(userAgent)}`)
+            console.log(`URL: ${request.url} User-Agent: ${request.headers["user-agent"]} => ${JSON.stringify(userAgent)}`)
             if (userAgent) {
                 if (previewBots[userAgent[0]] || longBots.indexOf(request.headers["user-agent"]) >= 0) {
                     const path = decodeURIComponent(request.url).replace("/gallery/", "")
