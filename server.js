@@ -43,7 +43,7 @@ const previewBots = {
     "facebookexternalhit": true,
     "Twitterbot": true,
     "Slackbot-LinkExpanding": true,
-    "node-fetch": true
+    "node-fetch": true //For testing
 }
 
 fastify.get("/images/:img", (request, reply) => {
