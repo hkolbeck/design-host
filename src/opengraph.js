@@ -35,11 +35,11 @@ async function generatePreviewImage(gcs, gcsPath) {
         return {}
     }
 
-    if (mime !== "image/png") {
-        throw new Error(`Unsupported mime type: ${mime}`)
+    if (mime === "image/png" || mime === "image/jpg" || mime === "image/jpeg") {
+        return {mime, contents}
     }
 
-    return {mime, contents}
+    throw new Error(`Unsupported mime type: ${mime}`)
 }
 
 exports.generateOpengraph = generateOpengraph;
