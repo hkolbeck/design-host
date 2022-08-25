@@ -1,6 +1,6 @@
 const {fabric} = require("fabric")
 const fs = require("fs");
-const {getDocument} = require("pdfjs-dist")
+const {getDocument} = require("pdfjs-dist/legacy/build/pdf.js")
 const {createCanvas} = require("canvas");
 
 async function generateOpengraph(gcs, gcsPath) {
@@ -46,7 +46,7 @@ async function getPreviewBuffer(mime, contents) {
     if (mime === "image/png" || mime === "image/jpg" || mime === "image/jpeg") {
         return {mime, contents}
     } else if (mime === "application/pdf") {
-        const imgContents = await generatePdfPreview(contents)
+        const imgContents = await generatePdfPreview(contents).catch(err => console.log(err))
         return {mime, contents: imgContents}
     } else if (mime === "image/svg+xml") {
         const imgContents = await generateSvgPreview(contents)
@@ -59,10 +59,10 @@ async function getPreviewBuffer(mime, contents) {
 
 async function generatePdfPreview(pdfBuffer) {
     const loadTask = getDocument(pdfBuffer.buffer);
-    const doc = await loadTask.promise()
+    const doc = await loadTask.promise
     const page = await doc.getPage(1)
-    const viewport = page.getViewport({ scale: 3.0 });
-    const canvas = createCanvas(viewport.width, viewport.width)
+    const viewport = page.getViewport({ scale: 10.0 });
+    const canvas = createCanvas(viewport.width, viewport.height)
     const ctx = canvas.getContext('2d')
     const renderContext = {
         canvasContext: ctx,
@@ -114,7 +114,7 @@ async function testPreview(file, mime) {
     fs.writeFileSync(file + ".png", outBuffer)
 }
 
-// testPreview("../site/img/asl-i-love-you.svg", "image/svg+xml")
+testPreview("acab-cat.pdf", "application/pdf")
 
 exports.generateOpengraph = generateOpengraph;
 exports.generatePreviewImage = generatePreviewImage;
