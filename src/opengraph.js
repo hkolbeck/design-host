@@ -21,7 +21,7 @@ async function generateOpengraph(gcs, gcsPath) {
     <meta property="og:url" content="https://acab.city/gallery/${encodeURIComponent(gcsPath)}" />
     <meta property="og:title" content="${metadata.title}" />
     <meta property="og:description" content="${metadata.alt}" />
-    <meta property="og:image" content="https://acab.city/api/preview/${gcsPath}}" />
+    <meta property="og:image" content="https://acab.city/api/preview/${gcsPath}" />
     <meta property="og:image:alt" content="${metadata.alt}" />
 </head>
 <body>
