@@ -12,22 +12,26 @@ async function generateOpengraph(gcs, gcsPath) {
     <title>ACAB.city</title>
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico"/>
     <meta name="description" content="The LaserBloc Design Gallery"/>
-    <meta name="twitter:title" content="${encodeURIComponent(metadata.title)}">
-    <meta name="twitter:text:title" content="${encodeURIComponent(metadata.title)}">
+    <meta name="twitter:title" content="${encodeQuotes(metadata.title)}">
+    <meta name="twitter:text:title" content="${encodeQuotes(metadata.title)}">
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@LaserBloc" />
     <meta name="twitter:creator" content="@LaserBloc" />
     <meta name="twitter:image" content="https://acab.city/api/preview/${encodeURI(gcsPath)}.png">
-    <meta name="twitter:image:alt" content="${encodeURIComponent(metadata.alt)}">
+    <meta name="twitter:image:alt" content="${encodeQuotes(metadata.alt)}">
     <meta property="og:url" content="https://acab.city/gallery/${encodeURI(gcsPath)}" />
-    <meta property="og:title" content="${encodeURIComponent(metadata.title)}" />
-    <meta property="og:description" content="${encodeURIComponent(metadata.alt)}" />
+    <meta property="og:title" content="${encodeQuotes(metadata.title)}" />
+    <meta property="og:description" content="${encodeQuotes(metadata.alt)}" />
     <meta property="og:image" content="https://acab.city/api/preview/${encodeURI(gcsPath)}.png" />
-    <meta property="og:image:alt" content="${encodeURIComponent(metadata.alt)}" />
+    <meta property="og:image:alt" content="${encodeQuotes(metadata.alt)}" />
 </head>
 <body>
 </body>
 </html>`
+}
+
+function encodeQuotes(str) {
+    return str.replaceAll('"', "&quot;")
 }
 
 async function generatePreviewImage(gcs, gcsPath) {
