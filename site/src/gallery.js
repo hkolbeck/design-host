@@ -177,7 +177,7 @@ async function getPreviewDataUrl(contentDataUrl, pdfScale) {
         return contentDataUrl;
     } else if (preamble.match("application/pdf")) {
         return await pdfToPreviewDataUrl(contentDataUrl, pdfScale);
-    } else if (preamble.match("image/svg\+xml")) {
+    } else if (preamble.indexOf("image/svg+xml") >= 0) {
         return await svgToPreviewDataUrl(contentDataUrl)
     } else if (preamble.match("text/plain")) {
         return textToPreviewDataUrl(contentDataUrl)
