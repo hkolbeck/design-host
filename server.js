@@ -207,7 +207,7 @@ fastify.get("/api/single-item/*", (request, reply) => {
 
 fastify.get("/api/preview/*", (request, reply) => {
     const path = decodeURIComponent(request.url).replace("/api/preview/", "")
-        .replace(/\?.*/, '/')
+        .replace(/\?.*/, '/').replace(/\.png$/, "")
     generatePreviewImage(gcs, path)
         .then(({mime, contents}) => {
             if (!contents) {
