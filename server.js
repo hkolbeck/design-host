@@ -41,7 +41,8 @@ const staticPaths = {
 const previewBots = {
     "facebot": true,
     "Twitterbot": true,
-    "Slackbot-LinkExpanding": true
+    "Slackbot-LinkExpanding": true,
+    "node-fetch": true
 }
 
 fastify.get("/images/:img", (request, reply) => {
