@@ -13,7 +13,7 @@ async function generateOpengraph(gcs, gcsPath) {
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico"/>
     <meta name="description" content="The LaserBloc Design Gallery"/>
     <meta name="twitter:title" content="${metadata.title}">
-    <meta name="twitter:text:title" content="${metadata.title}">
+    <meta name="twitter:text:title" content="Title: ${metadata.title}">
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@LaserBloc" />
     <meta name="twitter:creator" content="@LaserBloc" />
