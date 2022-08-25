@@ -252,6 +252,7 @@
 #single-image {
     max-width: 80vw;
     max-height: 60vh;
+    margin: 20px 0;
     grid-area: img;
     place-self: center;
     filter: drop-shadow(0 0 0.75rem white);
