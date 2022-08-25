@@ -12,6 +12,7 @@
     "@google-cloud/storage": "^6.4.1",
     "@stablelib/base64": "^1.0.1",
     "canvas": "^2.9.3",
+    "fabric": "^5.2.4",
     "fastify": "^4.3.0",
     "node-fetch": "^2.6.6",
     "pdfjs-dist": "^2.15.349",
