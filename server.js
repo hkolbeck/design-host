@@ -40,6 +40,7 @@ const staticPaths = {
 
 const previewBots = {
     "facebot": true,
+    "facebookexternalhit": true,
     "Twitterbot": true,
     "Slackbot-LinkExpanding": true,
     "node-fetch": true
