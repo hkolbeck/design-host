@@ -59,6 +59,7 @@
     text-shadow: 2px 2px black;
     place-self: center;
     grid-area: c;
+    overflow-x: hidden;
 }
 
 .big-image-wrapper {
