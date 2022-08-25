@@ -157,8 +157,8 @@ async function svgToPreviewDataUrl(svgDataUrl, edgeLen) {
         const img = document.createElement("img")
         img.onload = () => {
             const canvas = document.createElement("canvas")
-            canvas.width = edgeLen
-            canvas.height = edgeLen
+            canvas.width = img.width
+            canvas.height = img.height
 
             const ctx = canvas.getContext('2d')
             ctx.fillStyle = "#FFFFFF"
@@ -171,14 +171,14 @@ async function svgToPreviewDataUrl(svgDataUrl, edgeLen) {
     })
 }
 
-async function getPreviewDataUrl(contentDataUrl, pdfScale, svgEdgeLen) {
+async function getPreviewDataUrl(contentDataUrl, pdfScale) {
     const preamble = contentDataUrl.slice(0, contentDataUrl.indexOf(","));
     if (preamble.match("image/jpeg") || preamble.match("image/png")) {
         return contentDataUrl;
     } else if (preamble.match("application/pdf")) {
         return await pdfToPreviewDataUrl(contentDataUrl, pdfScale);
     } else if (preamble.indexOf("image/svg+xml") >= 0) {
-        return await svgToPreviewDataUrl(contentDataUrl, svgEdgeLen)
+        return await svgToPreviewDataUrl(contentDataUrl)
     } else if (preamble.match("text/plain")) {
         return textToPreviewDataUrl(contentDataUrl)
     } else {
@@ -218,7 +218,7 @@ async function renderPage(path, currentPage, nextPage, files) {
             const linkImg = document.getElementById(`item-link-img-${i}`)
 
             if (file.type === "file") {
-                const previewDataUrl = await getPreviewDataUrl(file.contents, 1, 280);
+                const previewDataUrl = await getPreviewDataUrl(file.contents, 1);
                 img.onclick = () => {
                     let wrapper = document.createElement("div");
                     wrapper.className = "big-image-wrapper";
@@ -305,7 +305,7 @@ async function renderSingle(item) {
     const download = document.getElementById("single-image-download")
     const downloadImg = document.getElementById("single-image-download-img")
 
-    const previewDataURL = await getPreviewDataUrl(item.contents, 10, 2048)
+    const previewDataURL = await getPreviewDataUrl(item.contents, 10)
     img.setAttribute("src", previewDataURL)
     img.setAttribute("alt", item.alt)
 
