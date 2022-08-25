@@ -1,11 +1,16 @@
 .gallery-wrapper {
-    top: 85px;
+    top: 70px;
     bottom: 60px;
     width: 100%;
     position: fixed;
     overflow-y: scroll;
     display: grid;
     grid-template-areas: "c";
+}
+
+#gallery-top-padding {
+    width: 100%;
+    height: 15px;
 }
 
 .gallery-item-wrapper {
