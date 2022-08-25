@@ -1,5 +1,7 @@
 const {fabric} = require("fabric")
 const fs = require("fs");
+const {getDocument} = require("pdfjs-dist")
+const {createCanvas} = require("canvas");
 
 async function generateOpengraph(gcs, gcsPath) {
     const metadata = await gcs.getMetadata(gcsPath)
@@ -56,7 +58,20 @@ async function getPreviewBuffer(mime, contents) {
 }
 
 async function generatePdfPreview(pdfBuffer) {
+    const loadTask = getDocument(pdfBuffer.buffer);
+    const doc = await loadTask.promise()
+    const page = await doc.getPage(1)
+    const viewport = page.getViewport({ scale: 3.0 });
+    const canvas = createCanvas(viewport.width, viewport.width)
+    const ctx = canvas.getContext('2d')
+    const renderContext = {
+        canvasContext: ctx,
+        viewport
+    };
 
+    const renderTask = page.render(renderContext);
+    await renderTask.promise;
+    return canvas.toBuffer();
 }
 
 async function generateSvgPreview(svgBuffer) {
