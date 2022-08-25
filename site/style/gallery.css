@@ -1,6 +1,6 @@
 .gallery-wrapper {
     top: 85px;
-    bottom: 50px;
+    bottom: 60px;
     width: 100%;
     position: fixed;
     overflow-y: scroll;
@@ -117,7 +117,7 @@
     float: right;
     height: 40px;
     width: auto;
-    margin: 5px 20px;
+    margin: 15px 20px 5px;
     display: inline-block;
 }
 
