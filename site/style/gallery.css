@@ -238,6 +238,14 @@
                          "save";
 }
 
+#single-image-title {
+    max-width: 80vw;
+    font-family: "montserrat", sans-serif;
+    font-weight: bold;
+    font-size: 2.5rem;
+    text-align: center;
+}
+
 #single-image {
     max-width: 80vw;
     max-height: 60vh;
