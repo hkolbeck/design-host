@@ -51,7 +51,8 @@ const previewBots = {
 const longBots = [
     "Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)",
     "Mozilla/5.0 (compatible; redditbot/1.0; +http://www.reddit.com/feedback)",
-    "Mozilla/5.0 (compatible; Semanticbot/1.0; +http://sempi.tech/bot.html)"
+    "Mozilla/5.0 (compatible; Semanticbot/1.0; +http://sempi.tech/bot.html)",
+    "Mozilla/5.0 (compatible; PaperLiBot/2.1; https://support.paper.li/hc/en-us/articles/360006695637-PaperLiBot)"
 ]
 fastify.get("/images/:img", (request, reply) => {
     reply.sendFile(request.params["img"], path.join(__dirname, "site", "img"))
