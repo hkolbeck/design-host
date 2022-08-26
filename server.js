@@ -147,8 +147,8 @@ fastify.get("/api/get-page/*", (request, reply) => {
                 if (file.name.endsWith("-")) {
                     return {
                         type: "directory",
-                        fullPath: file.name.replace(/-$/, ""),
-                        fileName: file.name.replace(path, "").replace(/-$/, "")
+                        fullPath: file.name.replace(/-$/, "").replace("0000", ""),
+                        fileName: file.name.replace(path, "").replace(/-$/, "").replace("0000", "")
                     }
                 } else {
                     const [rawFile, [metadata]] = await Promise.all([gcs.fetchObject(file), file.getMetadata()])
