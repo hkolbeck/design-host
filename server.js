@@ -241,7 +241,7 @@ fastify.get("/api/preview/*", (request, reply) => {
 })
 
 fastify.get("/api/tag-groups", (request, reply) => {
-    reply.status(200).send(Object.keys(tagGroups))
+    reply.status(200).send(Object.keys(tagGroups).sort())
 })
 
 fastify.get("/api/tag-group-page/:tag", (request, reply) => {
@@ -283,3 +283,4 @@ fastify.listen({port: config.port, host: config.host}, function (err, address) {
 });
 
 makeTagGroups()
+setInterval(makeTagGroups, 5 * 60 * 1000)
