@@ -1,4 +1,6 @@
 async function loadPage(url) {
+    buildPage()
+
     const pageToken = url.searchParams.get("page");
     const path = url.pathname.replace("/gallery/", "")
 
@@ -10,21 +12,17 @@ async function loadPage(url) {
     }
 
     if (apiResult.page) {
-        renderPage(path, pageToken, apiResult.nextPage, apiResult.page).catch(
-            (err) => {
-                console.log(`Error fetching ${path}`)
-                console.log(err);
-                window.location.href = "https://acab.city/error";
-            }
-        );
+        renderPage(path, pageToken, apiResult.nextPage, apiResult.page).catch((err) => {
+            console.log(`Error fetching ${path}`)
+            console.log(err);
+            window.location.href = "https://acab.city/error";
+        });
     } else if (apiResult.contents) {
-        renderSingle(apiResult).catch(
-            (err) => {
-                console.log(`Error fetching ${path}`)
-                console.log(err);
-                window.location.href = "https://acab.city/error";
-            }
-        );
+        renderSingle(apiResult).catch((err) => {
+            console.log(`Error fetching ${path}`)
+            console.log(err);
+            window.location.href = "https://acab.city/error";
+        });
     } else {
         console.log(`Unexpected result type from page fetch: ${typeof apiResult}: ${JSON.stringify(apiResult)}`);
         window.location.href = "https://acab.city/error";
@@ -42,6 +40,50 @@ async function fetchForPath(path, pageToken) {
                 return fetchPage(path + "/", null)
             }
         })
+    }
+}
+
+function buildItem(idx) {
+    const wrapper = document.createElement("img");
+    wrapper.id = `gallery-item-wrapper-${idx}`
+    wrapper.className = "gallery-item-wrapper"
+    wrapper.innerHTML = `
+            <div id="gallery-item-${idx}" class="gallery-item">
+                <img id="gallery-image-${idx}" class="gallery-image" src="" alt=""/>
+                <a id="gallery-folder-${idx}" href="">
+                    <img
+                            id="gallery-folder-img-${idx}"
+                            class="gallery-folder"
+                            src="/images/folder.svg"
+                            alt="folder"
+                    />
+                </a>
+                <a id="item-link-${idx}" href="">
+                    <img
+                            id="item-link-img-${idx}"
+                            class="item-link-img"
+                            src="/images/link.svg"
+                            alt="Link"
+                    />
+                </a>
+                <a id="download-${idx}">
+                    <img
+                            id="download-img-${idx}"
+                            class="download"
+                            src="/images/download.svg"
+                            alt="Download"
+                    />
+                </a>
+            </div>
+            <div class="title-wrapper"><span class="gallery-title" id="gallery-title-${idx}"></span></div>`
+
+    return wrapper
+}
+
+function buildPage() {
+    const gallery = document.getElementById("gallery")
+    for (let i = 0; i < 10; i++) {
+        gallery.appendChild(buildItem(i))
     }
 }
 
@@ -77,11 +119,7 @@ async function apiFetch(url, def) {
             console.log(`Fetch completed in ${Date.now() - start}ms`);
             return json;
         } else {
-            console.log(
-                `Failed to fetch '${url}': ${resp.status} ${
-                    resp.statusText
-                }: ${await resp.text()}`
-            );
+            console.log(`Failed to fetch '${url}': ${resp.status} ${resp.statusText}: ${await resp.text()}`);
             return def;
         }
     }).catch((err) => {
@@ -112,14 +150,11 @@ async function pdfToPreviewDataUrl(pdfDataUrl, scale) {
     canvas.width = Math.floor(viewport.width * outputScale);
     canvas.height = Math.floor(viewport.height * outputScale);
 
-    const transform =
-        outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+    const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
 
     // Render PDF page into canvas context.
     const renderContext = {
-        canvasContext: context,
-        transform,
-        viewport,
+        canvasContext: context, transform, viewport,
     };
     await page.render(renderContext).promise;
 
@@ -264,10 +299,7 @@ async function renderPage(path, currentPage, nextPage, files) {
                 img.style.display = "none";
 
                 folderImg.setAttribute("alt", `${file.fileName} Folder`);
-                folder.setAttribute(
-                    "href",
-                    `https://acab.city/gallery/${encodeURIComponent(file.fullPath)}`
-                );
+                folder.setAttribute("href", `https://acab.city/gallery/${encodeURIComponent(file.fullPath)}`);
 
                 title.innerText = file.fileName;
 
