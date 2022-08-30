@@ -396,3 +396,8 @@ async function renderSingle(item) {
 
     wrapper.style.display = "grid"
 }
+
+window.onload = () => {
+    buildPage();
+    load(new URL(window.location.href));
+}
