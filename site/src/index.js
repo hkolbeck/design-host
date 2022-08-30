@@ -1,5 +1,5 @@
 async function loadTags() {
-    const tags = apiFetch("https://acab.city/api/tag-groups", [])
+    const tags = await apiFetch("https://acab.city/api/tag-groups", [])
 
     const tagContainer = document.getElementById("tags")
     tags.forEach(tag => {
