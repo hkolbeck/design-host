@@ -22,13 +22,14 @@ li {
 }
 
 #tag-hr {
-    width: 80%;
+    width: 60vw;
     color: white;
 }
 
 #tags {
     display: none;
     text-align: center;
+    width: 80vw;
 }
 
 .tag-wrapper {
