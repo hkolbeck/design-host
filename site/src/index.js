@@ -8,7 +8,7 @@ async function loadTags() {
 
         const link = document.createElement('a')
         link.href = `https://acab.city/tag/${tag}`
-        link.innerText = tag
+        link.innerText = tag.replace(' ', '&nbsp;')
         wrapper.appendChild(link)
 
         tagContainer.appendChild(wrapper)

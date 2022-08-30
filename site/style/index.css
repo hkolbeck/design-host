@@ -36,5 +36,6 @@ li {
     padding: 5px 10px;
     font-weight: bold;
     text-decoration: underline;
+    display: inline-block;
 }
 
