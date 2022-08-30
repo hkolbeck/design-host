@@ -86,7 +86,7 @@ function buildItem(idx) {
     wrapper.className = "gallery-item-wrapper"
     wrapper.innerHTML = `
             <div id="gallery-item-${idx}" class="gallery-item">
-                <img id="gallery-image-${idx}" class="gallery-image" src="" alt=""/>
+                <img id="gallery-image-${idx}" class="gallery-image" src="" alt=""/></img>
                 <a id="gallery-folder-${idx}" href="">
                     <img
                             id="gallery-folder-img-${idx}"
