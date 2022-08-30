@@ -81,12 +81,12 @@ async function fetchForPath(path, pageToken) {
 }
 
 function buildItem(idx) {
-    const wrapper = document.createElement("img");
+    const wrapper = document.createElement("div");
     wrapper.id = `gallery-item-wrapper-${idx}`
     wrapper.className = "gallery-item-wrapper"
     wrapper.innerHTML = `
             <div id="gallery-item-${idx}" class="gallery-item">
-                <img id="gallery-image-${idx}" class="gallery-image" src="" alt=""/></img>
+                <img id="gallery-image-${idx}" class="gallery-image" src="" alt=""/>
                 <a id="gallery-folder-${idx}" href="">
                     <img
                             id="gallery-folder-img-${idx}"
