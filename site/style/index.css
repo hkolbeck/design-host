@@ -30,6 +30,7 @@ li {
     display: none;
     text-align: center;
     width: 80vw;
+    margin: 0 auto;
 }
 
 .tag-wrapper {
