@@ -4,7 +4,9 @@ function makeClient(bucket) {
         fetchObject: makeFetchObject(),
         fetchObjectRaw: makeFetchObjectRaw(bucket),
         fetchPath: makeFetchPath(bucket),
-        getMetadata: makeGetMetadata(bucket)
+        getMetadata: makeGetMetadata(bucket),
+        buildCollection: makeBuildCollection(bucket),
+        fetchBatch: makeFetchBatch(bucket)
     }
 }
 
@@ -14,7 +16,7 @@ function makeGetMetadata(bucket) {
         const [metadata] = await file.getMetadata()
             .catch(err => {
                 console.log(`Metadata fetch failed for '${path}': ${err.message}`)
-                return null
+                return [null]
             })
 
         if (!metadata) {
@@ -172,6 +174,57 @@ function makeFetchObjectRaw(bucket) {
                 }
             })
         })
+    }
+}
+
+function makeBuildCollection(bucket) {
+    return async function buildCollection() {
+        const tagGroups = {}
+        const collection = []
+        const [files] = await bucket.getFiles()
+
+        for (let file of files.filter(f => !f.name.endsWith("/"))) {
+            const type = file.name.endsWith("-") ? "directory" : "file"
+            const actualPath = file.name.replace("0000", "").replace(/-$/, "")
+            collection.push({type, path: actualPath})
+
+            const [metadata] = await file.getMetadata() || []
+            if (metadata) {
+                if (metadata.metadata && metadata.metadata["tags"]) {
+                    metadata.metadata["tags"].split(",").map(tag => tag.trim()).forEach(tag => {
+                        tagGroups[tag] = tagGroups[tag] || []
+                        tagGroups[tag].push({type, path: actualPath})
+                    })
+                } else {
+                    tagGroups["untagged"] = tagGroups["untagged"] || []
+                    tagGroups["untagged"].push({type, path: actualPath})
+                }
+            } else {
+                tagGroups["untagged"] = tagGroups["untagged"] || []
+                tagGroups["untagged"].push({type, path: actualPath})
+            }
+        }
+
+        return {tagGroups, collection}
+    }
+}
+
+function makeFetchBatch(bucket) {
+    const fetchPath = makeFetchPath(bucket)
+    return async function fetchBatch(items) {
+        const batch = await Promise.all(items.map(async item => {
+            if (item.type === "directory") {
+                return {
+                    type: "directory",
+                    fullPath: item.path,
+                    fileName: item.path.slice(item.path.lastIndexOf("/") + 1)
+                }
+            } else {
+                return await fetchPath(item.path)
+            }
+        }))
+
+        return batch.filter(o => !!o)
     }
 }
 

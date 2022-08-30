@@ -1,6 +1,39 @@
-async function loadPage(url) {
-    buildPage()
+async function load(url) {
+    if (url.pathname.startsWith('/gallery/')) {
+        await loadGalleryPage(url)
+    } else if (url.pathname.startsWith('/tag/')) {
+        await loadTagPage(url)
+    } else {
+        console.log(`Unexpected url: ${url}`);
+        window.location.href = "https://acab.city/error";
+    }
+}
 
+async function loadTagPage(url) {
+    const tag = url.pathname.replace('/tag/', '')
+    const offset = url.searchParams.get('offset')
+
+    const apiResult = fetchTagPage(tag, offset)
+    if (!apiResult) {
+        console.log("Page fetch failed");
+        window.location.href = "https://acab.city/error";
+        return;
+    }
+
+    let nextPageLink = null;
+    if (apiResult.nextOffset) {
+        nextPageLink = `https://acab.city/tag/${tag}?offset=${apiResult.nextOffset}`;
+    }
+
+    renderPage(nextPageLink, apiResult.page).catch((err) => {
+        console.log(`Error fetching for tag ${tag}`)
+        console.log(err);
+        window.location.href = "https://acab.city/error";
+    });
+}
+
+
+async function loadGalleryPage(url) {
     const pageToken = url.searchParams.get("page");
     const path = url.pathname.replace("/gallery/", "")
 
@@ -12,7 +45,11 @@ async function loadPage(url) {
     }
 
     if (apiResult.page) {
-        renderPage(path, pageToken, apiResult.nextPage, apiResult.page).catch((err) => {
+        let nextPageLink = null;
+        if (apiResult.nextPage) {
+            nextPageLink = `https://acab.city/gallery/${path}?page=${apiResult.nextPage}`;
+        }
+        renderPage(nextPageLink, apiResult.page).catch((err) => {
             console.log(`Error fetching ${path}`)
             console.log(err);
             window.location.href = "https://acab.city/error";
@@ -102,6 +139,15 @@ async function fetchPage(path, pageToken) {
         url += `?page=${pageToken}&count=10`;
     } else {
         url += "?count=11";
+    }
+
+    return apiFetch(url, {page: []})
+}
+
+async function fetchTagPage(tag, offset) {
+    let url = `https://acab.city/api/tag-group-page/${tag}`
+    if (offset) {
+        url = url + `?offset=${offset}`
     }
 
     return apiFetch(url, {page: []})
@@ -228,7 +274,7 @@ async function dataUrlToBlob(item) {
         .then(URL.createObjectURL);
 }
 
-async function renderPage(path, currentPage, nextPage, files) {
+async function renderPage(nextPageLink, files) {
     const start = Date.now();
 
     if (files.length === 0) {
@@ -321,8 +367,8 @@ async function renderPage(path, currentPage, nextPage, files) {
     gallery.style.display = "grid"
 
     const next = document.getElementById("next-button");
-    if (nextPage) {
-        next.href = `https://acab.city/gallery/${path}?page=${nextPage}`;
+    if (nextPageLink) {
+        next.href = nextPageLink
         next.style.display = "block";
     } else {
         next.style.display = "none";

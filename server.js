@@ -54,6 +54,18 @@ const longBots = [
     "Mozilla/5.0 (compatible; Semanticbot/1.0; +http://sempi.tech/bot.html)",
     "Mozilla/5.0 (compatible; PaperLiBot/2.1; https://support.paper.li/hc/en-us/articles/360006695637-PaperLiBot)"
 ]
+
+let tagGroups = {}
+let collection = []
+async function makeTagGroups() {
+    const start = Date.now()
+    const coll = await gcs.buildCollection()
+    tagGroups = coll.tagGroups
+    collection = coll.collection
+
+    console.log(`Built tag groups in ${Date.now() - start}ms`)
+}
+
 fastify.get("/images/:img", (request, reply) => {
     reply.sendFile(request.params["img"], path.join(__dirname, "site", "img"))
 })
@@ -91,7 +103,7 @@ fastify.get("/gallery/*", (request, reply) => {
                     sendingPreview = true
                     generateOpengraph(gcs, path)
                         .then(head => {
-                            return reply.status(200).send(head);
+                            reply.status(200).send(head);
                         })
                         .catch(err => {
                             console.log(`Error generating preview for ${path}: ${err.message}`)
@@ -105,6 +117,10 @@ fastify.get("/gallery/*", (request, reply) => {
     if (!sendingPreview) {
         reply.sendFile("gallery.html")
     }
+})
+
+fastify.get("/tag/*", (request, reply) => {
+    reply.sendFile("gallery.html")
 })
 
 fastify.get("/error", (request, reply) => {
@@ -224,6 +240,36 @@ fastify.get("/api/preview/*", (request, reply) => {
         })
 })
 
+fastify.get("/api/tag-groups", (request, reply) => {
+    reply.status(200).send(Object.keys(tagGroups))
+})
+
+fastify.get("/api/tag-group-page/:tag", (request, reply) => {
+    const tag = request.params["tag"]
+    const offset = parseInt(request.query["offset"] || "0")
+
+    if (tag) {
+        const tagged = tagGroups[tag] || []
+        const pageContents = tagged.slice(offset, offset + 10)
+        gcs.fetchBatch(pageContents)
+            .then(page => {
+                const resp = {page}
+                if (offset + 10 < tagged.length) {
+                    resp.nextOffset = offset + 10
+                }
+
+                reply.status(200).send(resp)
+            })
+            .catch(err => {
+                console.log(`Error fetching batch for tag: ${tag} and offset ${offset}`)
+                console.log(err)
+                reply.status(500).send({error: "Internal server error"})
+            })
+    } else {
+        reply.status(400).send({error: "Missing tag in path"})
+    }
+})
+
 fastify.get("/health", (request, reply) => reply.status(200).send())
 
 fastify.listen({port: config.port, host: config.host}, function (err, address) {
@@ -235,3 +281,5 @@ fastify.listen({port: config.port, host: config.host}, function (err, address) {
     console.log(`Your app is listening on ${address}`);
     fastify.log.info(`server listening on ${address}`);
 });
+
+makeTagGroups()
