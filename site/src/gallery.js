@@ -13,7 +13,7 @@ async function loadTagPage(url) {
     const tag = url.pathname.replace('/tag/', '')
     const offset = url.searchParams.get('offset')
 
-    const apiResult = fetchTagPage(tag, offset)
+    const apiResult = await fetchTagPage(tag, offset)
     if (!apiResult) {
         console.log("Page fetch failed");
         window.location.href = "https://acab.city/error";
