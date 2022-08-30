@@ -21,5 +21,19 @@ li {
     padding-top: 5vh;
 }
 
+#tag-hr {
+    width: 80%;
+    color: white;
+}
 
+#tags {
+    display: none;
+    text-align: center;
+}
+
+.tag-wrapper {
+    padding: 5px 10px;
+    font-weight: bold;
+    text-underline: white;
+}
 
