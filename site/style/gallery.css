@@ -10,7 +10,7 @@
 
 .gallery-item-wrapper {
     width: 300px;
-    overflow: hidden;
+    min-height: 300px;
     display: none;
 }
 
