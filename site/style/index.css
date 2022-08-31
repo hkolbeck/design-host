@@ -19,6 +19,7 @@ li {
     text-align: center;
     width: 100%;
     padding-top: 5vh;
+    margin-bottom: 15px;
 }
 
 #tag-hr {
@@ -30,7 +31,7 @@ li {
     display: none;
     text-align: center;
     width: 80vw;
-    margin: 0 auto;
+    margin: 15px auto;
 }
 
 .tag-wrapper {
