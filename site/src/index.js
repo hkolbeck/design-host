@@ -1,14 +1,35 @@
+const displayTags = {
+    "acab": "ACAB",
+    "america": "America",
+    "andy ngo": "Andy Ngo",
+    "black": "Black",
+    "blm": "BLM",
+    "gnwp": "GNWP",
+    "indigenous": "Indigenous",
+    "jewish": "Jewish",
+    "karl marx": "Karl Marx",
+    "oregon": "Oregon",
+    "portland": "Portland",
+    "seeger": "Pete Seeger",
+    "stafford beer": "Stafford Beer",
+    "swerf": "SWERF",
+    "terf": "TERF",
+    "timbers": "Timbers",
+    "thorns": "Thorns"
+}
+
 async function loadTags() {
     const tags = await apiFetch("https://acab.city/api/tag-groups", [])
 
     const tagContainer = document.getElementById("tags")
     tags.forEach(tag => {
+        const displayTag = (displayTags[tag] || tag).replace(' ', '&nbsp;')
         const wrapper = document.createElement("span")
         wrapper.className = 'tag-wrapper'
 
         const link = document.createElement('a')
         link.href = `https://acab.city/tag/${tag}`
-        link.innerHTML = tag.replace(' ', '&nbsp;')
+        link.innerHTML = displayTag
         wrapper.appendChild(link)
 
         tagContainer.appendChild(wrapper)
