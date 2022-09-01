@@ -371,6 +371,13 @@ async function renderSingle(item) {
     const objectURL = await dataUrlToBlob(item);
     download.setAttribute("href", objectURL);
     download.setAttribute("download", item.fileName);
+
+    if (item.fileName.endsWith('.pdf') || item.fileName.endsWith('.svg')) {
+        downloadImg.setAttribute('src', '/img/save-vector.svg')
+    } else {
+        downloadImg.setAttribute('src', '/img/save-high-res.svg')
+    }
+
     downloadImg.setAttribute("alt", `Save ${item.title}`)
 
     wrapper.style.display = "grid"
