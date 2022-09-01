@@ -372,7 +372,7 @@ async function renderSingle(item) {
     download.setAttribute("href", objectURL);
     download.setAttribute("download", item.fileName);
 
-    console.log(item.fileName)
+    console.log(JSON.stringify(item))
 
     if (item.fileName.endsWith('.pdf') || item.fileName.endsWith('.svg')) {
         downloadImg.setAttribute('src', '/img/save-vector.svg')
