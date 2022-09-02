@@ -238,7 +238,8 @@
     place-self: center;
     grid-template-areas: "title"
                          "img"
-                         "save";
+                         "save"
+                         "license";
 }
 
 #single-image-title {
@@ -275,6 +276,7 @@
 .creative-commons-0 {
     font-family: Courier new, monospace;
     text-align: center;
-    float: bottom;
-    width: 100%;
+    margin-top: 30px;
+    width: 80vw;
+    grid-area: license;
 }
