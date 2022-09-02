@@ -15,6 +15,7 @@ const displayTags = {
     "seeger": "Pete Seeger",
     "stafford beer": "Stafford Beer",
     "swerf": "SWERF",
+    "ted wheeler": "Ted Wheeler",
     "terf": "TERF",
     "timbers": "Timbers",
     "thorns": "Thorns"
