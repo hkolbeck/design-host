@@ -271,3 +271,10 @@
     width: 50vw;
     height: auto;
 }
+
+.creative-commons-0 {
+    font-family: Courier new, monospace;
+    text-align: center;
+    float: bottom;
+    width: 100%;
+}
