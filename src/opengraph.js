@@ -78,6 +78,7 @@ async function generatePdfPreview(pdfBuffer) {
 
     const renderTask = page.render(renderContext);
     await renderTask.promise;
+    doc.cleanup()
     return canvas.toBuffer();
 }
 
