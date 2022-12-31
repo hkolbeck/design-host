@@ -50,7 +50,9 @@ const previewBots = [
     "Discordbot",
     "redditbot",
     "Semanticbot",
-    "PaperLiBot"
+    "PaperLiBot",
+    "Akkoma",
+    "Pleroma"
 ]
 
 let tagGroups = {}
