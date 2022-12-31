@@ -100,7 +100,6 @@ fastify.get("/gallery/*", (request, reply) => {
                 .reduce((found, thisBot) => found || thisBot)
 
             if (isBot) {
-                console.log(`Is bot: ${userAgent}`)
                 sendingPreview = true
                 const path = decodeURIComponent(request.url).replace("/gallery/", "")
                 generateOpengraph(gcs, path)
@@ -111,8 +110,6 @@ fastify.get("/gallery/*", (request, reply) => {
                         console.log(`Error generating preview for ${path}: ${err.message}`)
                         reply.status(404).send()
                     })
-            } else {
-                console.log(`Not a bot: ${userAgent}`)
             }
         }
     }
