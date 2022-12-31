@@ -212,7 +212,7 @@ function textToPreviewDataUrl(textDataUrl) {
     return canvas.toDataURL()
 }
 
-async function svgToPreviewDataUrl(svgDataUrl, edgeLen) {
+async function svgToPreviewDataUrl(svgDataUrl) {
     return new Promise((resolve) => {
         const img = document.createElement("img")
         img.onload = () => {
@@ -225,7 +225,7 @@ async function svgToPreviewDataUrl(svgDataUrl, edgeLen) {
             ctx.fillRect(0, 0, canvas.width, canvas.height)
             ctx.drawImage(img, 0, 0)
 
-            resolve(canvas.toDataURL("image/ing"))
+            resolve(canvas.toDataURL("image/png"))
         }
         img.src = svgDataUrl
     })

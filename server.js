@@ -38,21 +38,19 @@ const staticPaths = {
 
 }
 
-const previewBots = {
-    "facebot": true,
-    "facebookexternalhit": true,
-    "Twitterbot": true,
-    "Slackbot-LinkExpanding": true,
-    "Googlebot-Image": true,
-    "Iframely": true,
-    "node-fetch": true //For testing
-}
-
-const longBots = [
-    "Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)",
-    "Mozilla/5.0 (compatible; redditbot/1.0; +http://www.reddit.com/feedback)",
-    "Mozilla/5.0 (compatible; Semanticbot/1.0; +http://sempi.tech/bot.html)",
-    "Mozilla/5.0 (compatible; PaperLiBot/2.1; https://support.paper.li/hc/en-us/articles/360006695637-PaperLiBot)"
+const previewBots = [
+    "facebot",
+    "facebookexternalhit",
+    "Twitterbot",
+    "Slackbot-LinkExpanding",
+    "Googlebot-Image",
+    "Iframely",
+    "node-fetch",
+    "Mastodon",
+    "Discordbot",
+    "redditbot",
+    "Semanticbot",
+    "PaperLiBot"
 ]
 
 let tagGroups = {}
@@ -94,11 +92,12 @@ fastify.get("/gallery/*", (request, reply) => {
     if (lastDot >= 0) {
         const ext = request.url.slice(lastDot)
         if (canPreview[ext] && request.headers["user-agent"]) {
-            const userAgent = request.headers["user-agent"].match(/^([\w-]+)/)
-            let isLongAgent = longBots.indexOf(request.headers["user-agent"]) >= 0;
-            console.log(`URL: ${request.url} User-Agent: ${request.headers["user-agent"]} => ${JSON.stringify(userAgent)} IsLong: ${isLongAgent}`)
+            const userAgent = request.headers["user-agent"]
             if (userAgent) {
-                if (previewBots[userAgent[0]] || isLongAgent) {
+                let isBot = previewBots.map(bot => userAgent.indexOf(bot) >= 0)
+                    .reduce((found, thisBot) => found || thisBot)
+                
+                if (isBot) {
                     const path = decodeURIComponent(request.url).replace("/gallery/", "")
                     sendingPreview = true
                     generateOpengraph(gcs, path)
