@@ -18,7 +18,8 @@
     "pdfjs-dist": "2.9.359",
     "readable-stream": "^4.1.0",
     "tailwindcss": "^3.1.8",
-    "worker-loader": "3.0.7"
+    "worker-loader": "3.0.7",
+    "node-cache": "^5.1.2"
   },
   "engines": {
     "node": "16.14.2"

@@ -1,9 +1,19 @@
 const {fabric} = require("fabric")
 const {getDocument} = require("pdfjs-dist/legacy/build/pdf.js")
 const {createCanvas} = require("canvas");
+const NodeCache = require( "node-cache" );
+
+const metadataCache = new NodeCache({stdTTL: 5 * 60, useClones: false});
+const contentCache = new NodeCache({stdTTL: 5 * 60, useClones: false});
 
 async function generateOpengraph(gcs, gcsPath) {
-    const metadata = await gcs.getMetadata(gcsPath)
+    let metadata;
+    if (metadataCache.has(gcsPath)) {
+        metadata = metadataCache.get(gcsPath);
+    } else {
+        metadata = await gcs.getMetadata(gcsPath);
+        metadataCache.set(gcsPath, metadata);
+    }
 
     return `<html lang="en">
 <head>
@@ -36,6 +46,10 @@ function encodeQuotes(str) {
 }
 
 async function generatePreviewImage(gcs, gcsPath) {
+    if (contentCache.has(gcsPath)) {
+        return contentCache.get(gcsPath);
+    }
+
     const {mime, contents} = await gcs.fetchObjectRaw(gcsPath)
         .catch(err => {
             console.log(`Failed to get '${gcsPath}' raw: ${err.message}`)
@@ -46,7 +60,9 @@ async function generatePreviewImage(gcs, gcsPath) {
         return {}
     }
 
-    return getPreviewBuffer(mime, contents)
+    const preview = getPreviewBuffer(mime, contents);
+    contentCache.set(gcsPath, preview);
+    return preview
 }
 
 async function getPreviewBuffer(mime, contents) {
