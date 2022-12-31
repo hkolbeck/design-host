@@ -224,10 +224,12 @@ fastify.get("/api/single-item/*", (request, reply) => {
 fastify.get("/api/preview/*", (request, reply) => {
     const path = decodeURIComponent(request.url).replace("/api/preview/", "")
         .replace(/\?.*/, '/').replace(/\.png$/, "")
-
+    let start = Date.now();
     generatePreviewImage(gcs, path)
         .then(({mime, contents}) => {
+            console.log(`Preview generated in ${Date.now() - start}ms`)
             if (!contents) {
+                console.log(`Couldn't generate preview for ${path}`);
                 reply.status(404).send()
                 return
             }

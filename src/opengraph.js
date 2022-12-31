@@ -1,5 +1,4 @@
 const {fabric} = require("fabric")
-const fs = require("fs");
 const {getDocument} = require("pdfjs-dist/legacy/build/pdf.js")
 const {createCanvas} = require("canvas");
 
@@ -83,7 +82,7 @@ async function generatePdfPreview(pdfBuffer) {
 }
 
 async function generateSvgPreview(svgBuffer) {
-    const canvas = await new Promise((resolve, reject) => {
+    const canvas = await new Promise((resolve) => {
         const workingCanvas = new fabric.Canvas('canvas')
 
         const bg = new fabric.Rect({
