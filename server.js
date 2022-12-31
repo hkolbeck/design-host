@@ -55,6 +55,7 @@ const previewBots = [
 
 let tagGroups = {}
 let collection = []
+
 async function makeTagGroups() {
     const start = Date.now()
     const coll = await gcs.buildCollection()
@@ -93,22 +94,23 @@ fastify.get("/gallery/*", (request, reply) => {
         const ext = request.url.slice(lastDot)
         if (canPreview[ext] && request.headers["user-agent"]) {
             const userAgent = request.headers["user-agent"]
-            if (userAgent) {
-                let isBot = previewBots.map(bot => userAgent.indexOf(bot) >= 0)
-                    .reduce((found, thisBot) => found || thisBot)
-                
-                if (isBot) {
-                    const path = decodeURIComponent(request.url).replace("/gallery/", "")
-                    sendingPreview = true
-                    generateOpengraph(gcs, path)
-                        .then(head => {
-                            reply.status(200).send(head);
-                        })
-                        .catch(err => {
-                            console.log(`Error generating preview for ${path}: ${err.message}`)
-                            reply.status(404).send()
-                        })
-                }
+            let isBot = previewBots.map(bot => userAgent.indexOf(bot) >= 0)
+                .reduce((found, thisBot) => found || thisBot)
+
+            if (isBot) {
+                console.log(`Is bot: ${userAgent}`)
+                const path = decodeURIComponent(request.url).replace("/gallery/", "")
+                sendingPreview = true
+                generateOpengraph(gcs, path)
+                    .then(head => {
+                        reply.status(200).send(head);
+                    })
+                    .catch(err => {
+                        console.log(`Error generating preview for ${path}: ${err.message}`)
+                        reply.status(404).send()
+                    })
+            } else {
+                console.log(`Not a bot: ${userAgent}`)
             }
         }
     }
