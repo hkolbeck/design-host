@@ -70,7 +70,8 @@ a, a:visited {
 }
 
 .footer {
-    text-align: right;
+    display: flex;
+    flex-direction: row-reverse;
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -80,13 +81,14 @@ a, a:visited {
 }
 
 .social-logos {
-    padding-right: 2vw;
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 .social-logo {
     height: 40px;
     width: 40px;
-    margin: 15px 15px 5px;
+    padding: 10px;
 }
 
 .not-found-content {
