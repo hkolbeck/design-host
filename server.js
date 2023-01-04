@@ -298,7 +298,7 @@ fastify.get("/api/search-page", (request, reply) => {
     const fullResults = [];
     for (let term of searchTerms) {
         let rightType = (collection[term] || [])
-            .filter(item => any(types, t => item.path.startsWith(t)))
+            .filter(item => types.length === 0 || any(types, t => item.path.startsWith(t)))
         fullResults.push(...rightType);
     }
 
