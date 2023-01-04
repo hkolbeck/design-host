@@ -183,7 +183,7 @@ async function renderPage(nextPageLink, files) {
     const start = Date.now();
 
     if (files.length === 0) {
-        const nothingHere = document.getElementById("nothing-here")
+        const nothingHere = document.getElementById("nothing-found")
         nothingHere.style.display = "block"
         return
     }
