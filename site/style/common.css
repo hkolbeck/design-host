@@ -72,6 +72,7 @@ a, a:visited {
 .footer {
     display: flex;
     flex-direction: row-reverse;
+    align-items: center;
     position: fixed;
     bottom: 0;
     width: 100%;
