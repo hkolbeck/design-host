@@ -61,10 +61,12 @@ a, a:visited {
     width: 18vw;
     min-width: 300px;
     height: auto;
+    border: 3px solid rgba(255, 255, 255, 0);
 }
 
 .link-button:hover {
     border: 3px solid #808080;
+    border-radius: 25%;
 }
 
 .footer {
