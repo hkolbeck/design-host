@@ -113,8 +113,10 @@
 }
 
 .next-button-spec {
-    height: 50px;
+    height: 40px;
     width: auto;
+    margin: 0;
+    padding: 10px;
 }
 
 #nothing-found {
