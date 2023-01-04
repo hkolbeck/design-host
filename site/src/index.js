@@ -80,4 +80,18 @@ async function loadTags() {
     tagContainer.style.display = "block"
 }
 
-window.onload = loadTags
+window.onload = () => {
+    document.getElementById("").addEventListener("keyup", event => {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            search().catch(err => {
+                console.log("Error in search:")
+                console.log(err)
+            })
+        }
+    })
+    loadTags().catch(err => {
+        console.log("Error in load tags:")
+        console.log(err)
+    })
+}
