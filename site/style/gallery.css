@@ -131,7 +131,7 @@
 
 #nothing-found {
     display: none;
-    font-size: 10vw;
+    font-size: 5vw;
     text-align: center;
     top: 40vh;
     position: fixed;
