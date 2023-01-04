@@ -279,7 +279,7 @@ fastify.get("/api/tag-group-page/:tag", (request, reply) => {
 })
 
 fastify.get("/api/search-page", (request, reply) => {
-    const search = decodeURIComponent(request.params["s"] || "");
+    const search = decodeURIComponent(request.query["s"] || "");
     if (!search) {
         reply.status(400).send({error: "No search specified"})
         return
