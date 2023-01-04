@@ -35,6 +35,7 @@ li {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin: 7px 0;
 }
 
 #search-input {
