@@ -177,7 +177,7 @@ async function dataUrlToBlob(item) {
         .then(URL.createObjectURL);
 }
 
-const POSITIONS = Array(PAGE_LEN).keys();
+const POSITIONS = Array.from(Array(PAGE_LEN).keys());
 
 async function renderPage(nextPageLink, files) {
     const start = Date.now();
