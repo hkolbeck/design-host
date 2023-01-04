@@ -1,3 +1,42 @@
+async function search() {
+    const searchBar = document.getElementById("search-input");
+    const rawSearch = searchBar.value;
+    if (!rawSearch) {
+        return
+    }
+
+    let sendEmTo = `https://acab.city/search?s=${encodeURIComponent(rawSearch)}`;
+
+    const searchType = document.getElementById("type-filter");
+    let selected = [];
+    for (let option of searchType.options) {
+        if (option.selected) {
+            selected.push(option.value)
+        }
+    }
+
+    selected = selected.filter(o => o !== 'any')
+    if (selected.length > 0) {
+        sendEmTo = sendEmTo + `&types=${encodeURIComponent(selected.join(','))}`
+    }
+
+    window.location.href = sendEmTo;
+}
+
+function deselectAny() {
+    const anyOption = document.getElementById("any-option")
+    anyOption.selected = false
+}
+
+function deselectOthers() {
+    const searchType = document.getElementById("type-filter");
+    for (let option of searchType.options) {
+        if (option.value !== 'any') {
+            option.selected = false
+        }
+    }
+}
+
 const displayTags = {
     "acab": "ACAB",
     "america": "America",

@@ -177,20 +177,31 @@ function makeFetchObjectRaw(bucket) {
     }
 }
 
+let UNSEARCHABLE = {
+    "a": true,
+    "an": true,
+    "and": true,
+    "at": true,
+    "be": true,
+    "of": true,
+    "the": true,
+    "this": true,
+    "to": true
+}
+
 function makeBuildCollection(bucket) {
     return async function buildCollection() {
         const tagGroups = {}
-        const collection = []
+        const collection = {}
         const [files] = await bucket.getFiles()
 
         for (let file of files.filter(f => !f.name.endsWith("/"))) {
             const type = file.name.endsWith("-") ? "directory" : "file"
             const actualPath = file.name.replace("0000", "").replace(/-$/, "")
-            collection.push({type, path: actualPath})
 
             const [metadata] = await file.getMetadata() || []
-            if (metadata) {
-                if (metadata.metadata && metadata.metadata["tags"]) {
+            if (metadata && metadata.metadata) {
+                if (metadata.metadata["tags"]) {
                     metadata.metadata["tags"].split(",").map(tag => tag.trim().toLowerCase()).forEach(tag => {
                         tagGroups[tag] = tagGroups[tag] || []
                         tagGroups[tag].push({type, path: actualPath})
@@ -199,6 +210,32 @@ function makeBuildCollection(bucket) {
                     tagGroups["untagged"] = tagGroups["untagged"] || []
                     tagGroups["untagged"].push({type, path: actualPath})
                 }
+
+                let title = metadata.metadata["title"] || ""
+                title.split(/\s+/g)
+                    .filter(w => !!w)
+                    .map(w => w.toLowerCase())
+                    .filter(w => !UNSEARCHABLE[w])
+                    .forEach(word => {
+                        if (!collection[word]) {
+                            collection[word] = []
+                        }
+
+                        collection[word].push({type, path: actualPath})
+                    })
+
+                let alt = metadata.metadata["alt"] || ""
+                alt.split(/\s+/g)
+                    .filter(w => !!w)
+                    .map(w => w.toLowerCase())
+                    .filter(w => !UNSEARCHABLE[w])
+                    .forEach(word => {
+                        if (!collection[word]) {
+                            collection[word] = []
+                        }
+
+                        collection[word].push({type, path: actualPath})
+                    })
             } else {
                 tagGroups["untagged"] = tagGroups["untagged"] || []
                 tagGroups["untagged"].push({type, path: actualPath})

@@ -15,9 +15,9 @@
 
     <meta name="twitter:text:title" content="ACAB.city">
     <meta name="twitter:title" content="ACAB.city">
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@LaserBloc" />
-    <meta name="twitter:creator" content="@LaserBloc" />
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:site" content="@LaserBloc"/>
+    <meta name="twitter:creator" content="@LaserBloc"/>
     <meta name="twitter:image" content="https://acab.city/images/acab-dot-city-og.png">
     <meta name="twitter:image:alt" content="ACAB.city in bold white text on a black background">
 
@@ -61,30 +61,44 @@
             </li>
             <li>
                 You may credit Laser Bloc when posting modifications, cuts, or prints of these designs, though you are
-                not
-                required to. Please do not credit the creators individually.
+                not required to. Please do not credit the creators individually.
             </li>
         </ul>
     </div>
     <div class="index-buttons">
-        <a href="/gallery/stickers/">
-            <img class="link-button" src="/images/stickers.svg" alt="stickers button">
-        </a>
+        <a href="/gallery/stickers/"><img class="link-button" src="/images/stickers.svg" alt="stickers button"></a>
         <a href="/gallery/jewelry/"><img class="link-button" src="/images/jewelry.svg" alt="jewelry button"></a>
-        <a href="/gallery/stencils/">
-            <img class="link-button" src="/images/stencils.svg" alt="stencils button">
-        </a>
+        <a href="/gallery/stencils/"><img class="link-button" src="/images/stencils.svg" alt="stencils button"></a>
         <a href="/gallery/signage/"><img class="link-button" src="/images/signage.svg" alt="signage button"></a>
         <a href="/gallery/flyers/"><img class="link-button" src="/images/flyers.svg" alt="flyers button"></a>
+        <a href="/gallery/zines/"><img class="link-button" src="/images/zines.svg" alt="zines button"></a>
     </div>
-    <hr id="tag-hr"/>
+    <hr/>
+    <div id="search">
+        <label for="search-input" class="search-label">Search the archives:&nbsp;</label>
+        <input id="search-input" name="search-input" type="search" placeholder="Title or tag(s)" maxlength="100"/>
+
+        <label for="type-filter" class="search-label">Filter by type:&nbsp;</label>
+        <select id="type-filter" name="type-filter"  multiple>
+            <option id="any-option" value="any" selected onclick="deselectOthers()">Any Type</option>
+            <option value="stickers" onclick="deselectAny()">Stickers</option>
+            <option value="jewelry" onclick="deselectAny()">Jewelry</option>
+            <option value="stencils" onclick="deselectAny()">Stencils</option>
+            <option value="signage" onclick="deselectAny()">Signage</option>
+            <option value="flyers" onclick="deselectAny()">Flyers</option>
+            <option value="zines" onclick="deselectAny()">Zines</option>
+        </select>
+
+        <img class="link-button" src="/images/search.svg" alt="search button" onclick="search()"/>
+    </div>
+    <hr/>
     <div id="tags"></div>
 </div>
 <div class="footer">
     <div class="social-logos">
-        <a href="https://twitter.com/LaserBloc">
-            <img class="social-logo" src="/images/twitter.svg"
-                 alt="Twitter logo, a small blue stylized bird"/>
+        <a href="https://kolektiva.social/@laser_bloc">
+            <img class="social-logo" src="/images/mastodon.svg"
+                 alt="Mastodon logo. A blue speech bubble with an M in it and long trunk to appear like an elephant"/>
         </a>
         <a href="https://www.instagram.com/laser_bloc/">
             <img class="social-logo" src="/images/instagram.svg"

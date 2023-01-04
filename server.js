@@ -56,15 +56,15 @@ const previewBots = [
 ]
 
 let tagGroups = {}
-let collection = []
+let collection = {}
 
-async function makeTagGroups() {
+async function makeFileIndex() {
     const start = Date.now()
     const coll = await gcs.buildCollection()
     tagGroups = coll.tagGroups
     collection = coll.collection
 
-    console.log(`Built tag groups in ${Date.now() - start}ms`)
+    console.log(`Built file index in ${Date.now() - start}ms`)
 }
 
 fastify.get("/images/:img", (request, reply) => {
@@ -121,6 +121,10 @@ fastify.get("/gallery/*", (request, reply) => {
 
 fastify.get("/tag/*", (request, reply) => {
     reply.sendFile("gallery.html")
+})
+
+fastify.get("/search", (request, reply) => {
+    reply.sendFile("search.html")
 })
 
 fastify.get("/error", (request, reply) => {
@@ -246,31 +250,100 @@ fastify.get("/api/tag-groups", (request, reply) => {
     reply.status(200).send(Object.keys(tagGroups).sort())
 })
 
+const PAGE_LEN = 10;
 fastify.get("/api/tag-group-page/:tag", (request, reply) => {
     const tag = request.params["tag"]
+    if (!tag) {
+        reply.status(400).send({error: "Missing tag in path"})
+        return
+    }
+
     const offset = parseInt(request.query["offset"] || "0")
 
-    if (tag) {
-        const tagged = tagGroups[tag] || []
-        const pageContents = tagged.slice(offset, offset + 10)
-        gcs.fetchBatch(pageContents)
-            .then(page => {
-                const resp = {page}
-                if (offset + 10 < tagged.length) {
-                    resp.nextOffset = offset + 10
-                }
+    const tagged = tagGroups[tag] || []
+    const pageContents = tagged.slice(offset, offset + PAGE_LEN)
+    gcs.fetchBatch(pageContents)
+        .then(page => {
+            const resp = {page}
+            if (offset + PAGE_LEN < tagged.length) {
+                resp.nextOffset = offset + PAGE_LEN
+            }
 
-                reply.status(200).send(resp)
-            })
-            .catch(err => {
-                console.log(`Error fetching batch for tag: ${tag} and offset ${offset}`)
-                console.log(err)
-                reply.status(500).send({error: "Internal server error"})
-            })
-    } else {
-        reply.status(400).send({error: "Missing tag in path"})
-    }
+            reply.status(200).send(resp)
+        })
+        .catch(err => {
+            console.log(`Error fetching batch for tag: '${tag}' and offset ${offset}`)
+            console.log(err)
+            reply.status(500).send({error: "Internal server error"})
+        })
 })
+
+fastify.get("/api/search-page", (request, reply) => {
+    const search = decodeURIComponent(request.params["s"] || "");
+    if (!search) {
+        reply.status(400).send({error: "No search specified"})
+        return
+    }
+
+    const offset = parseInt(request.query["offset"] || "0")
+
+    const searchTerms = search.replace(/\W/g, "").split(/\s+/);
+    const types = decodeURIComponent(request.query["types"] || "")
+        .split(',')
+        .filter(t => t.length > 0)
+
+    const fullResults = [];
+    for (let term of searchTerms) {
+        let rightType = (collection[term] || [])
+            .filter(item => any(types, t => item.path.startsWith(t)))
+        fullResults.push(...rightType);
+    }
+
+    let counts = {};
+    let pathTypes = {};
+    for (let item of fullResults) {
+        pathTypes[item.path] = item.type
+
+        if (!counts[item.path]) {
+            counts[item.path] = 0
+        }
+
+        counts[item.path]++
+    }
+
+    let paths = Object.entries(counts);
+    paths.sort((a, b) => b[1] - a[1])
+    const pageContents = paths.slice(offset, offset + PAGE_LEN)
+        .map(entry => entry[0])
+        .map(path => {
+            return {type: pathTypes[path], path}
+        })
+
+    gcs.fetchBatch(pageContents)
+        .then(page => {
+            const resp = {page}
+            if (offset + PAGE_LEN < fullResults.length) {
+                resp.nextOffset = offset + PAGE_LEN
+            }
+
+            reply.status(200).send(resp)
+        })
+        .catch(err => {
+            console.log(`Error fetching batch for search: '${search}' and offset ${offset}`)
+            console.log(err)
+            reply.status(500).send({error: "Internal server error"})
+        })
+})
+
+function any(arr, pred) {
+    for (let item of arr) {
+        if (pred(item)) {
+            return true
+        }
+    }
+
+    return false
+}
 
 fastify.get("/health", (request, reply) => reply.status(200).send())
 
@@ -284,5 +357,15 @@ fastify.listen({port: config.port, host: config.host}, function (err, address) {
     fastify.log.info(`server listening on ${address}`);
 });
 
-makeTagGroups()
-setInterval(makeTagGroups, 5 * 60 * 1000)
+makeFileIndex().catch(e => {
+    console.error("Failed to build file index");
+    console.error(e);
+})
+
+setInterval(
+    () => makeFileIndex().catch(e => {
+        console.error("Failed to build file index");
+        console.error(e);
+    }),
+    5 * 60 * 1000
+)

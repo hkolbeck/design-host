@@ -15,25 +15,29 @@ async function generateOpengraph(gcs, gcsPath) {
         metadataCache.set(gcsPath, metadata);
     }
 
+    let encodedPath = encodeURIComponent(gcsPath).replace(/%2f/ig, "/");
+    let alt = encodeQuotes(metadata.alt);
+    let title = encodeQuotes(metadata.title);
+
     return `<html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <title>ACAB.city</title>
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico"/>
+    <link rel="icon" type="image/png" href="/img/favicon.png"/>
     <meta name="description" content="The LaserBloc Design Gallery"/>
     
-    <meta name="twitter:title" content="${encodeQuotes(metadata.title)}">
-    <meta name="twitter:text:title" content="${encodeQuotes(metadata.title)}">
+    <meta name="twitter:title" content="${title}">
+    <meta name="twitter:text:title" content="${title}">
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@LaserBloc" />
     <meta name="twitter:creator" content="@LaserBloc" />
-    <meta name="twitter:image" content="https://acab.city/api/preview/${encodeURI(gcsPath)}.png">
-    <meta name="twitter:image:alt" content="${encodeQuotes(metadata.alt)}">
-    <meta property="og:url" content="https://acab.city/gallery/${encodeURI(gcsPath)}" />
-    <meta property="og:title" content="${encodeQuotes(metadata.title)}" />
-    <meta property="og:description" content="${encodeQuotes(metadata.alt)}" />
-    <meta property="og:image" content="https://acab.city/api/preview/${encodeURI(gcsPath)}.png" />
-    <meta property="og:image:alt" content="${encodeQuotes(metadata.alt)}" />
+    <meta name="twitter:image" content="https://acab.city/api/preview/${encodedPath}.png">
+    <meta name="twitter:image:alt" content="${alt}">
+    <meta property="og:url" content="https://acab.city/gallery/${encodedPath}" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${alt}" />
+    <meta property="og:image" content="https://acab.city/api/preview/${encodedPath}.png" />
+    <meta property="og:image:alt" content="${alt}" />
     <meta property="og:site_name" content="ACAB.city">
 </head>
 <body>
