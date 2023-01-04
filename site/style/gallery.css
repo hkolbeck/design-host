@@ -221,6 +221,7 @@
 #next-button {
     display: none;
     grid-area: next;
+    place-self: center;
 }
 
 #single-item-wrapper {

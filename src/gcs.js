@@ -202,10 +202,18 @@ function makeBuildCollection(bucket) {
             const [metadata] = await file.getMetadata() || []
             if (metadata && metadata.metadata) {
                 if (metadata.metadata["tags"]) {
-                    metadata.metadata["tags"].split(",").map(tag => tag.trim().toLowerCase()).forEach(tag => {
-                        tagGroups[tag] = tagGroups[tag] || []
-                        tagGroups[tag].push({type, path: actualPath})
-                    })
+                    metadata.metadata["tags"].split(",")
+                        .map(tag => tag.trim().toLowerCase())
+                        .filter(t => !!t)
+                        .forEach(tag => {
+                            if (!collection[tag]) {
+                                collection[tag] = []
+                            }
+                            collection[tag].push({type, path: actualPath})
+
+                            tagGroups[tag] = tagGroups[tag] || []
+                            tagGroups[tag].push({type, path: actualPath})
+                        })
                 } else {
                     tagGroups["untagged"] = tagGroups["untagged"] || []
                     tagGroups["untagged"].push({type, path: actualPath})
