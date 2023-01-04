@@ -111,7 +111,6 @@
 .nav-control {
     height: 50px;
     width: calc(98vw - 210px);
-    float: left;
 }
 
 .nav-button {
