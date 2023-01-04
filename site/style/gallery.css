@@ -109,10 +109,12 @@
 }
 
 #next-button {
-    float: right;
-    height: 50px;
-    width: 80px;
     display: none;
+}
+
+.next-button-spec {
+    height: 50px;
+    width: auto;
 }
 
 #nothing-found {
