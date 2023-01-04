@@ -81,7 +81,7 @@ async function loadTags() {
 }
 
 window.onload = () => {
-    document.getElementById("").addEventListener("keyup", event => {
+    document.getElementById("search-input").addEventListener("keyup", event => {
         event.preventDefault();
         if (event.keyCode === 13) {
             search().catch(err => {
