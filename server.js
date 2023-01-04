@@ -285,7 +285,7 @@ fastify.get("/api/search-page", (request, reply) => {
         return
     }
 
-    const searchTerms = search.replace(/\W/g, "")
+    const searchTerms = search.replace(/[^_a-zA-Z\d\s]/g, "")
         .split(/\s+/g)
         .filter(w => !!w);
     const offset = parseInt(request.query["offset"] || "0")
