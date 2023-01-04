@@ -285,12 +285,15 @@ fastify.get("/api/search-page", (request, reply) => {
         return
     }
 
+    const searchTerms = search.replace(/\W/g, "")
+        .split(/\s+/g)
+        .filter(w => !!w);
     const offset = parseInt(request.query["offset"] || "0")
-
-    const searchTerms = search.replace(/\W/g, "").split(/\s+/);
     const types = decodeURIComponent(request.query["types"] || "")
         .split(',')
         .filter(t => t.length > 0)
+
+    console.log(`Got s=${JSON.stringify(searchTerms)} o=${offset} t=${JSON.stringify(types)}`)
 
     const fullResults = [];
     for (let term of searchTerms) {
@@ -298,6 +301,8 @@ fastify.get("/api/search-page", (request, reply) => {
             .filter(item => any(types, t => item.path.startsWith(t)))
         fullResults.push(...rightType);
     }
+
+    console.log(`Found ${fullResults.length} non-deduped results`)
 
     let counts = {};
     let pathTypes = {};
@@ -311,6 +316,9 @@ fastify.get("/api/search-page", (request, reply) => {
         counts[item.path]++
     }
 
+    console.log(JSON.stringify(counts))
+    console.log(JSON.stringify(pathTypes))
+
     let paths = Object.entries(counts);
     paths.sort((a, b) => b[1] - a[1])
     const pageContents = paths.slice(offset, offset + PAGE_LEN)
@@ -318,6 +326,8 @@ fastify.get("/api/search-page", (request, reply) => {
         .map(path => {
             return {type: pathTypes[path], path}
         })
+
+    console.log(JSON.stringify(pageContents))
 
     gcs.fetchBatch(pageContents)
         .then(page => {
