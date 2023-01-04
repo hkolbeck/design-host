@@ -326,7 +326,7 @@ fastify.get("/api/search-page", (request, reply) => {
     gcs.fetchBatch(pageContents)
         .then(page => {
             const resp = {page}
-            if (offset + PAGE_LEN < fullResults.length) {
+            if (offset + PAGE_LEN < paths.length) {
                 resp.nextOffset = offset + PAGE_LEN
             }
 
