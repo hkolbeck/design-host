@@ -61,7 +61,7 @@ a, a:visited {
     width: 18vw;
     min-width: 300px;
     height: auto;
-    border-radius: 18px;
+    border-radius: 25px;
     border: 3px solid rgba(255, 255, 255, 0);
 }
 
