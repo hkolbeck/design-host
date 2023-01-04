@@ -80,11 +80,6 @@ a, a:visited {
     z-index: 10;
 }
 
-.social-logos {
-    display: flex;
-    flex-direction: row-reverse;
-}
-
 .social-logo {
     height: 40px;
     width: 40px;
