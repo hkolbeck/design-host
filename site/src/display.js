@@ -50,12 +50,22 @@ function buildItem(idx) {
 }
 
 const PAGE_LEN = 10;
-
 function buildPage() {
     const gallery = document.getElementById("gallery")
     for (let i = 0; i < PAGE_LEN; i++) {
         gallery.appendChild(buildItem(i))
     }
+
+    const nextButton = document.createElement("img")
+    nextButton.src = "/images/next-page.svg"
+    nextButton.alt = "Next page"
+    nextButton.className = "link-button"
+
+    const nextLink = document.createElement("a")
+    nextLink.id = "next-button"
+    nextLink.appendChild(nextButton)
+
+    gallery.appendChild(nextLink)
 }
 
 async function fetchSingle(path) {

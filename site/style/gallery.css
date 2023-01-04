@@ -108,16 +108,6 @@
     left: 20px;
 }
 
-#next-button {
-    display: none;
-}
-
-.next-button-spec {
-    height: 40px;
-    width: auto;
-    margin: 10px;
-}
-
 #nothing-found {
     display: none;
     font-size: 5vw;
@@ -142,14 +132,16 @@
         "g"
         "h"
         "i"
-        "j";
+        "j"
+        "next";
 }
 
 @media screen and (min-width: 1500px) {
     #gallery {
         grid-template-areas:
             "a b c d e"
-            "f g h i j";
+            "f g h i j"
+            ". . . . next";
     }
 }
 
@@ -158,7 +150,8 @@
         grid-template-areas:
             "a b c d"
             "e f g h"
-            ". i j .";
+            ". i j ."
+            ". . . next";
     }
 }
 
@@ -168,7 +161,8 @@
             "a b c"
             "d e f"
             "g h i"
-            ". j .";
+            ". j ."
+            ". . next";
     }
 }
 
@@ -180,6 +174,7 @@
             "e f"
             "g h"
             "i j"
+            ". next";
     }
 }
 
@@ -221,6 +216,11 @@
 
 #gallery-item-wrapper-9 {
     grid-area: j;
+}
+
+#next-button {
+    display: none;
+    grid-area: next;
 }
 
 #single-item-wrapper {
