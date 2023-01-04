@@ -75,21 +75,26 @@
     </div>
     <hr/>
     <div id="search">
-        <label for="search-input" class="search-label">Search the archives:&nbsp;</label>
-        <input id="search-input" name="search-input" type="search" placeholder="Title or tag(s)" maxlength="100"/>
+        <div class="search-chunk">
+            <label for="search-input" class="search-label">Search the archives:</label>
+            <input id="search-input" name="search-input" type="search" placeholder="Title or tag(s)" maxlength="100"/>
+        </div>
 
-        <label for="type-filter" class="search-label">Filter by type:&nbsp;</label>
-        <select id="type-filter" name="type-filter" size="1">
-            <option id="any-option" value="any" selected onclick="deselectOthers()">Any Type</option>
-            <option value="stickers" onclick="deselectAny()">Stickers</option>
-            <option value="jewelry" onclick="deselectAny()">Jewelry</option>
-            <option value="stencils" onclick="deselectAny()">Stencils</option>
-            <option value="signage" onclick="deselectAny()">Signage</option>
-            <option value="flyers" onclick="deselectAny()">Flyers</option>
-            <option value="zines" onclick="deselectAny()">Zines</option>
-        </select>
-
-        <img class="link-button" src="/images/search.svg" alt="search button" onclick="search()"/>
+        <div class="search-chunk">
+            <label for="type-filter" class="search-label">Filter by type:</label>
+            <select id="type-filter" name="type-filter" size="1">
+                <option id="any-option" value="any" selected onclick="deselectOthers()">Any Type</option>
+                <option value="stickers" onclick="deselectAny()">Stickers</option>
+                <option value="jewelry" onclick="deselectAny()">Jewelry</option>
+                <option value="stencils" onclick="deselectAny()">Stencils</option>
+                <option value="signage" onclick="deselectAny()">Signage</option>
+                <option value="flyers" onclick="deselectAny()">Flyers</option>
+                <option value="zines" onclick="deselectAny()">Zines</option>
+            </select>
+        </div>
+        <div class="search-chunk">
+            <img class="link-button" src="/images/search.svg" alt="search button" onclick="search()"/>
+        </div>
     </div>
     <hr/>
     <div id="tags"></div>
