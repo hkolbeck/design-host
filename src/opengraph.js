@@ -22,6 +22,10 @@ async function generateOpengraph(gcs, gcsPath) {
     let alt = encodeQuotes(metadata.alt);
     let title = encodeQuotes(metadata.title);
 
+    generatePreviewImage(gcs, gcsPath).catch(err => {
+        console.log(`Initial preview image generation failed for ${gcsPath}`)
+    })
+
     return `<html lang="en">
 <head>
     <meta charset="UTF-8"/>
@@ -188,6 +192,8 @@ async function padImage(dataUrl) {
     let yGutter = (PREVIEW_HEIGHT - height) / 2
 
     ctx.drawImage(img, xGutter, yGutter, width, height)
+    console.log(`Drew image with xG: ${xGutter} yG: ${yGutter} w: ${width} h: ${h}`)
+
     return canvas.toBuffer()
 }
 

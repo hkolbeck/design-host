@@ -104,6 +104,7 @@ fastify.get("/gallery/*", (request, reply) => {
                 const path = decodeURIComponent(request.url).replace("/gallery/", "")
                 generateOpengraph(gcs, path)
                     .then(head => {
+                        console.log(`Generated OG for '${path}'`)
                         reply.status(200).send(head);
                     })
                     .catch(err => {
