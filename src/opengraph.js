@@ -1,10 +1,13 @@
 const {fabric} = require("fabric")
 const {getDocument} = require("pdfjs-dist/legacy/build/pdf.js")
-const {createCanvas} = require("canvas");
+const {createCanvas, Canvas, Image} = require("canvas");
 const NodeCache = require("node-cache");
 
 const metadataCache = new NodeCache({stdTTL: 5 * 60, useClones: false});
 const contentCache = new NodeCache({stdTTL: 5 * 60, useClones: false});
+
+const PREVIEW_HEIGHT = 600
+const PREVIEW_WIDTH = 1200
 
 async function generateOpengraph(gcs, gcsPath) {
     let metadata;
@@ -34,10 +37,12 @@ async function generateOpengraph(gcs, gcsPath) {
     <meta name="twitter:image" content="https://acab.city/api/preview/${encodedPath}.png">
     <meta name="twitter:image:alt" content="${alt}">
     <meta property="og:title" content="${title}" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:url" content="https://acab.city/gallery/${encodedPath}" />
     <meta property="og:description" content="${alt}" />
     <meta property="og:image" content="https://acab.city/api/preview/${encodedPath}.png" />
+    <meta property="og:image:width" content="${PREVIEW_WIDTH}" />
+    <meta property="og:image:height" content="${PREVIEW_HEIGHT}" />    
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:alt" content="${alt}" />
     <meta property="og:site_name" content="ACAB.city">
@@ -71,18 +76,33 @@ async function generatePreviewImage(gcs, gcsPath) {
     return preview
 }
 
+const IMG_PNG = 'image/png';
 async function getPreviewBuffer(mime, contents) {
-    if (mime === "image/png" || mime === "image/jpg" || mime === "image/jpeg") {
-        return {mime, contents}
+    if (mime === IMG_PNG || mime === "image/jpg" || mime === "image/jpeg") {
+        let padded = await generateImagePreview(mime, contents).catch(err => {
+            console.log(err);
+            return null
+        })
+        return {mime: IMG_PNG, contents: padded}
     } else if (mime === "application/pdf") {
-        const imgContents = await generatePdfPreview(contents).catch(err => console.log(err))
-        return {mime: "image/png", contents: imgContents}
+        const imgContents = await generatePdfPreview(contents).catch(err => {
+            console.log(err);
+            return null
+        })
+        return {mime: IMG_PNG, contents: imgContents}
     } else if (mime === "image/svg+xml") {
-        const imgContents = await generateSvgPreview(contents)
-        return {mime: "image/png", contents: imgContents}
+        const imgContents = await generateSvgPreview(contents).catch(err => {
+            console.log(err);
+            return null
+        })
+        return {mime: IMG_PNG, contents: imgContents}
     }
 
     throw new Error(`Unsupported mime type: ${mime}`)
+}
+
+async function generateImagePreview(mime, contents) {
+    return await padImage(`data:${mime};base64,${contents.toString("base64")}`)
 }
 
 async function generatePdfPreview(pdfBuffer) {
@@ -100,7 +120,9 @@ async function generatePdfPreview(pdfBuffer) {
     const renderTask = page.render(renderContext);
     await renderTask.promise;
     doc.cleanup()
-    return canvas.toBuffer();
+
+    let dataUrl = canvas.toDataURL(IMG_PNG);
+    return await padImage(dataUrl)
 }
 
 async function generateSvgPreview(svgBuffer) {
@@ -119,8 +141,6 @@ async function generateSvgPreview(svgBuffer) {
         fabric.loadSVGFromString(svgBuffer.toString("utf8"), (curves) => {
             const grouped = fabric.util.groupSVGElements(curves)
 
-            // const scaleX = 2048 / grouped.getScaledWidth()
-
             grouped.set({
                 left: 20,
                 top: 20,
@@ -134,7 +154,44 @@ async function generateSvgPreview(svgBuffer) {
         })
     })
 
-    return fabric.util.getNodeCanvas(canvas.lowerCanvasEl).toBuffer()
+    let dataURL = fabric.util.getNodeCanvas(canvas.lowerCanvasEl).toDataURL(IMG_PNG);
+    return await padImage(dataURL)
+}
+
+async function padImage(dataUrl) {
+    let canvas = new Canvas(PREVIEW_WIDTH, PREVIEW_HEIGHT, "image")
+    let ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "black"
+    ctx.fillRect(0, 0, PREVIEW_WIDTH, PREVIEW_HEIGHT)
+
+    let img = new Image()
+    const loadPromise = new Promise((resolve, reject) => {
+        img.onload = () => {
+            resolve()
+        }
+        img.onerror = (err) => {
+            reject(err)
+        }
+    })
+    img.src = dataUrl
+    await loadPromise
+
+    let width = 0
+    let height = 0
+    if (img.width > PREVIEW_WIDTH) {
+        width = PREVIEW_WIDTH
+        height = PREVIEW_WIDTH * img.height / img.width
+    } else if (img.height > PREVIEW_HEIGHT) {
+        width = PREVIEW_HEIGHT * img.width / img.height
+        height = PREVIEW_HEIGHT
+    }
+
+    let xGutter = (PREVIEW_WIDTH - width) / 2
+    let yGutter = (PREVIEW_HEIGHT - height) / 2
+
+    ctx.drawImage(img, xGutter, yGutter, width, height)
+    return canvas.toBuffer()
 }
 
 exports.generateOpengraph = generateOpengraph;
