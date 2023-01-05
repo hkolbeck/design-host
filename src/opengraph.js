@@ -192,7 +192,7 @@ async function padImage(dataUrl) {
     let yGutter = (PREVIEW_HEIGHT - height) / 2
 
     ctx.drawImage(img, xGutter, yGutter, width, height)
-    console.log(`Drew image with xG: ${xGutter} yG: ${yGutter} w: ${width} h: ${h}`)
+    console.log(`Drew image with xG: ${xGutter} yG: ${yGutter} w: ${width} h: ${height}`)
 
     return canvas.toBuffer()
 }
