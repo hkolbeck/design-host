@@ -81,6 +81,7 @@ async function generatePreviewImage(gcs, gcsPath) {
 }
 
 const IMG_PNG = 'image/png';
+
 async function getPreviewBuffer(mime, contents) {
     if (mime === IMG_PNG || mime === "image/jpg" || mime === "image/jpeg") {
         return await generateImagePreview(mime, contents).catch(err => {
@@ -163,8 +164,6 @@ async function padImage(dataUrl) {
     let canvas = new Canvas(PREVIEW_WIDTH, PREVIEW_HEIGHT, "image")
     let ctx = canvas.getContext("2d");
 
-    ctx.fillStyle = "black"
-    ctx.fillRect(0, 0, PREVIEW_WIDTH, PREVIEW_HEIGHT)
 
     let img = new Image()
     const loadPromise = new Promise((resolve, reject) => {
@@ -178,21 +177,16 @@ async function padImage(dataUrl) {
     img.src = dataUrl
     await loadPromise
 
-    let width = 0
-    let height = 0
-    if (img.width > PREVIEW_WIDTH) {
-        width = PREVIEW_WIDTH
-        height = PREVIEW_WIDTH * img.height / img.width
-    } else if (img.height > PREVIEW_HEIGHT) {
-        width = PREVIEW_HEIGHT * img.width / img.height
-        height = PREVIEW_HEIGHT
-    }
-
-    let xGutter = (PREVIEW_WIDTH - width) / 2
-    let yGutter = (PREVIEW_HEIGHT - height) / 2
-
-    ctx.drawImage(img, xGutter, yGutter, width, height)
-    console.log(`Drew image with xG: ${xGutter} yG: ${yGutter} w: ${width} h: ${height}`)
+    ctx.fillStyle = "black"
+    ctx.fillRect(0, 0, PREVIEW_WIDTH, PREVIEW_HEIGHT)
+    const hRatio = canvas.width / img.width;
+    const vRatio = canvas.height / img.height;
+    const ratio = Math.min(hRatio, vRatio);
+    const xGutter = (canvas.width - img.width * ratio) / 2;
+    const yGutter = (canvas.height - img.height * ratio) / 2;
+    ctx.drawImage(img, 0, 0, img.width, img.height,
+        xGutter, yGutter, img.width * ratio, img.height * ratio);
+    console.log(`Drew image with ratio: ${ratio}, xG: ${xGutter} yG: ${yGutter}`)
 
     return canvas.toBuffer()
 }
