@@ -34,7 +34,7 @@ async function generateOpengraph(gcs, gcsPath) {
     <meta name="twitter:image" content="https://acab.city/api/preview/${encodedPath}.png">
     <meta name="twitter:image:alt" content="${alt}">
     <meta property="og:title" content="${title}" />
-    <meta property="og:type" content="image/png" />
+    <meta property="og:type" content="website" />
     <meta property="og:url" content="https://acab.city/gallery/${encodedPath}" />
     <meta property="og:description" content="${alt}" />
     <meta property="og:image" content="https://acab.city/api/preview/${encodedPath}.png" />
