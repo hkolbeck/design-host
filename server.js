@@ -99,6 +99,7 @@ fastify.get("/gallery/*", (request, reply) => {
             let isBot = previewBots.map(bot => userAgent.indexOf(bot) >= 0)
                 .reduce((found, thisBot) => found || thisBot)
 
+            console.log(`UA: '${userAgent}' bot? ${isBot}`)
             if (isBot) {
                 sendingPreview = true
                 const path = decodeURIComponent(request.url).replace("/gallery/", "")
