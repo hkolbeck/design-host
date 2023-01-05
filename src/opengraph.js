@@ -1,7 +1,7 @@
 const {fabric} = require("fabric")
 const {getDocument} = require("pdfjs-dist/legacy/build/pdf.js")
 const {createCanvas} = require("canvas");
-const NodeCache = require( "node-cache" );
+const NodeCache = require("node-cache");
 
 const metadataCache = new NodeCache({stdTTL: 5 * 60, useClones: false});
 const contentCache = new NodeCache({stdTTL: 5 * 60, useClones: false});
@@ -33,10 +33,12 @@ async function generateOpengraph(gcs, gcsPath) {
     <meta name="twitter:creator" content="@LaserBloc" />
     <meta name="twitter:image" content="https://acab.city/api/preview/${encodedPath}.png">
     <meta name="twitter:image:alt" content="${alt}">
-    <meta property="og:url" content="https://acab.city/gallery/${encodedPath}" />
     <meta property="og:title" content="${title}" />
+    <meta property="og:type" content="image/png" />
+    <meta property="og:url" content="https://acab.city/gallery/${encodedPath}" />
     <meta property="og:description" content="${alt}" />
     <meta property="og:image" content="https://acab.city/api/preview/${encodedPath}.png" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:alt" content="${alt}" />
     <meta property="og:site_name" content="ACAB.city">
 </head>
@@ -87,7 +89,7 @@ async function generatePdfPreview(pdfBuffer) {
     const loadTask = getDocument(pdfBuffer.buffer);
     const doc = await loadTask.promise
     const page = await doc.getPage(1)
-    const viewport = page.getViewport({ scale: 10.0 });
+    const viewport = page.getViewport({scale: 10.0});
     const canvas = createCanvas(viewport.width, viewport.height)
     const ctx = canvas.getContext('2d')
     const renderContext = {
