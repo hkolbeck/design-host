@@ -57,7 +57,9 @@ const displayTags = {
     "ted wheeler": "Ted Wheeler",
     "terf": "TERF",
     "timbers": "Timbers",
-    "thorns": "Thorns"
+    "thorns": "Thorns",
+    "ursulakleguin": "Ursula K. Leguin",
+    "wwii": "WWII"
 }
 
 async function loadTags() {
