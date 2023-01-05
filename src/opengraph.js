@@ -79,23 +79,20 @@ async function generatePreviewImage(gcs, gcsPath) {
 const IMG_PNG = 'image/png';
 async function getPreviewBuffer(mime, contents) {
     if (mime === IMG_PNG || mime === "image/jpg" || mime === "image/jpeg") {
-        let padded = await generateImagePreview(mime, contents).catch(err => {
+        return await generateImagePreview(mime, contents).catch(err => {
             console.log(err);
             return null
         })
-        return {mime: IMG_PNG, contents: padded}
     } else if (mime === "application/pdf") {
-        const imgContents = await generatePdfPreview(contents).catch(err => {
+        return await generatePdfPreview(contents).catch(err => {
             console.log(err);
             return null
         })
-        return {mime: IMG_PNG, contents: imgContents}
     } else if (mime === "image/svg+xml") {
-        const imgContents = await generateSvgPreview(contents).catch(err => {
+        return await generateSvgPreview(contents).catch(err => {
             console.log(err);
             return null
         })
-        return {mime: IMG_PNG, contents: imgContents}
     }
 
     throw new Error(`Unsupported mime type: ${mime}`)

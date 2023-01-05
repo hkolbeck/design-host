@@ -229,15 +229,15 @@ fastify.get("/api/preview/*", (request, reply) => {
         .replace(/\?.*/, '/').replace(/\.png$/, "")
     let start = Date.now();
     generatePreviewImage(gcs, path)
-        .then(({mime, contents}) => {
-            console.log(`Preview generated in ${Date.now() - start}ms`)
+        .then((contents) => {
+            console.log(`Preview generated for '${path}' in ${Date.now() - start}ms`)
             if (!contents) {
                 console.log(`Couldn't generate preview for ${path}`);
                 reply.status(404).send()
                 return
             }
 
-            reply.header("Content-Type", mime)
+            reply.header("Content-Type", "image/png")
             reply.status(200).send(contents)
         })
         .catch(err => {
