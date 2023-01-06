@@ -82,11 +82,6 @@ Object.entries(staticPaths).forEach(entry => {
     });
 })
 
-fastify.get("/preview/*",(request, reply) => {
-    let previewPath = request.url.slice(request.url.indexOf("preview/")) + ".png"
-    reply.sendFile(previewPath, path.join(__dirname, "site", "img"))
-})
-
 const canPreview = {
     ".pdf": true,
     ".jpeg": true,
@@ -229,27 +224,11 @@ fastify.get("/api/single-item/*", (request, reply) => {
         })
 })
 
-fastify.get("/api/preview/*", (request, reply) => {
-    const path = decodeURIComponent(request.url).replace("/api/preview/", "")
-        .replace(/\?.*/, '/').replace(/\.png$/, "")
-    let start = Date.now();
-    generatePreviewImage(gcs, path, true)
-        .then((contents) => {
-            console.log(`Preview generated for '${path}' in ${Date.now() - start}ms`)
-            if (!contents) {
-                console.log(`Couldn't generate preview for ${path}`);
-                reply.status(404).send()
-                return
-            }
-
-            reply.header("Content-Type", "image/png")
-            reply.status(200).send(contents)
-        })
-        .catch(err => {
-            console.log(err)
-            reply.status(404).send()
-        })
+fastify.get("/preview/*",(request, reply) => {
+    let previewPath = request.url.slice(request.url.indexOf("preview/")) + ".png"
+    reply.sendFile(previewPath, path.join(__dirname, "site", "img"))
 })
+
 
 fastify.get("/api/tag-groups", (request, reply) => {
     reply.status(200).send(Object.keys(tagGroups).sort())

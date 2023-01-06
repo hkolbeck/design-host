@@ -34,13 +34,13 @@ async function generateOpengraph(gcs, gcsPath) {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@LaserBloc" />
     <meta name="twitter:creator" content="@LaserBloc" />
-    <meta name="twitter:image" content="https://acab.city/api/preview/${encodedPath}.png">
+    <meta name="twitter:image" content="https://acab.city/preview/${encodedPath}">
     <meta name="twitter:image:alt" content="${alt}">
     <meta property="og:title" content="${title}" />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://acab.city/gallery/${encodedPath}" />
     <meta property="og:description" content="${alt}" />
-    <meta property="og:image" content="https://acab.city/api/preview/${encodedPath}.png" />
+    <meta property="og:image" content="https://acab.city/preview/${encodedPath}" />
     <meta property="og:image:width" content="${PREVIEW_WIDTH}" />
     <meta property="og:image:height" content="${PREVIEW_HEIGHT}" />    
     <meta property="og:image:type" content="image/png" />
@@ -134,12 +134,11 @@ async function generatePdfPreview(pdfBuffer) {
     const renderTask = page.render(renderContext);
     let rendered = true
     await renderTask.promise.catch(err => {
-        console.log("Get document:")
+        console.log("Rendering:")
         console.log(err)
         rendered = false
     });
 
-    console.log(`Rendered: ${rendered}`)
     doc.cleanup()
 
     let dataUrl = canvas.toDataURL(IMG_PNG);
