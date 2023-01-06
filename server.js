@@ -5,7 +5,7 @@ const fastify = require("fastify")({
 });
 
 const {makeGcsClient} = require("./src/gcs");
-const {generatePreviewImage, generateOpengraph} = require("./src/opengraph");
+const {generateOpengraph} = require("./src/opengraph");
 
 const config = {
     bucket: process.env.BUCKET,
@@ -224,11 +224,11 @@ fastify.get("/api/single-item/*", (request, reply) => {
         })
 })
 
-fastify.get("/preview/*",(request, reply) => {
+fastify.get("/preview/*", (request, reply) => {
     let previewPath = request.url.slice(request.url.indexOf("preview/")) + ".png"
+    console.log(`Returning preview for ${previewPath}`)
     reply.sendFile(previewPath, path.join(__dirname, "site", "img"))
 })
-
 
 fastify.get("/api/tag-groups", (request, reply) => {
     reply.status(200).send(Object.keys(tagGroups).sort())

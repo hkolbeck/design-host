@@ -7,8 +7,7 @@ const {makeGcsClient} = require('./src/gcs');
 const {generatePreviewImage} = require('./src/opengraph');
 
 const config = {
-    bucket: process.env.BUCKET,
-    fileRoot: process.env.PREVIEW_ROOT
+    bucket: process.env.BUCKET
 }
 
 const storage = new Storage();
