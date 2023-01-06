@@ -1,4 +1,4 @@
-const p = require('path')
+const path = require('path')
 const fs = require('fs')
 
 const {Storage} = require('@google-cloud/storage');
@@ -21,11 +21,11 @@ async function generatePreviews() {
     }
     running = true
 
-    let paths = await gcs.listObjects()
-    console.log(`Found ${paths.length} objects to check`)
+    let gcsPaths = await gcs.listObjects()
+    console.log(`Found ${gcsPaths.length} objects to check`)
 
-    for (let gcsPath of paths) {
-        let fsPath = p.join('site', 'img', 'preview', gcsPath) + '.png'
+    for (let gcsPath of gcsPaths) {
+        let fsPath = path.join('site', 'img', 'preview', gcsPath) + '.png'
         let fileMtime
         try {
             let stats = fs.lstatSync(fsPath);
@@ -37,12 +37,16 @@ async function generatePreviews() {
         let gcsMetadata = await gcs.getMetadata(gcsPath)
         if (gcsMetadata.mtime > fileMtime) {
             let start = Date.now();
-            let dir = p.dirname(fsPath);
+            let dir = path.dirname(fsPath);
             fs.mkdirSync(dir, {recursive: true})
 
             let contents = await generatePreviewImage(gcs, gcsPath, false)
-            fs.writeFileSync(fsPath, contents)
-            console.log(`Wrote '${fsPath}' for '${gcsPath}' in ${Date.now() - start}ms`)
+            try {
+                fs.writeFileSync(fsPath, contents)
+                console.log(`Wrote '${fsPath}' for '${gcsPath}' in ${Date.now() - start}ms`)
+            } catch (err) {
+                console.log(`Failed to write preview for ${gcsPath}`)
+            }
         }
     }
 
