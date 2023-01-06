@@ -228,7 +228,7 @@ fastify.get("/api/preview/*", (request, reply) => {
     const path = decodeURIComponent(request.url).replace("/api/preview/", "")
         .replace(/\?.*/, '/').replace(/\.png$/, "")
     let start = Date.now();
-    generatePreviewImage(gcs, path)
+    generatePreviewImage(gcs, path, true)
         .then((contents) => {
             console.log(`Preview generated for '${path}' in ${Date.now() - start}ms`)
             if (!contents) {

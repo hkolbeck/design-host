@@ -22,10 +22,6 @@ async function generateOpengraph(gcs, gcsPath) {
     let alt = encodeQuotes(metadata.alt);
     let title = encodeQuotes(metadata.title);
 
-    generatePreviewImage(gcs, gcsPath).catch(err => {
-        console.log(`Initial preview image generation failed for ${gcsPath}`)
-    })
-
     return `<html lang="en">
 <head>
     <meta charset="UTF-8"/>
@@ -60,8 +56,8 @@ function encodeQuotes(str) {
     return str.replaceAll('"', "&quot;")
 }
 
-async function generatePreviewImage(gcs, gcsPath) {
-    if (contentCache.has(gcsPath)) {
+async function generatePreviewImage(gcs, gcsPath, cache) {
+    if (cache && contentCache.has(gcsPath)) {
         return contentCache.get(gcsPath);
     }
 
@@ -76,7 +72,11 @@ async function generatePreviewImage(gcs, gcsPath) {
     }
 
     const preview = getPreviewBuffer(mime, contents);
-    contentCache.set(gcsPath, preview);
+
+    if (cache) {
+        contentCache.set(gcsPath, preview);
+    }
+
     return preview
 }
 

@@ -1,3 +1,4 @@
+
 function makeClient(bucket) {
     return {
         listDirectory: makeListDirectory(bucket),
@@ -6,7 +7,8 @@ function makeClient(bucket) {
         fetchPath: makeFetchPath(bucket),
         getMetadata: makeGetMetadata(bucket),
         buildCollection: makeBuildCollection(bucket),
-        fetchBatch: makeFetchBatch(bucket)
+        fetchBatch: makeFetchBatch(bucket),
+        listObjects: makeListObjects(bucket)
     }
 }
 
@@ -31,6 +33,9 @@ function makeGetMetadata(bucket) {
         return {
             alt: metadata.metadata["alt"] || "No alt text found",
             title: metadata.metadata["title"] || fileName,
+            tags: metadata.metadata["tags"] || "",
+            blur: metadata.metadata["blur"] || false,
+            mtime: Date.parse(metadata.timeCreated) || 0
         }
     }
 }
@@ -272,5 +277,20 @@ function makeFetchBatch(bucket) {
         return batch.filter(o => !!o)
     }
 }
+
+function makeListObjects(bucket) {
+    return async function listObjects() {
+        const paths = []
+        const [files] = await bucket.getFiles()
+        for (let file of files) {
+            if (!file.name.endsWith('-') && !file.name.endsWith('/')) {
+                paths.push(file.name)
+            }
+        }
+
+        return paths
+    }
+}
+
 
 exports.makeGcsClient = makeClient;
