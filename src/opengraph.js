@@ -109,17 +109,17 @@ async function generateImagePreview(mime, contents) {
 
 async function generatePdfPreview(pdfBuffer) {
     const loadTask = getDocument(pdfBuffer.buffer);
-    const doc = await loadTask.promise
-    if (!doc) {
-        console.log("Failed to getDocument")
+    const doc = await loadTask.promise.catch(err => {
+        console.log("Get document:")
+        console.log(err)
         return null
-    }
+    })
 
-    const page = await doc.getPage(1)
-    if (!page) {
-        console.log("Failed to getPage()")
+    const page = await doc.getPage(1).catch(err => {
+        console.log("Get document:")
+        console.log(err)
         return null
-    }
+    })
 
     const viewport = page.getViewport({scale: 10.0});
     const canvas = createCanvas(viewport.width, viewport.height)
