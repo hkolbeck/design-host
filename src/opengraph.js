@@ -110,7 +110,17 @@ async function generateImagePreview(mime, contents) {
 async function generatePdfPreview(pdfBuffer) {
     const loadTask = getDocument(pdfBuffer.buffer);
     const doc = await loadTask.promise
+    if (!doc) {
+        console.log("Failed to getDocument")
+        return null
+    }
+
     const page = await doc.getPage(1)
+    if (!page) {
+        console.log("Failed to getPage()")
+        return null
+    }
+
     const viewport = page.getViewport({scale: 10.0});
     const canvas = createCanvas(viewport.width, viewport.height)
     const ctx = canvas.getContext('2d')
@@ -161,10 +171,6 @@ async function generateSvgPreview(svgBuffer) {
 }
 
 async function padImage(dataUrl) {
-    if (!dataUrl) {
-
-    }
-
     let canvas = new Canvas(PREVIEW_WIDTH, PREVIEW_HEIGHT, "image")
     let ctx = canvas.getContext("2d");
 
