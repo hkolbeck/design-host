@@ -46,6 +46,7 @@ async function generateOpengraph(gcs, gcsPath) {
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:alt" content="${alt}" />
     <meta property="og:site_name" content="ACAB.city">
+    <meta property="og:locale" content="en">
 </head>
 <body>
 </body>
