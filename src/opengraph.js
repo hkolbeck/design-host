@@ -161,9 +161,12 @@ async function generateSvgPreview(svgBuffer) {
 }
 
 async function padImage(dataUrl) {
+    if (!dataUrl) {
+
+    }
+
     let canvas = new Canvas(PREVIEW_WIDTH, PREVIEW_HEIGHT, "image")
     let ctx = canvas.getContext("2d");
-
 
     let img = new Image()
     const loadPromise = new Promise((resolve, reject) => {

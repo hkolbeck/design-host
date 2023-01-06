@@ -40,12 +40,13 @@ async function generatePreviews() {
             let dir = path.dirname(fsPath);
             fs.mkdirSync(dir, {recursive: true})
 
-            let contents = await generatePreviewImage(gcs, gcsPath, false)
             try {
+                let contents = await generatePreviewImage(gcs, gcsPath, false)
                 fs.writeFileSync(fsPath, contents)
                 console.log(`Wrote '${fsPath}' for '${gcsPath}' in ${Date.now() - start}ms`)
             } catch (err) {
-                console.log(`Failed to write preview for ${gcsPath}`)
+                console.log(`Failed to generate and write preview for ${gcsPath}`)
+                console.log(err)
             }
         }
     }
