@@ -40,7 +40,7 @@ async function generatePreviews() {
             let dir = p.dirname(fsPath);
             fs.mkdirSync(dir, {recursive: true})
 
-            let contents = generatePreviewImage(gcs, gcsPath, false)
+            let contents = await generatePreviewImage(gcs, gcsPath, false)
             fs.writeFileSync(fsPath, contents)
             console.log(`Wrote '${fsPath}' for '${gcsPath}' in ${Date.now() - start}ms`)
         }
