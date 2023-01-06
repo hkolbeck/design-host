@@ -82,6 +82,11 @@ Object.entries(staticPaths).forEach(entry => {
     });
 })
 
+fastify.get("/preview/*",(request, reply) => {
+    let previewPath = request.url.slice(request.url.indexOf("preview/")) + ".png"
+    reply.sendFile(previewPath, path.join(__dirname, "site", "img"))
+})
+
 const canPreview = {
     ".pdf": true,
     ".jpeg": true,
