@@ -114,12 +114,14 @@ async function generatePdfPreview(pdfBuffer) {
         console.log(err)
         return null
     })
+    console.log(`Got doc: ${!!doc}`)
 
     const page = await doc.getPage(1).catch(err => {
         console.log("Get document:")
         console.log(err)
         return null
     })
+    console.log(`Got page: ${!!page}`)
 
     const viewport = page.getViewport({scale: 10.0});
     const canvas = createCanvas(viewport.width, viewport.height)
@@ -130,7 +132,14 @@ async function generatePdfPreview(pdfBuffer) {
     };
 
     const renderTask = page.render(renderContext);
-    await renderTask.promise;
+    let rendered = true
+    await renderTask.promise.catch(err => {
+        console.log("Get document:")
+        console.log(err)
+        rendered = false
+    });
+
+    console.log(`Rendered: ${rendered}`)
     doc.cleanup()
 
     let dataUrl = canvas.toDataURL(IMG_PNG);
