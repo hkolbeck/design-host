@@ -1,8 +1,8 @@
-async function fetchForPath(path, pageToken) {
+async function fetchForPath(path, extension, pageToken) {
     if (path.endsWith("/") || pageToken) {
         return await fetchPage(path, pageToken)
     } else {
-        return await fetchSingle(path).then(item => {
+        return await fetchSingle(path, extension).then(item => {
             if (item) {
                 return item
             } else {
@@ -68,8 +68,12 @@ function buildPage() {
     gallery.appendChild(nextLink)
 }
 
-async function fetchSingle(path) {
-    const url = `https://acab.city/api/single-item/${path}`
+async function fetchSingle(path, extension) {
+    if (!extension) {
+        throw new Error("No file extension specified")
+    }
+
+    const url = `https://acab.city/api/single-item/${path}.${extension}`
     return apiFetch(url, null)
 }
 
@@ -249,7 +253,9 @@ async function renderPage(nextPageLink, files) {
                 download.setAttribute("download", item.fileName);
                 downloadImg.setAttribute("alt", `Download ${file.title}`);
 
-                link.setAttribute("href", `https://acab.city/gallery/${file.fullPath}`)
+                let extension = file.fullPath.slice(file.fullPath.lastIndexOf('.') + 1)
+                let strippedPath = file.fullPath.slice(0, file.fullPath.lastIndexOf('.'));
+                link.setAttribute("href", `https://acab.city/gallery/${strippedPath}?ext=${extension}`)
                 linkImg.setAttribute("alt", `Link to ${file.title}`)
 
                 folder.style.display = "none";

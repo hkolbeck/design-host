@@ -40,11 +40,30 @@ async function loadTagPage(url) {
     });
 }
 
+const supportedFormats = {
+    "pdf": true,
+    "png": true,
+    "jpg": true,
+    "jpeg": true,
+}
+
 async function loadGalleryPage(url) {
     const pageToken = url.searchParams.get("page");
-    const path = url.pathname.replace("/gallery/", "")
+    let extension = url.searchParams.get("ext")
+    if (extension && extension.length > 4) {
+        window.location.href = "https://acab.city/error";
+        return
+    }
 
-    const apiResult = await fetchForPath(path, pageToken);
+    let path = url.pathname.replace("/gallery/", "")
+
+    // Allow old links
+    if (!extension && path.indexOf('.') >= 0) {
+        extension = path.slice(path.lastIndexOf('.') + 1)
+        path = path.slice(0, path.lastIndexOf('.'))
+    }
+
+    const apiResult = await fetchForPath(path, extension, pageToken);
     if (!apiResult) {
         console.log("Page fetch failed");
         window.location.href = "https://acab.city/error";
