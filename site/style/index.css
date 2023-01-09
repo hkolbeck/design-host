@@ -6,6 +6,7 @@ li {
     top: 70px;
     bottom: 60px;
     width: 100%;
+    padding-left: 10px;
     position: fixed;
     overflow-y: scroll;
 }
