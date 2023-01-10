@@ -134,6 +134,15 @@ fastify.setNotFoundHandler((request, reply) => {
     reply.sendFile("404.html")
 })
 
+fastify.get("/widget/addnow.js", (request, reply) => {
+    goodbye(reply)
+})
+
+function goodbye(reply) {
+    reply.header("Location", "https://zombo.com")
+    reply.status(301).send()
+}
+
 fastify.setErrorHandler((error, request, reply) => {
     console.log(`Error serving '${request.url}'`)
     console.log(error)
