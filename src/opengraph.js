@@ -26,7 +26,7 @@ async function generateOpengraph(gcs, path, ext) {
     let title = encodeQuotes(metadata.title);
 
     console.log(`Generating OpenGraph for '${encodedGcsPath}'`)
-    return `<html lang="en">
+    let s = `<html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <title>ACAB.city</title>
@@ -56,7 +56,9 @@ async function generateOpengraph(gcs, path, ext) {
 </head>
 <body>
 </body>
-</html>`
+</html>`;
+    console.log(s)
+    return s
 }
 
 function encodeQuotes(str) {
