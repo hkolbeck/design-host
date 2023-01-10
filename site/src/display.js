@@ -70,7 +70,7 @@ function buildPage() {
 
 async function fetchSingle(path, extension) {
     if (!extension) {
-        throw new Error("No file extension specified")
+        return null
     }
 
     const url = `https://acab.city/api/single-item/${path}.${extension}`
