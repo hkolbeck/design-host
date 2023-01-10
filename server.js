@@ -233,7 +233,7 @@ fastify.get("/api/single-item/*", (request, reply) => {
 })
 
 fastify.get("/preview/*", (request, reply) => {
-    let previewPath = request.url.slice(request.url.indexOf("preview/"))
+    let previewPath = decodeURIComponent(request.url.slice(request.url.indexOf("preview/")))
     console.log(`Returning preview for ${previewPath}`)
     reply.sendFile(previewPath, path.join(__dirname, "site", "img"))
 })
