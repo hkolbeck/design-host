@@ -83,11 +83,11 @@ Object.entries(staticPaths).forEach(entry => {
 })
 
 const canPreview = {
-    ".pdf": true,
-    ".jpeg": true,
-    ".jpg": true,
-    ".png": true,
-    ".svg": true
+    "pdf": true,
+    "jpeg": true,
+    "jpg": true,
+    "png": true,
+    "svg": true
 }
 fastify.get("/gallery/*", (request, reply) => {
     let ext = request.query["ext"];
