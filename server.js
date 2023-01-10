@@ -99,8 +99,9 @@ fastify.get("/gallery/*", (request, reply) => {
 
         if (isBot) {
             sendingPreview = true
-            const path = decodeURIComponent(request.url).replace("/gallery/", "")
-            generateOpengraph(gcs, path)
+            let path = decodeURIComponent(request.url).replace("/gallery/", "")
+            path = path.slice(0, path.lastIndexOf('?'))
+            generateOpengraph(gcs, path, ext)
                 .then(head => {
                     reply.status(200).send(head);
                 })

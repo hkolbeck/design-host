@@ -9,7 +9,9 @@ const contentCache = new NodeCache({stdTTL: 5 * 60, useClones: false});
 const PREVIEW_HEIGHT = 600
 const PREVIEW_WIDTH = 1200
 
-async function generateOpengraph(gcs, gcsPath) {
+async function generateOpengraph(gcs, path, ext) {
+    let gcsPath = `${path}.${ext}`
+
     let metadata;
     if (metadataCache.has(gcsPath)) {
         metadata = metadataCache.get(gcsPath);
@@ -18,7 +20,8 @@ async function generateOpengraph(gcs, gcsPath) {
         metadataCache.set(gcsPath, metadata);
     }
 
-    let encodedPath = encodeURIComponent(gcsPath).replace(/%2f/ig, "/");
+    let encodedPath = encodeURIComponent(path).replace(/%2f/ig, "/")
+    let encodedGcsPath = encodeURIComponent(gcsPath).replace(/%2f/ig, "/")
     let alt = encodeQuotes(metadata.alt);
     let title = encodeQuotes(metadata.title);
 
@@ -34,13 +37,13 @@ async function generateOpengraph(gcs, gcsPath) {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@LaserBloc" />
     <meta name="twitter:creator" content="@LaserBloc" />
-    <meta name="twitter:image" content="https://acab.city/preview/${encodedPath}">
+    <meta name="twitter:image" content="https://acab.city/preview/${encodedGcsPath}">
     <meta name="twitter:image:alt" content="${alt}">
     <meta property="og:title" content="${title}" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://acab.city/gallery/${encodedPath}" />
+    <meta property="og:url" content="https://acab.city/gallery/${encodedPath}?ext=${ext}" />
     <meta property="og:description" content="${alt}" />
-    <meta property="og:image" content="https://acab.city/preview/${encodedPath}" />
+    <meta property="og:image" content="https://acab.city/preview/${encodedGcsPath}" />
     <meta property="og:image:width" content="${PREVIEW_WIDTH}" />
     <meta property="og:image:height" content="${PREVIEW_HEIGHT}" />    
     <meta property="og:image:type" content="image/png" />
