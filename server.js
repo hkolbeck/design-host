@@ -29,13 +29,13 @@ const gcs = makeGcsClient(storage.bucket(config.bucket))
 const staticPaths = {
     "/": "index.html",
     "/404": "404.html",
+    "/robots.txt": "robots.txt",
 
     "/fonts/montserrat-regular-webfont.woff": "fonts/montserrat-regular-webfont.woff",
     "/fonts/montserrat-regular-webfont.woff2": "fonts/montserrat-regular-webfont.woff2",
 
     "/src/gallery.js": "src/gallery.js",
     "/src/base64-binary.js": "src/base64-binary.js"
-
 }
 
 const previewBots = [
