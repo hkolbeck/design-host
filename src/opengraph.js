@@ -209,7 +209,7 @@ async function padImage(dataUrl) {
     img.src = dataUrl
     await loadPromise
 
-    ctx.fillStyle = "black"
+    ctx.fillStyle = "#191b22"
     ctx.fillRect(0, 0, PREVIEW_WIDTH, PREVIEW_HEIGHT)
     const hRatio = canvas.width / img.width;
     const vRatio = canvas.height / img.height;
