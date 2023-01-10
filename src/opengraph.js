@@ -40,6 +40,8 @@ async function generateOpengraph(gcs, path, ext) {
     <meta name="twitter:creator" content="@LaserBloc" />
     <meta name="twitter:image" content="https://acab.city/preview/${encodedGcsPath}">
     <meta name="twitter:image:alt" content="${alt}">
+    <meta name="twitter:image:width" content="${PREVIEW_WIDTH}" />
+    <meta name="twitter:image:height" content="${PREVIEW_HEIGHT}" />   
     <meta property="og:title" content="${title}" />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://acab.city/gallery/${encodedPath}?ext=${ext}" />
