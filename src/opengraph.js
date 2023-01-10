@@ -57,7 +57,7 @@ async function generateOpengraph(gcs, path, ext) {
 <body>
 </body>
 </html>`;
-    console.log(s)
+    // console.log(s)
     return s
 }
 
