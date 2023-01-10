@@ -130,6 +130,7 @@ fastify.get("/error", (request, reply) => {
 });
 
 fastify.setNotFoundHandler((request, reply) => {
+    console.log(`404: ${request.url}`)
     reply.sendFile("404.html")
 })
 
