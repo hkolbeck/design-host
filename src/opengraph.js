@@ -33,12 +33,12 @@ async function generateOpengraph(gcs, path, ext) {
     <link rel="icon" type="image/png" href="/img/favicon.png"/>
     <meta name="description" content="The LaserBloc Design Gallery"/>
     
-    <meta name="twitter:title" content="${title}">
-    <meta name="twitter:text:title" content="${title}">
+    <meta name="twitter:title" content="${title}"/>
+    <meta name="twitter:text:title" content="${title}"/>
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@LaserBloc" />
     <meta name="twitter:creator" content="@LaserBloc" />
-    <meta name="twitter:image" content="https://acab.city/preview/${encodedGcsPath}">
+    <meta name="twitter:image" content="https://acab.city/preview/${encodedGcsPath}.png">
     <meta name="twitter:image:alt" content="${alt}">
     <meta name="twitter:image:width" content="${PREVIEW_WIDTH}" />
     <meta name="twitter:image:height" content="${PREVIEW_HEIGHT}" />   
@@ -46,7 +46,7 @@ async function generateOpengraph(gcs, path, ext) {
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://acab.city/gallery/${encodedPath}?ext=${ext}" />
     <meta property="og:description" content="${alt}" />
-    <meta property="og:image" content="https://acab.city/preview/${encodedGcsPath}" />
+    <meta property="og:image" content="https://acab.city/preview/${encodedGcsPath}.png" />
     <meta property="og:image:width" content="${PREVIEW_WIDTH}" />
     <meta property="og:image:height" content="${PREVIEW_HEIGHT}" />    
     <meta property="og:image:type" content="image/png" />
