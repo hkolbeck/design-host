@@ -33,12 +33,6 @@ async function generateOpengraph(gcs, path, ext) {
     <link rel="icon" type="image/png" href="/img/favicon.png"/>
     <meta name="description" content="The LaserBloc Design Gallery"/>
     
-    <link rel="alternate" 
-          type="application/json+oembed" 
-          href="https://acab.city/oembed/${encodedGcsPath}" 
-          title="${title}"
-    />
-    
     <meta name="twitter:title" content="${title}"/>
     <meta name="twitter:text:title" content="${title}"/>
     <meta name="twitter:card" content="summary_large_image" />

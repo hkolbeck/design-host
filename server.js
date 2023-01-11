@@ -239,25 +239,6 @@ fastify.get("/preview/*", (request, reply) => {
     reply.sendFile(previewPath, path.join(__dirname, "site", "img"))
 })
 
-fastify.get("/oembed/*", (request, reply) => {
-    let path = decodeURIComponent(request.url.slice(request.url.indexOf("oembed/")))
-
-    const resp = {
-        type: "photo",
-        version: "1.0",
-        author_name: "Laser Bloc",
-        author_url: "https://acab.city",
-        cache_age: 10 * 60 * 60, //10hr
-        url: `https://acab.city/preview/${encodeURIComponent(path).replace(/%2f/ig, "/")}.png`,
-        width: "1200",
-        height: "600"
-    }
-
-    console.log(`Oembed for '${path}': ${JSON.stringify(resp)}`)
-
-    reply.status(200).send(resp)
-})
-
 fastify.get("/api/tag-groups", (request, reply) => {
     reply.status(200).send(Object.keys(tagGroups).sort())
 })
