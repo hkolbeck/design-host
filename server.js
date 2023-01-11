@@ -26,35 +26,6 @@ fastify.register(require('@fastify/static'), {
 const storage = new Storage();
 const gcs = makeGcsClient(storage.bucket(config.bucket))
 
-const staticPaths = {
-    "/": "index.html",
-    "/404": "404.html",
-    "/robots.txt": "robots.txt",
-
-    "/fonts/montserrat-regular-webfont.woff": "fonts/montserrat-regular-webfont.woff",
-    "/fonts/montserrat-regular-webfont.woff2": "fonts/montserrat-regular-webfont.woff2",
-
-    "/src/gallery.js": "src/gallery.js",
-    "/src/base64-binary.js": "src/base64-binary.js"
-}
-
-const previewBots = [
-    "facebot",
-    "facebookexternalhit",
-    "Twitterbot",
-    "Slackbot-LinkExpanding",
-    "Googlebot-Image",
-    "Iframely",
-    "node-fetch",
-    "Mastodon",
-    "Discordbot",
-    "redditbot",
-    "Semanticbot",
-    "PaperLiBot",
-    "Akkoma",
-    "Pleroma"
-]
-
 let tagGroups = {}
 let collection = {}
 
@@ -75,12 +46,42 @@ fastify.get("/styles/:style", (request, reply) => {
     reply.sendFile(request.params["style"], path.join(__dirname, "site", "style"))
 })
 
+const staticPaths = {
+    "/": "index.html",
+    "/404": "404.html",
+    "/robots.txt": "robots.txt",
+    "/favicon.ico": "img/favicon.ico",
+
+    "/fonts/montserrat-regular-webfont.woff": "fonts/montserrat-regular-webfont.woff",
+    "/fonts/montserrat-regular-webfont.woff2": "fonts/montserrat-regular-webfont.woff2",
+
+    "/src/gallery.js": "src/gallery.js",
+    "/src/base64-binary.js": "src/base64-binary.js"
+}
+
 Object.entries(staticPaths).forEach(entry => {
     const [path, file] = entry
     fastify.get(path, (request, reply) => {
         reply.sendFile(file)
     });
 })
+
+const previewBots = [
+    "facebot",
+    "facebookexternalhit",
+    "Twitterbot",
+    "Slackbot-LinkExpanding",
+    "Googlebot-Image",
+    "Iframely",
+    "node-fetch",
+    "Mastodon",
+    "Discordbot",
+    "redditbot",
+    "Semanticbot",
+    "PaperLiBot",
+    "Akkoma",
+    "Pleroma"
+]
 
 const canPreview = {
     "pdf": true,
