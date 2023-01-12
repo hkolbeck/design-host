@@ -322,5 +322,11 @@ async function renderSingle(item) {
 
     downloadImg.setAttribute("alt", `Save ${item.title}`)
 
+    if (item.notOurs) {
+        document.getElementById("unknown-license").style.display = "block";
+    } else {
+        document.getElementById("cc0").style.display = "block";
+    }
+
     wrapper.style.display = "grid"
 }

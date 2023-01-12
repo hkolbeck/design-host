@@ -265,10 +265,11 @@
     height: auto;
 }
 
-.creative-commons-0 {
+.license {
     font-family: "Courier new", monospace;
     text-align: center;
     margin-top: 30px;
     width: 80vw;
+    display: none;
     grid-area: license;
 }

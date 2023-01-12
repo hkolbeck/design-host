@@ -35,6 +35,7 @@ function makeGetMetadata(bucket) {
             title: metadata.metadata["title"] || fileName,
             tags: metadata.metadata["tags"] || "",
             blur: metadata.metadata["blur"] || false,
+            notOurs: metadata.metadata["notours"] || false,
             mtime: Date.parse(metadata.timeCreated) || 0
         }
     }
@@ -115,7 +116,8 @@ function makeFetchPath(bucket) {
                 fullPath: file.name,
                 alt: metadata.metadata["alt"] || "No alt text found",
                 title: metadata.metadata["title"] || fileName,
-                blur: metadata.metadata["blur"] === "true"
+                blur: metadata.metadata["blur"] === "true",
+                notOurs: metadata.metadata["notours"] === "true"
             }
         } else {
             return null;
