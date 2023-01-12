@@ -314,8 +314,10 @@ async function renderSingle(item) {
     download.setAttribute("href", objectURL);
     download.setAttribute("download", item.fileName);
 
-    if (item.fullPath.endsWith('.pdf') || item.fullPath.endsWith('.svg')) {
-        downloadImg.setAttribute('src', '/img/save-vector.svg')
+    if (item.fullPath.endsWith('.pdf')) {
+        downloadImg.setAttribute('src', '/img/save-pdf.svg')
+    } else if (item.fullPath.endsWith('.svg')) {
+        downloadImg.setAttribute('src', '/img/save-svg.svg')
     } else {
         downloadImg.setAttribute('src', '/img/save-high-res.svg')
     }
