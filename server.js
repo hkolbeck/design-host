@@ -135,13 +135,51 @@ fastify.setNotFoundHandler((request, reply) => {
     reply.sendFile("404.html")
 })
 
-fastify.get("/widget/addnow.js", (request, reply) => {
-    goodbye(reply)
-})
+goodbye(fastify, "/components/com_jnews/includes/openflashchart/php-ofc-library/ofc_upload_image.php")
+goodbye(fastify, "/apis/apps/v1/namespaces/kube-system/daemonsets")
+goodbye(fastify, "/.env")
+goodbye(fastify, "/actuator/gateway/routes")
+goodbye(fastify, "/wp-config.inc")
+goodbye(fastify, "/wp-config.old")
+goodbye(fastify, "/wp-config.php.bak")
+goodbye(fastify, "/wp-config.php.dist")
+goodbye(fastify, "/wp-config.php.inc")
+goodbye(fastify, "/wp-config.php.old")
+goodbye(fastify, "/wp-config.php~")
+goodbye(fastify, "/wp-config.php.txt")
+goodbye(fastify, "/wp-config.txt")
+goodbye(fastify, "/phpinfo.php")
+goodbye(fastify, "/.env")
+goodbye(fastify, "/php.php")
+goodbye(fastify, "/info.php")
+goodbye(fastify, "/metrics")
+goodbye(fastify, "/v2/")
+goodbye(fastify, "/sitemap.xml")
+goodbye(fastify, "/sftp-config.json")
+goodbye(fastify, "/.vscode/sftp.json")
+goodbye(fastify, "/wp-includes/ID3/license.txt")
+goodbye(fastify, "/feed/")
+goodbye(fastify, "/xmlrpc.php?rsd")
+goodbye(fastify, "/blog/wp-includes/wlwmanifest.xml")
+goodbye(fastify, "/web/wp-includes/wlwmanifest.xml")
+goodbye(fastify, "/wordpress/wp-includes/wlwmanifest.xml")
+goodbye(fastify, "/wp/wp-includes/wlwmanifest.xml")
+goodbye(fastify, "/2020/wp-includes/wlwmanifest.xml")
+goodbye(fastify, "/2019/wp-includes/wlwmanifest.xml")
+goodbye(fastify, "/2021/wp-includes/wlwmanifest.xml")
+goodbye(fastify, "/shop/wp-includes/wlwmanifest.xml")
+goodbye(fastify, "/wp1/wp-includes/wlwmanifest.xml")
+goodbye(fastify, "/test/wp-includes/wlwmanifest.xml")
+goodbye(fastify, "/site/wp-includes/wlwmanifest.xml")
+goodbye(fastify, "/cms/wp-includes/wlwmanifest.xml")
+goodbye(fastify, "/remote/fgt_lang?lang=/../../../..//////////dev/  ")
+goodbye(fastify, "/widget/addnow.js")
 
-function goodbye(reply) {
-    reply.header("Location", "https://zombo.com")
-    reply.status(301).send()
+function goodbye(fastify, path) {
+    fastify.get(path, (request, reply) => {
+        reply.header("Location", "https://zombo.com")
+        reply.status(301).send()
+    })
 }
 
 fastify.setErrorHandler((error, request, reply) => {
@@ -231,6 +269,12 @@ fastify.get("/api/single-item/*", (request, reply) => {
             console.log(err)
             reply.status(500).send({error: "Internal server error"})
         })
+})
+
+fastify.get("/api/preview/*", (request, reply) => {
+    let previewPath = decodeURIComponent(request.url.slice(request.url.indexOf("preview/")))
+    console.log(`Returning preview for ${previewPath}`)
+    reply.sendFile(previewPath, path.join(__dirname, "site", "img"))
 })
 
 fastify.get("/preview/*", (request, reply) => {
