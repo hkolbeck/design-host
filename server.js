@@ -137,7 +137,6 @@ fastify.setNotFoundHandler((request, reply) => {
 
 goodbye(fastify, "/components/com_jnews/includes/openflashchart/php-ofc-library/ofc_upload_image.php")
 goodbye(fastify, "/apis/apps/v1/namespaces/kube-system/daemonsets")
-goodbye(fastify, "/.env")
 goodbye(fastify, "/actuator/gateway/routes")
 goodbye(fastify, "/wp-config.inc")
 goodbye(fastify, "/wp-config.old")
