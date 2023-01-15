@@ -195,12 +195,17 @@ const POSITIONS = Array.from(Array(PAGE_LEN).keys());
 
 async function renderPage(nextPageLink, files) {
     const start = Date.now();
+    const fetching = document.getElementById("fetching")
+    fetching.style.display = "none"
 
     if (files.length === 0) {
         const nothingFound = document.getElementById("nothing-found")
         nothingFound.style.display = "block"
         return
     }
+
+    const rendering = document.getElementById("rendering")
+    rendering.style.display = "block"
 
     const promises = POSITIONS.map(async i => {
         const wrapper = document.getElementById(`gallery-item-wrapper-${i}`)
@@ -284,8 +289,7 @@ async function renderPage(nextPageLink, files) {
 
     await Promise.all(promises)
 
-    const loading = document.getElementById("loading")
-    loading.style.display = "none"
+    rendering.style.display = "none"
     const gallery = document.getElementById("gallery")
     gallery.style.display = "grid"
 

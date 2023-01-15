@@ -265,8 +265,17 @@
     height: auto;
 }
 
-#loading {
+#fetching {
     display: block;
+    font-size: 5vw;
+    text-align: center;
+    top: 40vh;
+    position: fixed;
+    width: 100%;
+}
+
+#rendering {
+    display: none;
     font-size: 5vw;
     text-align: center;
     top: 40vh;
