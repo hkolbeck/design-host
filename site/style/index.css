@@ -24,8 +24,6 @@ li {
 }
 
 .index-button-wrapper {
-    padding-left: 15px;
-    padding-top: 15px;
     width: 18vw;
     min-width: 300px;
     height: auto;
@@ -34,7 +32,8 @@ li {
 .index-button {
     height: 35px;
     width: auto;
-}
+    padding-left: 15px;
+    padding-top: 15px;}
 
 #search {
     display: flex;
