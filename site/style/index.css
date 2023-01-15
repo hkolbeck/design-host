@@ -23,6 +23,18 @@ li {
     margin-bottom: 15px;
 }
 
+.index-button-wrapper {
+    margin: 1vh clamp(5px, 0.5vw, 20px);
+    width: 18vw;
+    min-width: 300px;
+    height: auto;
+}
+
+.index-button {
+    height: 35px;
+    width: auto;
+}
+
 #search {
     display: flex;
     flex-direction: column;
