@@ -33,7 +33,12 @@ li {
     height: 45px;
     width: auto;
     padding-left: 15px;
-    padding-top: 15px;}
+    padding-top: 15px;
+}
+
+.index-button:hover {
+    filter: drop-shadow(0 0 5px red);
+}
 
 #search {
     display: flex;
