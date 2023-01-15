@@ -265,6 +265,15 @@
     height: auto;
 }
 
+#loading {
+    display: block;
+    font-size: 5vw;
+    text-align: center;
+    top: 40vh;
+    position: fixed;
+    width: 100%;
+}
+
 .license {
     font-family: "Courier new", monospace;
     text-align: center;

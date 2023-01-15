@@ -284,6 +284,8 @@ async function renderPage(nextPageLink, files) {
 
     await Promise.all(promises)
 
+    const loading = document.getElementById("loading")
+    loading.style.display = "none"
     const gallery = document.getElementById("gallery")
     gallery.style.display = "grid"
 
