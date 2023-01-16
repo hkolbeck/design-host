@@ -202,6 +202,7 @@ goodbye(fastify, "/index.php")
 goodbye(fastify, "/api/v2/cmdb/system/admin/admin")
 goodbye(fastify, "/.git/config")
 goodbye(fastify, "/mifs/.;/services/LogService")
+goodbye(fastify, "/Autodiscover/Autodiscover.xml")
 
 function goodbye(fastify, path) {
     fastify.get(path, (request, reply) => {
