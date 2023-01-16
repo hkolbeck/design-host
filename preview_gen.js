@@ -15,10 +15,12 @@ const gcs = makeGcsClient(storage.bucket(config.bucket))
 
 let running = false
 async function generatePreviews() {
+    let start = Date.now()
     if (running) {
         return
     }
     running = true
+
 
     let gcsPaths = await gcs.listObjects()
     console.log(`Found ${gcsPaths.length} objects to check`)
@@ -30,6 +32,7 @@ async function generatePreviews() {
     }
 
     running = false
+    console.log(`Run finished in ${Date.now() - start}ms`)
 }
 
 async function generatePreview(gcs, gcsPath, gcsMTime, localDir, imgFn) {
