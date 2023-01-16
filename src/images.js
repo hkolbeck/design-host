@@ -137,8 +137,10 @@ async function sizeCeiling(buffer) {
     const hRatio = canvas.width / img.width;
     const vRatio = canvas.height / img.height;
     const ratio = Math.min(hRatio, vRatio);
+    const xGutter = (canvas.width - img.width * ratio) / 2;
+    const yGutter = (canvas.height - img.height * ratio) / 2;
     ctx.drawImage(img, 0, 0, img.width, img.height,
-        0, 0, img.width * ratio, img.height * ratio);
+        xGutter, yGutter, img.width * ratio, img.height * ratio);
 
     return canvas.toBuffer()
 
