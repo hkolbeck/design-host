@@ -174,6 +174,7 @@ function makeFetchObjectRaw(bucket) {
                         reject(new Error(`Unknown mime type for file '${file.name}'`))
                         return
                     }
+                    console.log(`Resolving with mime: ${mime}, contents: ${!!contents}`)
                     resolve({mime, contents})
                 } else if (err) {
                     reject(err)
