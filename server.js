@@ -120,7 +120,8 @@ fastify.get("/gallery/*", (request, reply) => {
 })
 
 fastify.get("/download/*", (request, reply) => {
-    let path = request.url.replace('/download/', '')
+    let path = decodeURIComponent(request.url.replace('/download/', ''))
+    console.log(`Downloading '${path}'`)
     let {mime, contents} = gcs.fetchObjectRaw(path)
     reply.header("Content-Type", mime)
     reply.status(200).send(contents)
