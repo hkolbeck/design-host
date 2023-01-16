@@ -120,7 +120,7 @@ async function renderPage(nextPageLink, files) {
             const linkImg = document.getElementById(`item-link-img-${i}`)
 
             if (file.type === "file") {
-                let browsePath = `/images/browse/${file.fullPath}`;
+                let browsePath = `/images/browse/${file.fullPath}.png`;
                 img.onclick = () => {
                     let wrapper = document.createElement("div");
                     wrapper.className = "big-image-wrapper";
