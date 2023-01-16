@@ -127,7 +127,7 @@ fastify.get("/download/*", (request, reply) => {
         console.log(err);
     })
     if (fetched) {
-        console.log(`Fetch keys: ${JSON.stringify(Object.keys(fetched))}`)
+        console.log(`Fetch keys: ${JSON.stringify(Object.getOwnPropertyNames(fetched))}`)
         reply.header("Content-Type", fetched.mime)
         reply.status(200).send(fetched.contents)
     } else {
