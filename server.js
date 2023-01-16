@@ -121,17 +121,13 @@ fastify.get("/gallery/*", (request, reply) => {
 
 fastify.get("/download/*", async (request, reply) => {
     let path = decodeURIComponent(request.url.replace('/download/', ''))
-    console.log(`Downloading '${path}'`)
     let fetched = await gcs.fetchObjectRaw(path).catch(err => {
-        console.log(`Failed to fetch '${path}'`)
         console.log(err);
     })
     if (fetched) {
-        console.log(`Fetch keys: ${JSON.stringify(Object.getOwnPropertyNames(fetched))}`)
         reply.header("Content-Type", fetched.mime)
         reply.status(200).send(fetched.contents)
     } else {
-        console.log(`Failed to find object to download: '${path}'`)
         reply.status(404).send()
     }
 })

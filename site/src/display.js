@@ -151,7 +151,7 @@ async function renderPage(nextPageLink, files) {
                 title.innerText = file.title;
 
                 download.setAttribute("href", `https://acab.city/download/${file.fullPath}`);
-                download.setAttribute("download", item.fileName);
+                download.setAttribute("download", file.fileName);
                 downloadImg.setAttribute("alt", `Download ${file.title}`);
 
                 let extension = file.fullPath.slice(file.fullPath.lastIndexOf('.') + 1)
