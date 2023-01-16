@@ -143,12 +143,10 @@ async function sizeCeiling(buffer) {
         xGutter, yGutter, img.width * ratio, img.height * ratio);
 
     return canvas.toBuffer()
-
 }
 
 async function padImage(buffer) {
-    let canvas = new Canvas(OG_PREVIEW_WIDTH, OG_PREVIEW_HEIGHT, "image")
-    let ctx = canvas.getContext("2d");
+
     let img = new Image()
     const loadPromise = new Promise((resolve, reject) => {
         img.onload = () => {
@@ -161,8 +159,8 @@ async function padImage(buffer) {
     img.src = buffer
     await loadPromise
 
-    ctx.fillStyle = "#191b22"
-    ctx.fillRect(0, 0, OG_PREVIEW_WIDTH, OG_PREVIEW_HEIGHT)
+    let canvas = new Canvas(OG_PREVIEW_WIDTH, OG_PREVIEW_HEIGHT, "image")
+    let ctx = canvas.getContext("2d");
     const hRatio = canvas.width / img.width;
     const vRatio = canvas.height / img.height;
     const ratio = Math.min(hRatio, vRatio);
