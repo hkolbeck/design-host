@@ -166,6 +166,7 @@ function makeFetchObjectRaw(bucket) {
     return async function fetchObjectRaw(path) {
         return new Promise((resolve, reject) => {
             const file = bucket.file(path)
+            console.log(`Path: '${path}' - ${!!file}`)
             file.download((err, contents) => {
                 if (contents) {
                     const mime = filenameToMimeType(file.name)
