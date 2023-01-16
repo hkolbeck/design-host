@@ -127,6 +127,7 @@ fastify.get("/download/*", (request, reply) => {
         reply.header("Content-Type", mime)
         reply.status(200).send(contents)
     } else {
+        console.log(`Failed to find object to download: '${path}'`)
         reply.status(404).send()
     }
 })
