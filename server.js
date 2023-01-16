@@ -119,10 +119,10 @@ fastify.get("/gallery/*", (request, reply) => {
     }
 })
 
-fastify.get("/download/*", (request, reply) => {
+fastify.get("/download/*", async (request, reply) => {
     let path = decodeURIComponent(request.url.replace('/download/', ''))
     console.log(`Downloading '${path}'`)
-    let fetched = gcs.fetchObjectRaw(path).catch(err => {
+    let fetched = await gcs.fetchObjectRaw(path).catch(err => {
         console.log(`Failed to fetch '${path}'`)
         console.log(err);
     })
