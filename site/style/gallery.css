@@ -10,7 +10,8 @@
 
 .gallery-item-wrapper {
     width: 300px;
-    display: none;
+    visibility: hidden;
+    display: block;
 }
 
 .gallery-item {
@@ -263,24 +264,6 @@
     max-width: 300px;
     width: 50vw;
     height: auto;
-}
-
-#fetching {
-    display: block;
-    font-size: 5vw;
-    text-align: center;
-    top: 40vh;
-    position: fixed;
-    width: 100%;
-}
-
-#rendering {
-    display: none;
-    font-size: 5vw;
-    text-align: center;
-    top: 40vh;
-    position: fixed;
-    width: 100%;
 }
 
 .license {

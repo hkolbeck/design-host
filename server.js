@@ -5,7 +5,7 @@ const fastify = require("fastify")({
 });
 
 const {makeGcsClient} = require("./src/gcs");
-const {generateOpengraph} = require("./src/opengraph");
+const {generateOpengraphHtml} = require("./src/opengraph");
 
 const config = {
     bucket: process.env.BUCKET,
@@ -38,8 +38,9 @@ async function makeFileIndex() {
     console.log(`Built file index in ${Date.now() - start}ms`)
 }
 
-fastify.get("/images/:img", (request, reply) => {
-    reply.sendFile(request.params["img"], path.join(__dirname, "site", "img"))
+fastify.get("/images/*", (request, reply) => {
+    let imgPath = request.url.replace('/images/', '')
+    reply.sendFile(imgPath, path.join(__dirname, "site", "img"))
 })
 
 fastify.get("/styles/:style", (request, reply) => {
@@ -102,7 +103,7 @@ fastify.get("/gallery/*", (request, reply) => {
             sendingPreview = true
             let path = decodeURIComponent(request.url).replace("/gallery/", "")
             path = path.slice(0, path.lastIndexOf('?'))
-            generateOpengraph(gcs, path, ext)
+            generateOpengraphHtml(gcs, path, ext)
                 .then(head => {
                     reply.status(200).send(head);
                 })
@@ -116,6 +117,13 @@ fastify.get("/gallery/*", (request, reply) => {
     if (!sendingPreview) {
         reply.sendFile("gallery.html")
     }
+})
+
+fastify.get("/download/*", (request, reply) => {
+    let path = request.url.replace('/download/', '')
+    let {mime, contents} = gcs.fetchObjectRaw(path)
+    reply.header("Content-Type", mime)
+    reply.status(200).send(contents)
 })
 
 fastify.get("/tag/*", (request, reply) => {
@@ -176,8 +184,10 @@ goodbye(fastify, "/widget/addnow.js")
 
 function goodbye(fastify, path) {
     fastify.get(path, (request, reply) => {
-        reply.header("Location", "https://zombo.com")
-        reply.status(301).send()
+        setTimeout(() => {
+            reply.header("Location", "https://zombo.com")
+            reply.status(301).send()
+        }, Math.random() * 3000 + 2000)
     })
 }
 
@@ -217,7 +227,7 @@ fastify.get("/api/get-page/*", (request, reply) => {
                         fileName: file.name.replace(path, "").replace(/-$/, "").replace("0000", "")
                     }
                 } else {
-                    const [rawFile, [metadata]] = await Promise.all([gcs.fetchObject(file), file.getMetadata()])
+                    const [metadata] = await file.getMetadata()
                     if (!metadata.metadata) {
                         metadata.metadata = {}
                     }
@@ -225,7 +235,6 @@ fastify.get("/api/get-page/*", (request, reply) => {
                     const fileName = file.name.slice(file.name.lastIndexOf("/") + 1, file.name.lastIndexOf("."))
                     return {
                         type: "file",
-                        contents: rawFile,
                         fileName: fileName,
                         fullPath: file.name,
                         alt: metadata.metadata["alt"] || "No alt text found",
@@ -270,16 +279,17 @@ fastify.get("/api/single-item/*", (request, reply) => {
         })
 })
 
+// Serves opengraph previews to accommodate old links
 fastify.get("/api/preview/*", (request, reply) => {
-    let previewPath = decodeURIComponent(request.url.slice(request.url.indexOf("preview/")))
-    console.log(`Returning preview for ${previewPath}`)
-    reply.sendFile(previewPath, path.join(__dirname, "site", "img"))
+    let previewPath = decodeURIComponent(request.url.replace('/preview/', ''))
+    console.log(`Returning preview for '${previewPath}'`)
+    reply.sendFile(previewPath, path.join(__dirname, "site", "img", "opengraph"))
 })
 
 fastify.get("/preview/*", (request, reply) => {
-    let previewPath = decodeURIComponent(request.url.slice(request.url.indexOf("preview/")))
-    console.log(`Returning preview for ${previewPath}`)
-    reply.sendFile(previewPath, path.join(__dirname, "site", "img"))
+    let previewPath = decodeURIComponent(request.url.replace('/preview/', ''))
+    console.log(`Returning preview for '${previewPath}'`)
+    reply.sendFile(previewPath, path.join(__dirname, "site", "img", "opengraph"))
 })
 
 fastify.get("/api/tag-groups", (request, reply) => {

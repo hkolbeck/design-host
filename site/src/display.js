@@ -92,120 +92,17 @@ async function fetchPage(path, pageToken) {
     return apiFetch(url, {page: []})
 }
 
-async function pdfToPreviewDataUrl(pdfDataUrl, scale) {
-    const pdfData = pdfDataUrl.slice(pdfDataUrl.indexOf(",") + 1);
-    const pdfBinaryData = Base64Binary.decode(pdfData);
-    const loadingTask = pdfjsLib.getDocument(pdfBinaryData);
-    const pdf = await loadingTask.promise.catch((err) => {
-        console.log(err);
-        return null;
-    });
-    // Fetch the first page.
-    const page = await pdf.getPage(1);
-    const viewport = page.getViewport({scale: 1.5});
-    // Support HiDPI-screens.
-    const outputScale = window.devicePixelRatio || scale;
-
-    // Prepare canvas using PDF page dimensions.
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-
-    canvas.width = Math.floor(viewport.width * outputScale);
-    canvas.height = Math.floor(viewport.height * outputScale);
-
-    const transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
-
-    // Render PDF page into canvas context.
-    const renderContext = {
-        canvasContext: context, transform, viewport,
-    };
-    await page.render(renderContext).promise;
-
-    return canvas.toDataURL();
-}
-
-function textToPreviewDataUrl(textDataUrl) {
-    const base64Text = textDataUrl.slice(textDataUrl.indexOf(",") + 1);
-    const text = atob(base64Text)
-    const parts = []
-    for (let i = 0; i < text.length; i += 34) {
-        parts.push(text.slice(i, i + 34))
-    }
-
-    const canvas = document.createElement("canvas")
-    const ctx = canvas.getContext('2d');
-    canvas.width = 260
-    canvas.height = 260
-
-    ctx.fillStyle = "white"
-    ctx.fillRect(0, 0, 260, 260)
-
-    ctx.fillStyle = "black"
-    ctx.textAlign = "left"
-    ctx.font = `12px monospace`
-    for (let y = 10, i = 0; y < 260 && i < parts.length; y += 14, i++) {
-        ctx.fillText(parts[i], 6, y)
-    }
-
-    return canvas.toDataURL()
-}
-
-async function svgToPreviewDataUrl(svgDataUrl) {
-    return new Promise((resolve) => {
-        const img = document.createElement("img")
-        img.onload = () => {
-            const canvas = document.createElement("canvas")
-            canvas.width = img.width
-            canvas.height = img.height
-
-            const ctx = canvas.getContext('2d')
-            ctx.fillStyle = "#FFFFFF"
-            ctx.fillRect(0, 0, canvas.width, canvas.height)
-            ctx.drawImage(img, 0, 0)
-
-            resolve(canvas.toDataURL("image/png"))
-        }
-        img.src = svgDataUrl
-    })
-}
-
-async function getPreviewDataUrl(contentDataUrl, pdfScale) {
-    const preamble = contentDataUrl.slice(0, contentDataUrl.indexOf(","));
-    if (preamble.match("image/jpeg") || preamble.match("image/png")) {
-        return contentDataUrl;
-    } else if (preamble.match("application/pdf")) {
-        return await pdfToPreviewDataUrl(contentDataUrl, pdfScale);
-    } else if (preamble.indexOf("image/svg+xml") >= 0) {
-        return await svgToPreviewDataUrl(contentDataUrl)
-    } else if (preamble.match("text/plain")) {
-        return textToPreviewDataUrl(contentDataUrl)
-    } else {
-        console.log(`Unknown mime type in preamble: '${preamble}'`);
-        return contentDataUrl;
-    }
-}
-
-async function dataUrlToBlob(item) {
-    return await fetch(item.contents)
-        .then((response) => response.blob())
-        .then(URL.createObjectURL);
-}
-
 const POSITIONS = Array.from(Array(PAGE_LEN).keys());
 
 async function renderPage(nextPageLink, files) {
-    const start = Date.now();
-    const fetching = document.getElementById("fetching")
-    fetching.style.display = "none"
-
     if (files.length === 0) {
         const nothingFound = document.getElementById("nothing-found")
         nothingFound.style.display = "block"
         return
     }
 
-    const rendering = document.getElementById("rendering")
-    rendering.style.display = "block"
+    const gallery = document.getElementById("gallery")
+    gallery.style.display = "grid"
 
     const promises = POSITIONS.map(async i => {
         const wrapper = document.getElementById(`gallery-item-wrapper-${i}`)
@@ -223,7 +120,7 @@ async function renderPage(nextPageLink, files) {
             const linkImg = document.getElementById(`item-link-img-${i}`)
 
             if (file.type === "file") {
-                const previewDataUrl = await getPreviewDataUrl(file.contents, 1);
+                let browsePath = `/images/browse/${file.fullPath}`;
                 img.onclick = () => {
                     let wrapper = document.createElement("div");
                     wrapper.className = "big-image-wrapper";
@@ -233,7 +130,7 @@ async function renderPage(nextPageLink, files) {
                     wrapper.appendChild(backer);
 
                     let bigImg = document.createElement("img");
-                    bigImg.src = previewDataUrl;
+                    bigImg.src = browsePath;
                     bigImg.alt = file.alt;
                     bigImg.className = "big-image";
                     wrapper.appendChild(bigImg);
@@ -245,7 +142,7 @@ async function renderPage(nextPageLink, files) {
                     document.body.appendChild(wrapper);
                 };
 
-                img.setAttribute("src", previewDataUrl);
+                img.setAttribute("src", browsePath)
                 img.setAttribute("alt", file.alt);
                 if (file.blur) {
                     img.style.filter = "blur(10px)"
@@ -253,8 +150,7 @@ async function renderPage(nextPageLink, files) {
 
                 title.innerText = file.title;
 
-                const objectURL = await dataUrlToBlob(file);
-                download.setAttribute("href", objectURL);
+                download.setAttribute("href", `https://acab.city/download/${file.fullPath}`);
                 download.setAttribute("download", item.fileName);
                 downloadImg.setAttribute("alt", `Download ${file.title}`);
 
@@ -265,7 +161,7 @@ async function renderPage(nextPageLink, files) {
 
                 folder.style.display = "none";
                 download.style.display = "block";
-                wrapper.style.display = "block";
+                wrapper.style.visibility = "visible";
             } else if (file.type === "directory") {
                 download.style.display = "none";
                 img.style.display = "none";
@@ -277,7 +173,7 @@ async function renderPage(nextPageLink, files) {
 
                 link.style.display = "none"
                 folderImg.style.display = "block";
-                wrapper.style.display = "block";
+                wrapper.style.visibility = "visible";
             } else {
                 console.log(`Unknown file type: ${file.type}`);
                 item.style.display = "none";
@@ -289,10 +185,6 @@ async function renderPage(nextPageLink, files) {
 
     await Promise.all(promises)
 
-    rendering.style.display = "none"
-    const gallery = document.getElementById("gallery")
-    gallery.style.display = "grid"
-
     const next = document.getElementById("next-button");
     if (nextPageLink) {
         next.href = nextPageLink
@@ -300,7 +192,6 @@ async function renderPage(nextPageLink, files) {
     } else {
         next.style.display = "none";
     }
-    console.log(`Render completed in ${Date.now() - start}ms`);
 }
 
 async function renderSingle(item) {
@@ -310,22 +201,20 @@ async function renderSingle(item) {
     const download = document.getElementById("single-image-download")
     const downloadImg = document.getElementById("single-image-download-img")
 
-    const previewDataURL = await getPreviewDataUrl(item.contents, 10)
-    img.setAttribute("src", previewDataURL)
+    img.setAttribute("src", `/images/browse/${item.fullPath}.png`)
     img.setAttribute("alt", item.alt)
 
     title.innerText = item.title
 
-    const objectURL = await dataUrlToBlob(item);
-    download.setAttribute("href", objectURL);
+    download.setAttribute("href", `/download/${item.fullPath}`);
     download.setAttribute("download", item.fileName);
 
     if (item.fullPath.endsWith('.pdf')) {
-        downloadImg.setAttribute('src', '/img/save-pdf.svg')
+        downloadImg.setAttribute('src', '/images/save-pdf.svg')
     } else if (item.fullPath.endsWith('.svg')) {
-        downloadImg.setAttribute('src', '/img/save-svg.svg')
+        downloadImg.setAttribute('src', '/images/save-svg.svg')
     } else {
-        downloadImg.setAttribute('src', '/img/save-high-res.svg')
+        downloadImg.setAttribute('src', '/images/save-high-res.svg')
     }
 
     downloadImg.setAttribute("alt", `Save ${item.title}`)
