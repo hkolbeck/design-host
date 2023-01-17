@@ -5,7 +5,7 @@ async function search() {
         return
     }
 
-    let sendEmTo = `https://acab.city/search?s=${encodeURIComponent(rawSearch)}`;
+    let sendEmTo = `https://acab.city/search?s=${encodeURIComponent(rawSearch.toLowerCase())}`;
 
     const searchType = document.getElementById("type-filter");
     let selected = [];
