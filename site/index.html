@@ -74,6 +74,32 @@
         Some works are not by Laser Bloc, as noted on their pages, and so are not covered by the above license. All of
         them are still free to use as you please.
     </div>
+    <div id="search">
+        <div class="search-chunk">
+            <label for="search-input" class="search-label">Search the archives:</label>
+            <input id="search-input" name="search-input" type="search" placeholder="Title, tag(s), or description"
+                   maxlength="100"/>
+        </div>
+
+        <div class="search-chunk">
+            <label for="type-filter" class="search-label">Filter by type:</label>
+            <select id="type-filter" name="type-filter" size="1">
+                <option id="any-option" value="any" selected onclick="deselectOthers()">Any Type</option>
+                <option value="stickers" onclick="deselectAny()">Stickers</option>
+                <option value="jewelry" onclick="deselectAny()">Jewelry</option>
+                <option value="stencils" onclick="deselectAny()">Stencils</option>
+                <option value="signage" onclick="deselectAny()">Signage</option>
+                <option value="flyers" onclick="deselectAny()">Flyers</option>
+                <option value="zines" onclick="deselectAny()">Zines</option>
+            </select>
+        </div>
+        <div class="search-chunk">
+            <span class="index-button-wrapper">
+                <img class="index-button" src="/images/search.svg" alt="search button" onclick="search()"/>
+            </span>
+        </div>
+    </div>
+    <hr/>
     <div class="index-buttons">
         <a href="/gallery/stickers/">
             <span class="index-button-wrapper">
@@ -105,32 +131,6 @@
                 <img class="index-button" src="/images/zines.svg" alt="zines button">
             </span>
         </a>
-    </div>
-    <hr/>
-    <div id="search">
-        <div class="search-chunk">
-            <label for="search-input" class="search-label">Search the archives:</label>
-            <input id="search-input" name="search-input" type="search" placeholder="Title, tag(s), or description"
-                   maxlength="100"/>
-        </div>
-
-        <div class="search-chunk">
-            <label for="type-filter" class="search-label">Filter by type:</label>
-            <select id="type-filter" name="type-filter" size="1">
-                <option id="any-option" value="any" selected onclick="deselectOthers()">Any Type</option>
-                <option value="stickers" onclick="deselectAny()">Stickers</option>
-                <option value="jewelry" onclick="deselectAny()">Jewelry</option>
-                <option value="stencils" onclick="deselectAny()">Stencils</option>
-                <option value="signage" onclick="deselectAny()">Signage</option>
-                <option value="flyers" onclick="deselectAny()">Flyers</option>
-                <option value="zines" onclick="deselectAny()">Zines</option>
-            </select>
-        </div>
-        <div class="search-chunk">
-            <span class="index-button-wrapper">
-                <img class="index-button" src="/images/search.svg" alt="search button" onclick="search()"/>
-            </span>
-        </div>
     </div>
     <hr/>
     <div id="tags"></div>
