@@ -5,8 +5,8 @@ li {
 .index-content {
     top: 70px;
     bottom: 60px;
-    left: 3vw;
-    right: 97vw;
+    padding-left: 10px;
+    padding-right: 10px;
     position: fixed;
     overflow-y: scroll;
 }
