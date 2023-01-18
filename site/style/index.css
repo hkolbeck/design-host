@@ -11,6 +11,10 @@ li {
     overflow-y: scroll;
 }
 
+#intro {
+    padding: 15px;
+}
+
 .license {
     font-family: Courier new, monospace;
     padding: 20px;
