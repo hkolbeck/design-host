@@ -73,6 +73,7 @@ a, a:visited {
     text-align: center;
     grid-area: author;
     place-self: center;
+    padding-bottom: 15px;
 }
 
 .link-button:hover {
