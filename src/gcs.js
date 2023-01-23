@@ -256,7 +256,12 @@ function makeBuildCollection(bucket) {
 
                 let author = metadata.metadata["author"];
                 if (author) {
-                    collection[author.toLowerCase()].push({type, path: actualPath})
+                    author = author.toLowerCase()
+                    if (!collection[author]) {
+                        collection[author] = []
+                    }
+
+                    collection[author].push({type, path: actualPath})
                 }
             } else {
                 tagGroups["untagged"] = tagGroups["untagged"] || []
