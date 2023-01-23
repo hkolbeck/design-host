@@ -262,6 +262,18 @@ function makeBuildCollection(bucket) {
                     }
 
                     collection[author].push({type, path: actualPath})
+                } else if (metadata.metadata["notours"]) {
+                    if (!collection["anonymous"]) {
+                        collection["anonymous"] = []
+                    }
+
+                    collection["anonymous"].push({type, path: actualPath})
+                } else {
+                    if (!collection["laser bloc"]) {
+                        collection["laser bloc"] = []
+                    }
+
+                    collection["laser bloc"].push({type, path: actualPath})
                 }
             } else {
                 tagGroups["untagged"] = tagGroups["untagged"] || []
