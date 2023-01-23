@@ -151,6 +151,7 @@ async function renderPage(nextPageLink, files) {
                 }
 
                 title.innerText = file.title;
+                author.innerText = getAuthor(file)
 
                 download.setAttribute("href", `https://acab.city/download/${file.fullPath}`);
                 download.setAttribute("download", file.fileName);
