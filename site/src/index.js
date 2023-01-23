@@ -39,7 +39,9 @@ function deselectOthers() {
 
 const displayTags = {
     "acab": "ACAB",
+    "amazon": "Amazon",
     "america": "America",
+    "atlanta": "Atlanta",
     "andy ngo": "Andy Ngo",
     "black": "Black",
     "blm": "BLM",
@@ -48,6 +50,7 @@ const displayTags = {
     "indigenous": "Indigenous",
     "jewish": "Jewish",
     "karl marx": "Karl Marx",
+    "nobonzo": "NoBonzo",
     "oregon": "Oregon",
     "portland": "Portland",
     "rip": "RIP",
@@ -58,6 +61,7 @@ const displayTags = {
     "terf": "TERF",
     "timbers": "Timbers",
     "thorns": "Thorns",
+    "tort": "Tort",
     "ursulakleguin": "Ursula K. Leguin",
     "wwii": "WWII"
 }
