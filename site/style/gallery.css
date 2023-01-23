@@ -48,7 +48,7 @@
 
 .title-wrapper {
     width: 280px;
-    padding: 0 10px 15px;
+    padding: 0 10px 5px;
     display: grid;
     grid-template-areas: "c";
 }
