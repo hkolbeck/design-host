@@ -67,6 +67,14 @@ a, a:visited {
     height: auto;
 }
 
+.author {
+    font-family: "montserrat", sans-serif;
+    font-size: 1rem;
+    text-align: center;
+    grid-area: author;
+    place-self: center;
+}
+
 .link-button:hover {
     filter: drop-shadow(0 0 5px red);
 }

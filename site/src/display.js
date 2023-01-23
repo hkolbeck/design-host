@@ -44,7 +44,8 @@ function buildItem(idx) {
                     />
                 </a>
             </div>
-            <div class="title-wrapper"><span class="gallery-title" id="gallery-title-${idx}"></span></div>`
+            <div class="title-wrapper"><span class="gallery-title" id="gallery-title-${idx}"></span></div>
+            <div id="gallery-author-${idx}" class="author"></div>`
 
     return wrapper
 }
@@ -112,6 +113,7 @@ async function renderPage(nextPageLink, files) {
         if (file) {
             const img = document.getElementById(`gallery-image-${i}`);
             const title = document.getElementById(`gallery-title-${i}`);
+            const author = document.getElementById(`gallery-author-${i}`)
             const download = document.getElementById(`download-${i}`);
             const downloadImg = document.getElementById(`download-img-${i}`);
             const folder = document.getElementById(`gallery-folder-${i}`);
@@ -198,6 +200,7 @@ async function renderSingle(item) {
     const wrapper = document.getElementById("single-item-wrapper")
     const img = document.getElementById("single-image")
     const title = document.getElementById("single-image-title")
+    const author = document.getElementById("single-image-author")
     const download = document.getElementById("single-image-download")
     const downloadImg = document.getElementById("single-image-download-img")
 
@@ -205,6 +208,7 @@ async function renderSingle(item) {
     img.setAttribute("alt", item.alt)
 
     title.innerText = item.title
+    author.innerText = getAuthor(item)
 
     download.setAttribute("href", `/download/${item.fullPath}`);
     download.setAttribute("download", item.fileName);
@@ -226,4 +230,15 @@ async function renderSingle(item) {
     }
 
     wrapper.style.display = "grid"
+}
+
+function getAuthor(item) {
+    let author = "Laser Bloc"
+    if (item.author) {
+        author = item.author
+    } else if (item.notOurs) {
+        author = "Anonymous"
+    }
+
+    return `By ${author}`
 }

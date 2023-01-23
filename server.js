@@ -267,7 +267,9 @@ fastify.get("/api/get-page/*", (request, reply) => {
                         fullPath: file.name,
                         alt: metadata.metadata["alt"] || "No alt text found",
                         title: metadata.metadata["title"] || fileName,
-                        blur: metadata.metadata["blur"] === "true"
+                        blur: metadata.metadata["blur"] === "true",
+                        notOurs: metadata.metadata["notours"] || false,
+                        author: metadata.metadata["author"] || null
                     }
                 }
             })

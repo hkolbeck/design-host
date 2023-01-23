@@ -117,7 +117,8 @@ function makeFetchPath(bucket) {
                 alt: metadata.metadata["alt"] || "No alt text found",
                 title: metadata.metadata["title"] || fileName,
                 blur: metadata.metadata["blur"] === "true",
-                notOurs: metadata.metadata["notours"] === "true"
+                notOurs: metadata.metadata["notours"] === "true",
+                author: metadata.metadata["author"] || null
             }
         } else {
             return null;

@@ -230,6 +230,7 @@
     grid-area: c;
     place-self: center;
     grid-template-areas: "title"
+                         "author"
                          "img"
                          "save"
                          "license";
