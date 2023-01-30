@@ -130,6 +130,7 @@ fastify.get("/download/*", async (request, reply) => {
     } else {
         reply.status(404).send()
     }
+    return reply
 })
 
 fastify.get("/tag/*", (request, reply) => {

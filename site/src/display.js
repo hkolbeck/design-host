@@ -224,7 +224,11 @@ async function renderSingle(item) {
 
     downloadImg.setAttribute("alt", `Save ${item.title}`)
 
-    if (item.notOurs) {
+    if (item.license) {
+        let custom = document.getElementById("custom-license");
+        custom.innerText = item.license
+        custom.style.display = "block"
+    } else if (item.notOurs) {
         document.getElementById("unknown-license").style.display = "block";
     } else {
         document.getElementById("cc0").style.display = "block";

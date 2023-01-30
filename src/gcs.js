@@ -36,7 +36,8 @@ function makeGetMetadata(bucket) {
             tags: metadata.metadata["tags"] || "",
             blur: metadata.metadata["blur"] || false,
             notOurs: metadata.metadata["notours"] || false,
-            mtime: Date.parse(metadata.timeCreated) || 0
+            mtime: Date.parse(metadata.timeCreated) || 0,
+            license: metadata.metadata["license"] || null,
         }
     }
 }
@@ -118,7 +119,8 @@ function makeFetchPath(bucket) {
                 title: metadata.metadata["title"] || fileName,
                 blur: metadata.metadata["blur"] === "true",
                 notOurs: metadata.metadata["notours"] === "true",
-                author: metadata.metadata["author"] || null
+                author: metadata.metadata["author"] || null,
+                license: metadata.metadata["license"] || null,
             }
         } else {
             return null;
