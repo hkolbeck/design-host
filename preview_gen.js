@@ -13,6 +13,15 @@ const config = {
 const storage = new Storage();
 const gcs = makeGcsClient(storage.bucket(config.bucket))
 
+let supported = {
+    "jpg": true,
+    "jpeg": true,
+    "png": true,
+    "svg": true,
+    "pdf": true,
+    "txt": true
+}
+
 let running = false
 async function generatePreviews() {
     let start = Date.now()
@@ -26,6 +35,12 @@ async function generatePreviews() {
     console.log(`Found ${gcsPaths.length} objects to check`)
 
     for (let gcsPath of gcsPaths) {
+        let ext = gcsPath.slice(gcsPath.lastIndexOf('.') + 1)
+        if (!supported[ext]) {
+            console.log(`Skipping '${gcsPath}'`)
+            continue
+        }
+
         let gcsMetadata = await gcs.getMetadata(gcsPath)
         await generatePreview(gcs, gcsPath, gcsMetadata.mtime, "browse", generateBrowseImage)
         await generatePreview(gcs, gcsPath, gcsMetadata.mtime, "opengraph", generateOpengraphImage)
